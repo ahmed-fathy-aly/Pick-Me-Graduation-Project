@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+
+    tools:context="com.library_app.activities.TestActivity">
+
+    <Button
+        android:id="@+id/buttonGET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GET"
+        android:theme="@style/coloredButtonTheme"/>
+
+    <Button
+        android:id="@+id/buttonPOST"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="POST"
+        android:theme="@style/coloredButtonTheme"/>
+
+
+    <TextView
+        android:id="@+id/textViweResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
+
+</LinearLayout>
