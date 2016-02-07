@@ -1,0 +1,13 @@
+1 make a branch called "x" for example in the Github website
+2 open git 
+3 git pull origin  master
+4 git checkout "x"
+5 write your code
+6 git add .
+7 git commit -m "commit message"
+8 git push origin x
+9 git checkout master
+10 git pull origin master
+11 git merge x
+12 git push origin master
+
