@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.asu.pick_me_graduation_project.callback.LoginCallback;
+import com.asu.pick_me_graduation_project.callback.SignUpCallback;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.PreferencesUtils;
@@ -68,6 +69,40 @@ public class AuthenticationAPIController
     }
 
     /**
+     * creates a new user profile then logs him in
+     * the result will have the user details (the ones sent)and an authentication token
+     * these results will be saved in the pereferences
+     */
+    public void signUp(final String email, final String userName, final String fullName, String password, final String gender, final SignUpCallback callback)
+    {
+        // make a delay to mock the request
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                // make mock data
+                User user = new User();
+                user.setEmail(email);
+                user.setUserName(userName);
+                user.setFullName(fullName);
+                user.setProfilePictureUrl("http://graph.facebook.com/100001144443949/picture?type=square");
+                user.setGender(gender);
+                user.setLocationLatitude(30.0412772);
+                user.setLocationAltitude(31.2658458);
+                String token = "abfgfgf_fdsfd";
+
+                // TODO update preferences
+                setCurrentUser(user, token);
+
+                // invoke callback
+                callback.success(user, token);
+
+            }
+        }, 1000);
+    }
+
+    /**
      * saves the user's info to the preferences
      */
     private void setCurrentUser(User user, String authorizationToken)
@@ -76,7 +111,6 @@ public class AuthenticationAPIController
         PreferencesUtils.setUser(context, user);
         PreferencesUtils.setAuthToken(context, authorizationToken);
     }
-
 
 
 }

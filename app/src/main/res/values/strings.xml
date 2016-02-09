@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Pick Me</string>
     <string name="success">success</string>
+    <string name="user_name">User Name</string>
+    <string name="full_name">Full Name</string>
+    <string name="email">Email</string>
 </resources>

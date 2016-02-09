@@ -5,15 +5,14 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.asu.pick_me_graduation_project.R;
-import com.asu.pick_me_graduation_project.callback.LoginCallback;
+import com.asu.pick_me_graduation_project.callback.SignUpCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
@@ -22,18 +21,21 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity
+public class SignUpActivity extends AppCompatActivity
 {
 
-    /* UI */
-    @Bind(R.id.editTextUserEmail)
-    EditText editTextUserEmail;
+    /* views */
+
+    @Bind(R.id.editTextEmail)
+    EditText editTextEmail;
+    @Bind(R.id.editTextUserName)
+    EditText editTextUserName;
+    @Bind(R.id.editTextFullName)
+    EditText editTextFullName;
     @Bind(R.id.editTextPassword)
     EditText editTextPassword;
-    @Bind(R.id.buttonLogIn)
-    Button buttonLogIn;
-    @Bind(R.id.textViewSignUp)
-    TextView textViewSignUp;
+    @Bind(R.id.spinnerGender)
+    Spinner spinngerGender;
     @Bind(R.id.progressBar)
     ProgressBar progressBar;
     @Bind(R.id.content)
@@ -43,26 +45,26 @@ public class LoginActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        // reference views
+        setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
-
-
     }
 
-    @OnClick(R.id.buttonLogIn)
-    void logIn()
+    @OnClick(R.id.buttonSignUp)
+    public void signUp()
     {
         // gather data
-        String email = editTextUserEmail.getText().toString();
-        String password = editTextPassword.getText().toString();
+        String email = editTextEmail.getText().toString();
+        String userName = editTextUserName.getText().toString();
+        String fullName = editTextEmail.getText().toString();
+        String password  = editTextPassword.getText().toString();
+        String gender = spinngerGender.getSelectedItem().toString();
 
-        // login
+        // sign up
         progressBar.setVisibility(View.VISIBLE);
         AuthenticationAPIController controller = new AuthenticationAPIController(getApplicationContext());
-        controller.login(email, password, new LoginCallback()
+        controller.signUp(email, userName, fullName, password, gender, new SignUpCallback()
         {
+
             @Override
             public void success(User user, String authenticationToken)
             {
@@ -84,12 +86,7 @@ public class LoginActivity extends AppCompatActivity
                 Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
             }
         });
-    }
 
-    @OnClick(R.id.textViewSignUp)
-    void goToSignUp()
-    {
-        Intent intent = new Intent(this, SignUpActivity.class);
-        startActivity(intent);
+
     }
 }
