@@ -2,6 +2,7 @@ package com.asu.pick_me_graduation_project.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.asu.pick_me_graduation_project.model.User;
 
@@ -10,7 +11,10 @@ import com.asu.pick_me_graduation_project.model.User;
  */
 public class PreferencesUtils
 {
-    private static final String KEY_PREFERENCES_NAME = "myPreferences";
+    /* constants */
+    private static final String KEY_PREFERENCES_NAME = "pickMePreferences";
+
+    /* getters and setters */
 
     /**
      * clears all data in preferences
@@ -29,6 +33,7 @@ public class PreferencesUtils
         SharedPreferences pref = context.getSharedPreferences(KEY_PREFERENCES_NAME, context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
+
         editor.putString("user_id", user.getUserId());
         editor.putString("user_name", user.getUserName());
         editor.putString("user_email", user.getEmail());
@@ -39,8 +44,25 @@ public class PreferencesUtils
         editor.putFloat("user_location_alt", (float) user.getLocationAltitude());
 
         editor.commit();
-
     }
+
+    public static User getUser(Context context)
+    {
+        SharedPreferences pref = context.getSharedPreferences(KEY_PREFERENCES_NAME, context.MODE_PRIVATE);
+
+        User user = new User();
+        user.setUserId(pref.getString("user_id", ""));
+        user.setUserName(pref.getString("user_name", ""));
+        user.setEmail(pref.getString("user_email", ""));
+        user.setProfilePictureUrl(pref.getString("user_profile_picture_url", ""));
+        user.setFullName(pref.getString("user_full_name", ""));
+        user.setGender(pref.getString("user_gender", ""));
+        user.setLocationLatitude(pref.getFloat("user_location_lat", 0));
+        user.setLocationAltitude(pref.getFloat("user_location_alt", 0));
+
+        return user;
+    }
+
 
     public static void setAuthToken(Context context, String authorizationToken)
     {
@@ -50,5 +72,13 @@ public class PreferencesUtils
         editor.putString("auth_token", authorizationToken);
 
         editor.commit();
+    }
+
+
+    public static String getAuthenticationToken(Context context)
+    {
+        SharedPreferences pref = context.getSharedPreferences(KEY_PREFERENCES_NAME, context.MODE_PRIVATE);
+        return pref.getString("auth_token", "");
+
     }
 }

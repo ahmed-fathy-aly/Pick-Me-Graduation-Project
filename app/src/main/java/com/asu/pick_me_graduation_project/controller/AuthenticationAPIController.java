@@ -48,6 +48,7 @@ public class AuthenticationAPIController
             {
                 // make mock data
                 User user = new User();
+                user.setUserId("42");
                 user.setEmail("egor@mail.com");
                 user.setUserName("Egor");
                 user.setFullName("Egor Kulikov");
@@ -57,7 +58,7 @@ public class AuthenticationAPIController
                 user.setLocationAltitude(31.2658458);
                 String token = "abfgfgf_fdsfd";
 
-                // TODO update preferences
+                // update preferences
                 setCurrentUser(user, token);
 
                 // invoke callback
@@ -83,6 +84,7 @@ public class AuthenticationAPIController
             {
                 // make mock data
                 User user = new User();
+                user.setUserId("42");
                 user.setEmail(email);
                 user.setUserName(userName);
                 user.setFullName(fullName);
@@ -91,8 +93,8 @@ public class AuthenticationAPIController
                 user.setLocationLatitude(30.0412772);
                 user.setLocationAltitude(31.2658458);
                 String token = "abfgfgf_fdsfd";
-
-                // TODO update preferences
+                Log.e("Game", "made user " + user.getUserId());
+                // update preferences
                 setCurrentUser(user, token);
 
                 // invoke callback
@@ -102,15 +104,45 @@ public class AuthenticationAPIController
         }, 1000);
     }
 
+
+    /**
+     * calls api backend
+     * clear the preferences
+     */
+    public void logOut()
+    {
+        PreferencesUtils.clear(context);
+    }
+
+    /**
+     * returns the info of the user that has previously logged in
+     * @return null if no user is logged in
+     */
+    public User getCurrentUser()
+    {
+        return PreferencesUtils.getUser(context);
+    }
+
+    /**
+     * checks if there's a user that has logged in before
+     * a logged in user has an authentication token
+     */
+    public boolean isUserLoggedIn()
+    {
+        return PreferencesUtils.getAuthenticationToken(context).length() > 0;
+    }
+
     /**
      * saves the user's info to the preferences
      */
     private void setCurrentUser(User user, String authorizationToken)
     {
+        Log.e("Game", "set user " + user.getUserId());
         PreferencesUtils.clear(context);
         PreferencesUtils.setUser(context, user);
         PreferencesUtils.setAuthToken(context, authorizationToken);
     }
+
 
 
 }

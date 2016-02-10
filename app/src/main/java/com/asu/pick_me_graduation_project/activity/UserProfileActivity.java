@@ -1,7 +1,8 @@
 package com.asu.pick_me_graduation_project.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.asu.pick_me_graduation_project.R;
@@ -10,15 +11,19 @@ import com.asu.pick_me_graduation_project.controller.UserApiController;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
  * shows the profile of a user whose id comes from an intent
  */
-public class UserProfileActivity extends AppCompatActivity
+public class UserProfileActivity extends BaseActivity
 {
 
+
     /* UI */
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     /* fields */
     private String userId;
@@ -35,6 +40,9 @@ public class UserProfileActivity extends AppCompatActivity
         // TODO - reference views (if you dont wanna use butterknife like the log in activity no problem, use findViewByIdInstead
         ButterKnife.bind(this);
 
+        // setup common views
+        setupNavigationBar(this, toolbar);
+        toolbar.setTitle(getString(R.string.title_profile));
         loadProfile();
 
     }

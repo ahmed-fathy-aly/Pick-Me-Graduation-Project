@@ -48,7 +48,6 @@ public class LoginActivity extends AppCompatActivity
         // reference views
         ButterKnife.bind(this);
 
-
     }
 
     @OnClick(R.id.buttonLogIn)
@@ -71,9 +70,9 @@ public class LoginActivity extends AppCompatActivity
                 Toast.makeText(getApplicationContext(), getString(R.string.success), Toast.LENGTH_SHORT).show();
 
                 // open the main activity
-                Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
-                intent.putExtra(Constants.USER_ID, user.getUserId());
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
+                finish();
             }
 
             @Override

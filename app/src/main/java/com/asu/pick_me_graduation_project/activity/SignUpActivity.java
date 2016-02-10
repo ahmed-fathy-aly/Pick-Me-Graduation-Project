@@ -73,9 +73,10 @@ public class SignUpActivity extends AppCompatActivity
                 Toast.makeText(getApplicationContext(), getString(R.string.success), Toast.LENGTH_SHORT).show();
 
                 // open the main activity
-                Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
-                intent.putExtra(Constants.USER_ID, user.getUserId());
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                finish();
             }
 
             @Override
