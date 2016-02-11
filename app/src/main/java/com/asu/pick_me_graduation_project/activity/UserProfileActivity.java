@@ -20,7 +20,6 @@ import butterknife.ButterKnife;
 public class UserProfileActivity extends BaseActivity
 {
 
-
     /* UI */
     @Bind(R.id.toolbar)
     Toolbar toolbar;

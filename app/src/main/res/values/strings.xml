@@ -5,4 +5,11 @@
     <string name="full_name">Full Name</string>
     <string name="email">Email</string>
     <string name="title_profile">Profile</string>
+    <string name="infoString">Biograghy Info</string>
+    <string name="CarModelString">Car model</string>
+    <string name="CarColorString">Car color</string>
+    <string name="RateString">User Rate</string>
+    <string name="dobString">DOB</string>
+    <string name="TripsString">Last Trips</string>
+    <string name="title_edit_profile">Edit Profile</string>
 </resources>
