@@ -12,4 +12,6 @@
     <string name="dobString">DOB</string>
     <string name="TripsString">Last Trips</string>
     <string name="title_edit_profile">Edit Profile</string>
+    <string name="title_search_users">Find User</string>
+    <string name="search_by_username">Search By Username</string>
 </resources>

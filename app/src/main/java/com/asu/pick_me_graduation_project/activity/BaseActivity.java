@@ -47,6 +47,8 @@ public class BaseActivity extends AppCompatActivity
             currentActivityId = 1;
         else if (activity.getClass().equals(UserProfileActivity.class))
             currentActivityId = 2;
+        else if (activity.getClass().equals(SearchUsersActivity.class))
+            currentActivityId = 3;
         final int finalCurrentActivityId = currentActivityId;
 
         // get the current user
@@ -68,6 +70,7 @@ public class BaseActivity extends AppCompatActivity
                 .withToolbar(toolbar);
         builder.addDrawerItems(new PrimaryDrawerItem().withIdentifier(1).withName("DashBoard")
                 , new PrimaryDrawerItem().withIdentifier(2).withName("My Profile")
+                , new PrimaryDrawerItem().withIdentifier(3).withName("Find User")
                 , new DividerDrawerItem()
                 , new PrimaryDrawerItem().withIdentifier(10).withName("Log Out"));
 
@@ -93,6 +96,9 @@ public class BaseActivity extends AppCompatActivity
                     {
                         intent.setClass(activity, UserProfileActivity.class);
                         intent.putExtra(Constants.USER_ID, user.getUserId());
+                    } else if (id == 3)
+                    {
+                        intent.setClass(activity, SearchUsersActivity.class);
                     }
 
                     // launch the activity after some milliseconds to show the drawer close animation
