@@ -57,26 +57,26 @@
                     </EditText>
 
                     <EditText
-                        android:id="@+id/editTextUserName"
+                        android:id="@+id/editTextFirstName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:hint="@string/user_name">
+                        android:hint="@string/first_name">
                     </EditText>
 
                     <EditText
-                        android:id="@+id/editTextFullName"
+                        android:id="@+id/editTextLastName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:hint="@string/full_name">
+                        android:hint="@string/last_name">
                     </EditText>
 
                     <EditText
                         android:id="@+id/editTextPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/editTextUserName"
+                        android:layout_below="@id/editTextFirstName"
                         android:ems="10"
                         android:gravity="left"
                         android:hint="Password"

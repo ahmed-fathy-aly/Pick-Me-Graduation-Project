@@ -15,7 +15,6 @@ import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.callback.SignUpCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.model.User;
-import com.asu.pick_me_graduation_project.utils.Constants;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,10 +27,10 @@ public class SignUpActivity extends AppCompatActivity
 
     @Bind(R.id.editTextEmail)
     EditText editTextEmail;
-    @Bind(R.id.editTextUserName)
-    EditText editTextUserName;
-    @Bind(R.id.editTextFullName)
-    EditText editTextFullName;
+    @Bind(R.id.editTextFirstName)
+    EditText editTextFirstName;
+    @Bind(R.id.editTextLastName)
+    EditText editTextLastName;
     @Bind(R.id.editTextPassword)
     EditText editTextPassword;
     @Bind(R.id.spinnerGender)
@@ -54,15 +53,15 @@ public class SignUpActivity extends AppCompatActivity
     {
         // gather data
         String email = editTextEmail.getText().toString();
-        String userName = editTextUserName.getText().toString();
-        String fullName = editTextEmail.getText().toString();
+        String firstName = editTextFirstName.getText().toString();
+        String lastName = editTextEmail.getText().toString();
         String password  = editTextPassword.getText().toString();
         String gender = spinngerGender.getSelectedItem().toString();
 
         // sign up
         progressBar.setVisibility(View.VISIBLE);
         AuthenticationAPIController controller = new AuthenticationAPIController(getApplicationContext());
-        controller.signUp(email, userName, fullName, password, gender, new SignUpCallback()
+        controller.signUp(email, firstName, lastName, password, gender, new SignUpCallback()
         {
 
             @Override

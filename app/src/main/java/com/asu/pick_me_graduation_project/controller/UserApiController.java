@@ -42,8 +42,8 @@ public class UserApiController
                 // make mock data
                 User user = new User();
                 user.setEmail("egor@mail.com");
-                user.setUserName("Egor");
-                user.setFullName("Egor Kulikov");
+                user.setFirstName("Egor");
+                user.setLastName("Egor Kulikov");
                 user.setProfilePictureUrl("http://graph.facebook.com/100001144443949/picture?type=square");
                 user.setGender(Constants.GENDER_MALE);
                 user.setLocationLatitude(30.0412772);
@@ -70,8 +70,8 @@ public class UserApiController
                 {
                     User user = new User();
                     user.setEmail("egor@mail.com");
-                    user.setUserName("ahmed " + searchString + i + "");
-                    user.setFullName("Egor Kulikov");
+                    user.setFirstName("ahmed " + searchString + i + "");
+                    user.setLastName("Egor Kulikov");
                     user.setProfilePictureUrl("http://www.freelanceme.net/Images/default%20profile%20picture.png");
                     user.setGender(Constants.GENDER_MALE);
                     user.setLocationLatitude(30.0412772);

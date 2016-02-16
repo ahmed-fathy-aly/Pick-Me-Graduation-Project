@@ -1,18 +1,26 @@
 package com.asu.pick_me_graduation_project.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.callback.GetProfileCallback;
+import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.UserApiController;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * shows the profile of a user whose id comes from an intent
@@ -23,6 +31,30 @@ public class UserProfileActivity extends BaseActivity
     /* UI */
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    @Bind(R.id.textViewUserName)
+    TextView textViewUserName;
+    @Bind(R.id.imageViewProfilePicture)
+    ImageView imageViewProfilePicture;
+    @Bind(R.id.ratingBar)
+    RatingBar ratingBar;
+    @Bind(R.id.textViewEmail)
+    TextView textViewEmail;
+    @Bind(R.id.textViewPhoneNumber)
+    TextView textViewPhoneNumber;
+    @Bind(R.id.textViewAge)
+    TextView textViewAge;
+    @Bind(R.id.textViewBio)
+    TextView textViewBio;
+    @Bind(R.id.textViewCarModel)
+    TextView textViewCarModel;
+    @Bind(R.id.textViewCarYear)
+    TextView textViewCarYear;
+    @Bind(R.id.textViewCarPlateNumber)
+    TextView textViewCarPlateNumber;
+    @Bind(R.id.iamgeViewCarIsConditioned)
+    ImageView iamgeViewCarIsConditioned;
+    @Bind(R.id.fab)
+    FloatingActionButton fab;
 
     /* fields */
     private String userId;
@@ -36,14 +68,48 @@ public class UserProfileActivity extends BaseActivity
         // get user id
         userId = getIntent().getExtras().getString(Constants.USER_ID);
 
-        // TODO - reference views (if you dont wanna use butterknife like the log in activity no problem, use findViewByIdInstead
+        // reference views
         ButterKnife.bind(this);
 
         // setup common views
-        setupNavigationBar(this, toolbar);
-        toolbar.setTitle(getString(R.string.title_profile));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // load data
         loadProfile();
 
+    }
+
+
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                // TODO - make a scale up animation on the fab
+            }
+        }, 300);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                // TODO - make a scale down animation on the fab
+            }
+        }, 300);
     }
 
     /**
@@ -58,7 +124,17 @@ public class UserProfileActivity extends BaseActivity
             public void success(User user)
             {
                 // TODO set profile data to views
-                Log.e("Game", "loaded");
+
+
+                // TODO - set the icon of the fab...depending on it's the profile of this user or not
+                if (userId.equals(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId()))
+                {
+
+                }
+                else
+                {
+
+                }
             }
 
             @Override
@@ -67,5 +143,15 @@ public class UserProfileActivity extends BaseActivity
                 // TODO show error using snack bar
             }
         });
+    }
+
+    @OnClick(R.id.fab)
+    public void onClick()
+    {
+        // TODO - open the edit activity if it's the profile of this user
+        if (userId.equals(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId()))
+        {
+
+        }
     }
 }

@@ -2,7 +2,7 @@
     <string name="app_name">Pick Me</string>
     <string name="success">success</string>
     <string name="user_name">User Name</string>
-    <string name="full_name">Full Name</string>
+    <string name="last_name">Full Name</string>
     <string name="email">Email</string>
     <string name="title_profile">Profile</string>
     <string name="infoString">Biograghy Info</string>
@@ -14,4 +14,5 @@
     <string name="title_edit_profile">Edit Profile</string>
     <string name="title_search_users">Find User</string>
     <string name="search_by_username">Search By Username</string>
+    <string name="first_name">First Name</string>
 </resources>

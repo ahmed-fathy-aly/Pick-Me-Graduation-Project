@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -46,7 +47,7 @@ public class SearchUsersActivity extends BaseActivity implements UsersAdapter.Li
 
         // setup common views
         setSupportActionBar(toolbar);
-        setupNavigationBar(this, toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // setup users list
         adapterUsers = new UsersAdapter(this);
@@ -87,6 +88,7 @@ public class SearchUsersActivity extends BaseActivity implements UsersAdapter.Li
 
 
     }
+
 
     /**
      * calls the api to search users with given substring

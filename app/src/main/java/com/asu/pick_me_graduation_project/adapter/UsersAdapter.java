@@ -1,8 +1,6 @@
 package com.asu.pick_me_graduation_project.adapter;
 
 import android.content.Context;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +11,7 @@ import android.widget.TextView;
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.view.CircleTransform;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.ImageViewBitmapInfo;
-import com.koushikdutta.ion.Ion;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
 
 /**
@@ -54,7 +48,7 @@ public class UsersAdapter extends ArrayAdapter<User>
 
         // set data
         final User user = getItem(position);
-        textViewUsername.setText(user.getUserName());
+        textViewUsername.setText(user.getFirstName());
         Picasso.with(getContext()).
                 load(user.getProfilePictureUrl())
                 .transform(new CircleTransform())

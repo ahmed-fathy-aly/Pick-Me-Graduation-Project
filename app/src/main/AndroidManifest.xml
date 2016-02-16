@@ -12,7 +12,8 @@
         android:theme="@style/AppTheme" >
         <activity android:name=".activity.LoginActivity" >
         </activity>
-        <activity android:name=".activity.UserProfileActivity" >
+        <activity android:name=".activity.UserProfileActivity"
+            android:label="@string/title_profile">
         </activity>
         <activity android:name=".activity.SignUpActivity" >
         </activity>

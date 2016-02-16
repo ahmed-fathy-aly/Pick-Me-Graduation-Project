@@ -1,20 +1,15 @@
 package com.asu.pick_me_graduation_project.controller;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 
 import com.asu.pick_me_graduation_project.callback.LoginCallback;
 import com.asu.pick_me_graduation_project.callback.SignUpCallback;
+import com.asu.pick_me_graduation_project.model.CarDetails;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.PreferencesUtils;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Created by ahmed on 12/17/2015.
@@ -50,8 +45,8 @@ public class AuthenticationAPIController
                 User user = new User();
                 user.setUserId("42");
                 user.setEmail("egor@mail.com");
-                user.setUserName("Egor");
-                user.setFullName("Egor Kulikov");
+                user.setFirstName("Egor");
+                user.setLastName("Egor Kulikov");
                 user.setProfilePictureUrl("http://graph.facebook.com/100001144443949/picture?type=square");
                 user.setGender(Constants.GENDER_MALE);
                 user.setLocationLatitude(30.0412772);
@@ -74,7 +69,7 @@ public class AuthenticationAPIController
      * the result will have the user details (the ones sent)and an authentication token
      * these results will be saved in the pereferences
      */
-    public void signUp(final String email, final String userName, final String fullName, String password, final String gender, final SignUpCallback callback)
+    public void signUp(final String email, final String firstName, final String lastName, String password, final String gender, final SignUpCallback callback)
     {
         // make a delay to mock the request
         new Handler().postDelayed(new Runnable()
@@ -86,12 +81,22 @@ public class AuthenticationAPIController
                 User user = new User();
                 user.setUserId("42");
                 user.setEmail(email);
-                user.setUserName(userName);
-                user.setFullName(fullName);
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
                 user.setProfilePictureUrl("http://graph.facebook.com/100001144443949/picture?type=square");
                 user.setGender(gender);
                 user.setLocationLatitude(30.0412772);
                 user.setLocationAltitude(31.2658458);
+                user.setPhoneNumber("0114385332");
+                user.setBio("this is my bio....");
+
+                CarDetails carDetails = new CarDetails();
+                carDetails.setModel("Kia");
+                carDetails.setYear("2013");
+                carDetails.setConditioned(true);
+                carDetails.setPlateNumber("1234");
+                user.setCarDetails(carDetails);
+
                 String token = "abfgfgf_fdsfd";
                 Log.e("Game", "made user " + user.getUserId());
                 // update preferences

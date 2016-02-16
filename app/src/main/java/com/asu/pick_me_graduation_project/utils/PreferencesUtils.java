@@ -2,7 +2,6 @@ package com.asu.pick_me_graduation_project.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.asu.pick_me_graduation_project.model.User;
 
@@ -35,10 +34,10 @@ public class PreferencesUtils
 
 
         editor.putString("user_id", user.getUserId());
-        editor.putString("user_name", user.getUserName());
+        editor.putString("user_name", user.getFirstName());
         editor.putString("user_email", user.getEmail());
         editor.putString("user_profile_picture_url", user.getProfilePictureUrl());
-        editor.putString("user_full_name", user.getFullName());
+        editor.putString("user_full_name", user.getLastName());
         editor.putString("user_gender", user.getGender());
         editor.putFloat("user_location_lat", (float) user.getLocationLatitude());
         editor.putFloat("user_location_alt", (float) user.getLocationAltitude());
@@ -52,10 +51,10 @@ public class PreferencesUtils
 
         User user = new User();
         user.setUserId(pref.getString("user_id", ""));
-        user.setUserName(pref.getString("user_name", ""));
+        user.setFirstName(pref.getString("user_name", ""));
         user.setEmail(pref.getString("user_email", ""));
         user.setProfilePictureUrl(pref.getString("user_profile_picture_url", ""));
-        user.setFullName(pref.getString("user_full_name", ""));
+        user.setLastName(pref.getString("user_full_name", ""));
         user.setGender(pref.getString("user_gender", ""));
         user.setLocationLatitude(pref.getFloat("user_location_lat", 0));
         user.setLocationAltitude(pref.getFloat("user_location_alt", 0));

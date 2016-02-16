@@ -9,13 +9,16 @@ public class User
 {
     /* fields */
     String userId;
-    String userName;
+    String firstName;
     String email;
-    String fullName;
+    String lastName;
     String profilePictureUrl;
     double locationLatitude;
     double locationAltitude;
     String gender;
+    String phoneNumber;
+    String bio;
+    CarDetails carDetails;
 
     /* setters and getters */
 
@@ -59,14 +62,14 @@ public class User
         this.profilePictureUrl = profilePictureUrl;
     }
 
-    public String getFullName()
+    public String getLastName()
     {
-        return fullName;
+        return lastName;
     }
 
-    public void setFullName(String fullName)
+    public void setLastName(String lastName)
     {
-        this.fullName = fullName;
+        this.lastName = lastName;
     }
 
     public String getEmail()
@@ -79,14 +82,14 @@ public class User
         this.email = email;
     }
 
-    public String getUserName()
+    public String getFirstName()
     {
-        return userName;
+        return firstName;
     }
 
-    public void setUserName(String userName)
+    public void setFirstName(String firstName)
     {
-        this.userName = userName;
+        this.firstName = firstName;
     }
 
     public String getUserId()
@@ -99,14 +102,43 @@ public class User
         this.userId = userId;
     }
 
-    /* methods */
+    public String getPhoneNumber()
+    {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber)
+    {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getBio()
+    {
+        return bio;
+    }
+
+    public void setBio(String bio)
+    {
+        this.bio = bio;
+    }
+
+    public CarDetails getCarDetails()
+    {
+        return carDetails;
+    }
+
+    public void setCarDetails(CarDetails carDetails)
+    {
+        this.carDetails = carDetails;
+    }
+/* methods */
 
     /**
      * parses a json to get a user object
      */
     public static User fromJson(JSONObject json)
     {
-       User user = new User();
+        User user = new User();
 
         // TODO - still waiting for backend to give the data
 

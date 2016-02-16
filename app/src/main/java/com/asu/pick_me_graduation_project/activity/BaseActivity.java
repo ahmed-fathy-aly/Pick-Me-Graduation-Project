@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.asu.pick_me_graduation_project.R;
@@ -55,11 +55,13 @@ public class BaseActivity extends AppCompatActivity
         final User user = new AuthenticationAPIController(activity).getCurrentUser();
 
         // profile header
-        ProfileDrawerItem userProfile = new ProfileDrawerItem().withName(user.getUserName());
+        ProfileDrawerItem userProfile = new ProfileDrawerItem().withName(user.getFirstName()).withEmail(user.getEmail()).withNameShown(true);
         final AccountHeader accountHeader = new AccountHeaderBuilder()
                 .withActivity(activity)
                 .addProfiles(userProfile)
+                .withAlternativeProfileHeaderSwitching(false)
                 .withHeaderBackground(R.drawable.drawer_profile_header)
+                .withCompactStyle(true)
                 .build();
 
 
@@ -89,10 +91,7 @@ public class BaseActivity extends AppCompatActivity
                 {
                     // select the activity to launch
                     final Intent intent = new Intent();
-                    if (id == 1)
-                    {
-                        intent.setClass(activity, MainActivity.class);
-                    } else if (id == 2)
+                    if (id == 2)
                     {
                         intent.setClass(activity, UserProfileActivity.class);
                         intent.putExtra(Constants.USER_ID, user.getUserId());
@@ -109,9 +108,10 @@ public class BaseActivity extends AppCompatActivity
                         public void run()
                         {
                             activity.startActivity(intent);
-                            activity.finish();
+                            drawer.setSelection(1, false);
                         }
                     }, 500);
+
                 } else if (id == 10)
                 {
                     // log out
@@ -122,12 +122,12 @@ public class BaseActivity extends AppCompatActivity
                     activity.finish();
                 }
 
-                return false;
+                return true;
             }
         });
 
         // select the current activity
-        Drawer drawer = builder.build();
+        drawer = builder.build();
         if (currentActivityId > 1)
             drawer.setSelection(currentActivityId);
         return drawer;
@@ -140,5 +140,17 @@ public class BaseActivity extends AppCompatActivity
             drawer.closeDrawer();
         else
             super.onBackPressed();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
