@@ -3,10 +3,9 @@ package com.asu.pick_me_graduation_project.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -17,6 +16,8 @@ import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController
 import com.asu.pick_me_graduation_project.controller.UserApiController;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.asu.pick_me_graduation_project.view.CircleTransform;
+import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,12 +32,6 @@ public class UserProfileActivity extends BaseActivity
     /* UI */
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.textViewUserName)
-    TextView textViewUserName;
-    @Bind(R.id.imageViewProfilePicture)
-    ImageView imageViewProfilePicture;
-    @Bind(R.id.ratingBar)
-    RatingBar ratingBar;
     @Bind(R.id.textViewEmail)
     TextView textViewEmail;
     @Bind(R.id.textViewPhoneNumber)
@@ -55,6 +50,12 @@ public class UserProfileActivity extends BaseActivity
     ImageView iamgeViewCarIsConditioned;
     @Bind(R.id.fab)
     FloatingActionButton fab;
+    @Bind(R.id.imageViewProfilePicture)
+    ImageView imageViewProfilePicture;
+    @Bind(R.id.ratingBar)
+    RatingBar ratingBar;
+    @Bind(R.id.scroll)
+    NestedScrollView scroll;
 
     /* fields */
     private String userId;
@@ -74,12 +75,12 @@ public class UserProfileActivity extends BaseActivity
         // setup common views
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // load data
         loadProfile();
 
     }
-
 
 
     @Override
@@ -124,14 +125,16 @@ public class UserProfileActivity extends BaseActivity
             public void success(User user)
             {
                 // TODO set profile data to views
-
+                Picasso.with(getApplicationContext()).
+                        load(user.getProfilePictureUrl())
+                        .transform(new CircleTransform())
+                        .into(imageViewProfilePicture);
 
                 // TODO - set the icon of the fab...depending on it's the profile of this user or not
                 if (userId.equals(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId()))
                 {
 
-                }
-                else
+                } else
                 {
 
                 }

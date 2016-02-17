@@ -98,7 +98,7 @@ public class AuthenticationAPIController
                 user.setCarDetails(carDetails);
 
                 String token = "abfgfgf_fdsfd";
-                Log.e("Game", "made user " + user.getUserId());
+
                 // update preferences
                 setCurrentUser(user, token);
 

@@ -5,6 +5,7 @@ import android.os.Handler;
 
 import com.asu.pick_me_graduation_project.callback.GetProfileCallback;
 import com.asu.pick_me_graduation_project.callback.SearchUserCallback;
+import com.asu.pick_me_graduation_project.model.CarDetails;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 
@@ -41,13 +42,23 @@ public class UserApiController
             {
                 // make mock data
                 User user = new User();
-                user.setEmail("egor@mail.com");
-                user.setFirstName("Egor");
-                user.setLastName("Egor Kulikov");
-                user.setProfilePictureUrl("http://graph.facebook.com/100001144443949/picture?type=square");
-                user.setGender(Constants.GENDER_MALE);
+                user.setUserId("42");
+                user.setEmail("usermail@mail.com");
+                user.setFirstName("Lukaka");
+                user.setLastName("agro");
+                user.setProfilePictureUrl("http://netdna.walyou.netdna-cdn.com/wp-content/uploads//2010/12/facebook-profile-picture-baby-pic-avatar.jpg");
+                user.setGender("Male");
                 user.setLocationLatitude(30.0412772);
                 user.setLocationAltitude(31.2658458);
+                user.setPhoneNumber("0114385332");
+                user.setBio("this is my bio....");
+
+                CarDetails carDetails = new CarDetails();
+                carDetails.setModel("Kia");
+                carDetails.setYear("2013");
+                carDetails.setConditioned(true);
+                carDetails.setPlateNumber("1234");
+                user.setCarDetails(carDetails);
 
                 // invoke callback
                 callback.success(user);
