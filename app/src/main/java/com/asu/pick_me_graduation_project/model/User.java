@@ -19,6 +19,7 @@ public class User
     String phoneNumber;
     String bio;
     CarDetails carDetails;
+    private int rate;
 
     /* setters and getters */
 
@@ -131,7 +132,18 @@ public class User
     {
         this.carDetails = carDetails;
     }
-/* methods */
+
+    public int getRate()
+    {
+        return rate;
+    }
+
+    public void setRate(int rate)
+    {
+        this.rate = rate;
+    }
+
+    /* methods */
 
     /**
      * parses a json to get a user object
@@ -144,4 +156,6 @@ public class User
 
         return user;
     }
+
+
 }

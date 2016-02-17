@@ -1,11 +1,15 @@
 package com.asu.pick_me_graduation_project.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -32,6 +36,8 @@ public class UserProfileActivity extends BaseActivity
     /* UI */
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    @Bind(R.id.content)
+    View content;
     @Bind(R.id.textViewEmail)
     TextView textViewEmail;
     @Bind(R.id.textViewPhoneNumber)
@@ -56,6 +62,8 @@ public class UserProfileActivity extends BaseActivity
     RatingBar ratingBar;
     @Bind(R.id.scroll)
     NestedScrollView scroll;
+    @Bind(R.id.app_bar_layout)
+    AppBarLayout appBarLayout;
 
     /* fields */
     private String userId;
@@ -88,30 +96,17 @@ public class UserProfileActivity extends BaseActivity
     {
         super.onResume();
 
-        new Handler().postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                // TODO - make a scale up animation on the fab
-            }
-        }, 300);
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
 
         new Handler().postDelayed(new Runnable()
         {
             @Override
             public void run()
             {
-                // TODO - make a scale down animation on the fab
+                // TODO animate fab
             }
         }, 300);
     }
+
 
     /**
      * downloads the user's profile and shows it
@@ -124,26 +119,39 @@ public class UserProfileActivity extends BaseActivity
             @Override
             public void success(User user)
             {
-                // TODO set profile data to views
+                //  set profile data to views
+                setTitle(user.getFirstName() + " " + user.getLastName());
+                ratingBar.setNumStars(user.getRate());
+                textViewEmail.setText(user.getEmail());
+                textViewPhoneNumber.setText(user.getPhoneNumber());
                 Picasso.with(getApplicationContext()).
                         load(user.getProfilePictureUrl())
                         .transform(new CircleTransform())
                         .into(imageViewProfilePicture);
+                // TODO age
+                textViewBio.setText(user.getBio());
+                textViewCarModel.setText(user.getCarDetails().getModel());
+                textViewCarYear.setText(user.getCarDetails().getYear());
+                textViewCarPlateNumber.setText(user.getCarDetails().getPlateNumber());
+                //iamgeViewCarIsConditioned.setImageResource(Integer.parseInt(String.valueOf(user.getCarDetails().isConditioned())));//not sure
 
-                // TODO - set the icon of the fab...depending on it's the profile of this user or not
+
+                // set the icon of the fab...depending on it's the profile of this user or not
                 if (userId.equals(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId()))
                 {
-
+                    fab.setImageResource(R.drawable.ic_edit);
                 } else
                 {
-
+                    fab.setImageResource(R.drawable.ic_chat);
                 }
             }
 
             @Override
             public void fail(String message)
             {
-                // TODO show error using snack bar
+                //  show error using snack bar
+                //done by ra2fat imported linearLayout and make linearLayput content
+                Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -151,10 +159,15 @@ public class UserProfileActivity extends BaseActivity
     @OnClick(R.id.fab)
     public void onClick()
     {
-        // TODO - open the edit activity if it's the profile of this user
         if (userId.equals(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId()))
         {
-
+            //  open the edit activity if it's the profile of this user
+            //done by raafat
+            if (userId.equals(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId()))
+            {
+                Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
+                startActivity(intent);
+            }
         }
     }
 }
