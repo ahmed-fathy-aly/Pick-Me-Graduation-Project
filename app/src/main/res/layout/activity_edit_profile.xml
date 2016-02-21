@@ -1,112 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
+    android:id="@+id/content"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        style="@style/AppTheme"
-        />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/infoString"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/toolbar"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/editText"
-        android:layout_below="@+id/textView3"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="none">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/CarModelString"
-        android:id="@+id/textView13"
-        android:layout_below="@+id/editText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corner"
+            android:orientation="vertical"
+            android:paddingBottom="10.0dip">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText2"
-        android:layout_below="@+id/textView13"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:gravity="center">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/CarColorString"
-        android:id="@+id/textView14"
-        android:layout_below="@+id/editText2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText3"
-        android:layout_below="@+id/textView14"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ProfilePic"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:src="@drawable/profilepic"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/dobString"
-        android:id="@+id/textView15"
-        android:layout_below="@+id/editText3"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+            </RelativeLayout>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        android:ems="10"
-        android:id="@+id/editText4"
-        android:layout_below="@+id/textView15"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ProfilePic"
+                android:layout_margin="10.0dip"
+                android:orientation="vertical">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="DONE"
-        android:id="@+id/button"
-        android:layout_marginTop="58dp"
-        android:layout_below="@+id/editText4"
-        android:layout_centerHorizontal="true"
-        android:background="#FF9800"
-        android:enabled="true" />
+                <EditText
+                    android:id="@+id/Name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="50.0dip"
+                    android:layout_marginBottom="10.0dip"
+                    android:background="@drawable/rounded_bg_white"
+                    android:drawableRight="@drawable/star_red"
+                    android:hint="@string/first_name"
+                    android:inputType="textPersonName|textCapSentences"
+                    android:maxLength="50"
+                    android:paddingRight="10.0dip"/>
 
-</RelativeLayout>
+                <EditText
+                    android:id="@+id/Lastname"
+                    android:layout_width="fill_parent"
+                    android:layout_height="50.0dip"
+                    android:layout_marginBottom="10.0dip"
+                    android:background="@drawable/rounded_bg_white"
+                    android:drawableRight="@drawable/star_red"
+                    android:hint="@string/last_name1"
+                    android:inputType="textPersonName|textCapSentences"
+                    android:maxLength="20"
+                    android:paddingRight="10.0dip"/>
+
+                <EditText
+                    android:id="@+id/Age"
+                    android:layout_width="fill_parent"
+                    android:layout_height="50.0dip"
+                    android:background="@drawable/rounded_bg_white"
+                    android:drawableRight="@drawable/star_red"
+                    android:hint="@string/age"
+                    android:inputType="textPersonName|textCapSentences"
+                    android:maxLength="20"
+                    android:paddingRight="10.0dip"/>
+
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/Email"
+                android:layout_width="fill_parent"
+                android:layout_height="50.0dip"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginRight="10.0dip"
+                android:drawableLeft="@drawable/envelop_purple"
+                android:drawablePadding="10.0dip"
+                android:drawableRight="@drawable/star_red"
+                android:hint="@string/email"
+                android:inputType="textWebEmailAddress|textCapSentences"
+                android:maxLength="30"
+                android:paddingRight="10.0dip"/>
+
+            <include layout="@layout/phonenumber"/>
+
+            <include layout="@layout/userbio"/>
+
+            <include layout="@layout/carinfo"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -47,10 +47,18 @@ public class AuthenticationAPIController
                 user.setEmail("egor@mail.com");
                 user.setFirstName("Egor");
                 user.setLastName("Egor Kulikov");
-                user.setProfilePictureUrl("http://graph.facebook.com/100001144443949/picture?type=square");
+                user.setProfilePictureUrl("https://upload.wikimedia.org/wikipedia/en/7/70/Shawn_Tok_Profile.jpg");
                 user.setGender(Constants.GENDER_MALE);
                 user.setLocationLatitude(30.0412772);
                 user.setLocationAltitude(31.2658458);
+
+                CarDetails carDetails = new CarDetails();
+                carDetails.setModel("Kia");
+                carDetails.setYear("2013");
+                carDetails.setConditioned(true);
+                carDetails.setPlateNumber("1234");
+                user.setCarDetails(carDetails);
+
                 String token = "abfgfgf_fdsfd";
 
                 // update preferences
@@ -83,7 +91,7 @@ public class AuthenticationAPIController
                 user.setEmail(email);
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
-                user.setProfilePictureUrl("http://graph.facebook.com/100001144443949/picture?type=square");
+                user.setProfilePictureUrl("https://upload.wikimedia.org/wikipedia/en/7/70/Shawn_Tok_Profile.jpg");
                 user.setGender(gender);
                 user.setLocationLatitude(30.0412772);
                 user.setLocationAltitude(31.2658458);
@@ -140,14 +148,18 @@ public class AuthenticationAPIController
     /**
      * saves the user's info to the preferences
      */
-    private void setCurrentUser(User user, String authorizationToken)
+    public void setCurrentUser(User user, String authorizationToken)
     {
-        Log.e("Game", "set user " + user.getUserId());
         PreferencesUtils.clear(context);
         PreferencesUtils.setUser(context, user);
         PreferencesUtils.setAuthToken(context, authorizationToken);
     }
 
-
-
+    /**
+     * updates saved user info
+     */
+    public void updateUser(User user)
+    {
+        PreferencesUtils.setUser(context, user);
+    }
 }

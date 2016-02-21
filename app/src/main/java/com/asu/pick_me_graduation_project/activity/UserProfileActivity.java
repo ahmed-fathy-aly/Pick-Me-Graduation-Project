@@ -1,10 +1,8 @@
 package com.asu.pick_me_graduation_project.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
@@ -20,7 +18,6 @@ import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController
 import com.asu.pick_me_graduation_project.controller.UserApiController;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
-import com.asu.pick_me_graduation_project.view.CircleTransform;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
@@ -64,6 +61,8 @@ public class UserProfileActivity extends BaseActivity
     NestedScrollView scroll;
     @Bind(R.id.app_bar_layout)
     AppBarLayout appBarLayout;
+    @Bind(R.id.textViewUserName)
+TextView textViewUserName;
 
     /* fields */
     private String userId;
@@ -120,15 +119,16 @@ public class UserProfileActivity extends BaseActivity
             public void success(User user)
             {
                 //  set profile data to views
-                setTitle(user.getFirstName() + " " + user.getLastName());
+                textViewUserName.setText(user.getFirstName() + " " + user.getLastName());
                 ratingBar.setNumStars(user.getRate());
                 textViewEmail.setText(user.getEmail());
                 textViewPhoneNumber.setText(user.getPhoneNumber());
                 Picasso.with(getApplicationContext()).
                         load(user.getProfilePictureUrl())
-                        .transform(new CircleTransform())
+                        .noFade()
                         .into(imageViewProfilePicture);
-                // TODO age
+
+                textViewAge.setText("23");
                 textViewBio.setText(user.getBio());
                 textViewCarModel.setText(user.getCarDetails().getModel());
                 textViewCarYear.setText(user.getCarDetails().getYear());
@@ -161,12 +161,12 @@ public class UserProfileActivity extends BaseActivity
     {
         if (userId.equals(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId()))
         {
-            //  open the edit activity if it's the profile of this user
+            //  show the edit profile dialog if it's the profile of this user
             //done by raafat
             if (userId.equals(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId()))
             {
-                Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
-                startActivity(intent);
+                EditProfileFragment editProfileFragment = new EditProfileFragment();
+                editProfileFragment.show(getSupportFragmentManager(), getString(R.string.title_edit_profile));
             }
         }
     }

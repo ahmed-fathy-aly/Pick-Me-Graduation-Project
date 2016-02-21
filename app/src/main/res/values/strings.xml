@@ -15,4 +15,18 @@
     <string name="title_search_users">Find User</string>
     <string name="search_by_username">Search By Username</string>
     <string name="first_name">First Name</string>
+    <string name="last_name1">Last Name</string>
+    <string name="age">Age</string>
+    <string name="add_car_photo">add your car photo</string>
+    <string name="model">car model</string>
+    <string name="plate_numer">plate number</string>
+    <string name="car_year">car year</string>
+    <string name="select_brand">select brand</string>
+    <string name="Do_you_have_acar">Do you have a car</string>
+    <string name="bio_hint">Biograghic info</string>
+    <string name="phone_hint_post">(11) 4761 1986</string>
+    <string name="phone_hint_pre">+20</string>
+    <string name="edit">Edit</string>
+    <string name="cancel">Cancel</string>
+
 </resources>

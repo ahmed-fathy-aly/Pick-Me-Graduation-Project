@@ -59,6 +59,7 @@ public class PreferencesUtils
         user.setLocationLatitude(pref.getFloat("user_location_lat", 0));
         user.setLocationAltitude(pref.getFloat("user_location_alt", 0));
 
+
         return user;
     }
 

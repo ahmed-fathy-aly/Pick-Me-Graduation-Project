@@ -4,4 +4,8 @@
         <item>Male </item>
         <item>Female </item>
     </string-array>
+    <string-array name="carbrand">
+        <item>Fiat </item>
+        <item>Other </item>
+    </string-array>
 </resources>

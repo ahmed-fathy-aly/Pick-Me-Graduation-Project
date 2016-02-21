@@ -14,11 +14,14 @@
         android:orientation="horizontal"
         android:layout_marginLeft="16dp">
 
-        <ImageView
+
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageViewProfilePicture"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleType="centerCrop"/>
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/profilepic"/>
+
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -32,7 +35,6 @@
                 android:id="@+id/textViewUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="User Name"
                 android:textColor="@color/white"
                 style="@style/TextAppearance.AppCompat.Large"
                 />

@@ -3,6 +3,7 @@ package com.asu.pick_me_graduation_project.controller;
 import android.content.Context;
 import android.os.Handler;
 
+import com.asu.pick_me_graduation_project.callback.EditProfileCallback;
 import com.asu.pick_me_graduation_project.callback.GetProfileCallback;
 import com.asu.pick_me_graduation_project.callback.SearchUserCallback;
 import com.asu.pick_me_graduation_project.model.CarDetails;
@@ -43,15 +44,15 @@ public class UserApiController
                 // make mock data
                 User user = new User();
                 user.setUserId("42");
-                user.setEmail("usermail@mail.com");
-                user.setFirstName("Lukaka");
-                user.setLastName("agro");
-                user.setProfilePictureUrl("http://netdna.walyou.netdna-cdn.com/wp-content/uploads//2010/12/facebook-profile-picture-baby-pic-avatar.jpg");
+                user.setEmail("nash@mail.com");
+                user.setFirstName("John");
+                user.setLastName("Nash");
+                user.setProfilePictureUrl("https://upload.wikimedia.org/wikipedia/en/7/70/Shawn_Tok_Profile.jpg");
                 user.setGender("Male");
                 user.setLocationLatitude(30.0412772);
                 user.setLocationAltitude(31.2658458);
                 user.setPhoneNumber("0114385332");
-                user.setBio("this is my bio....");
+                user.setBio("This is my bio....");
 
                 CarDetails carDetails = new CarDetails();
                 carDetails.setModel("Kia");
@@ -67,6 +68,28 @@ public class UserApiController
         }, 1000);
     }
 
+    /**
+     * updates the user's profile
+     */
+    public void editProfile(final User user, final EditProfileCallback callback)
+    {
+        // make a delay to mock the request
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+
+                // invoke callback
+                callback.success(user);
+
+            }
+        }, 1000);
+    }
+
+    /**
+     * seraches for all users having that substring
+     */
     public void searchusers(final String searchString, final SearchUserCallback callback)
     {
         // make a delay to mock the request
@@ -83,7 +106,7 @@ public class UserApiController
                     user.setEmail("egor@mail.com");
                     user.setFirstName("ahmed " + searchString + i + "");
                     user.setLastName("Egor Kulikov");
-                    user.setProfilePictureUrl("http://www.freelanceme.net/Images/default%20profile%20picture.png");
+                    user.setProfilePictureUrl("https://www.morganstanley.com/assets/images/people/tiles/adam-parker-large.jpg");
                     user.setGender(Constants.GENDER_MALE);
                     user.setLocationLatitude(30.0412772);
                     user.setLocationAltitude(31.2658458);
@@ -97,4 +120,6 @@ public class UserApiController
             }
         }, 1000);
     }
+
+
 }

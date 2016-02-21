@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:orientation="vertical"
+        android:paddingLeft="10.0dip"
+        android:paddingRight="10.0dip"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+
+        <EditText
+            android:id="@+id/CarModel"
+            android:padding="10.0dip"
+            android:layout_width="fill_parent"
+            android:layout_height="50.0dip"
+            android:layout_marginTop="10.0dip"
+            android:hint="@string/model"
+            android:maxLength="14" />
+        <EditText
+            android:id="@+id/CarYear"
+            android:padding="10.0dip"
+            android:layout_width="fill_parent"
+            android:layout_height="50.0dip"
+            android:layout_marginTop="10.0dip"
+            android:hint="@string/car_year"
+            android:maxLength="14" />
+        <EditText
+            android:id="@+id/CarPlate"
+            android:padding="10.0dip"
+            android:layout_width="fill_parent"
+            android:layout_height="50.0dip"
+            android:layout_marginTop="10.0dip"
+            android:layout_marginBottom="10.0dip"
+            android:hint="@string/plate_numer"
+            android:maxLength="14" />
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15.0sp"
+            android:text="Air conditioned"
+            android:id="@+id/Aircondition" />
+    </LinearLayout>
+
+
+</LinearLayout>
