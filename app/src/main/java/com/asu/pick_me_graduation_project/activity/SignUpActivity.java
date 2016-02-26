@@ -54,7 +54,7 @@ public class SignUpActivity extends AppCompatActivity
         // gather data
         String email = editTextEmail.getText().toString();
         String firstName = editTextFirstName.getText().toString();
-        String lastName = editTextEmail.getText().toString();
+        String lastName = editTextLastName.getText().toString();
         String password  = editTextPassword.getText().toString();
         String gender = spinngerGender.getSelectedItem().toString();
 

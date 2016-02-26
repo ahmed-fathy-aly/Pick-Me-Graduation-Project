@@ -1,8 +1,11 @@
 package com.asu.pick_me_graduation_project.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
@@ -25,11 +28,16 @@ import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController
 import com.asu.pick_me_graduation_project.controller.UserApiController;
 import com.asu.pick_me_graduation_project.model.CarDetails;
 import com.asu.pick_me_graduation_project.model.User;
+import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.CircleTransform;
+import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class EditProfileFragment extends android.support.v4.app.DialogFragment
@@ -78,6 +86,10 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
 
     /* fields */
 
+    private Uri imageUri;
+
+    /* fields */
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
@@ -113,6 +125,22 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+
+
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+    @Override
     public void onStart()
     {
         super.onStart();
@@ -134,46 +162,30 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
         }
     }
 
-    /**
-     * downloads the user's profile and shows it
-     */
-    private void loadProfile()
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent result)
     {
-        UserApiController controller = new UserApiController(getContext());
-        controller.getProfile(new AuthenticationAPIController(getContext()).getCurrentUser().getUserId(), new GetProfileCallback()
+        if (requestCode == Crop.REQUEST_PICK && resultCode == Activity.RESULT_OK)
         {
-            @Override
-            public void success(User user)
-            {
-                //  set profile data to views
-                Name.setText(user.getFirstName());
-                Lastname.setText(user.getLastName());
-                Email.setText(user.getEmail());
-                Phonenumber.setText(user.getPhoneNumber());
-                Bio.setText(user.getBio());
-                Picasso.with(getContext()).
-                        load(user.getProfilePictureUrl())
-                        .noFade()
-                        .into(ProfilePic);
-
-                // TODO age
-                CarModel.setText(user.getCarDetails().getModel());
-                CarYear.setText(user.getCarDetails().getYear());
-                CarPlate.setText(user.getCarDetails().getPlateNumber());
-                Aircondition.setChecked(user.getCarDetails().isConditioned());
-
-            }
-
-            @Override
-            public void fail(String message)
-            {
-                //  show error using snack bar
-                //done by ra2fat imported linearLayout and make linearLayput content
-                Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
-            }
-        });
+            // crop the picked image
+            Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped"));
+            Crop.of(result.getData(), destination).asSquare().start(getActivity());
+        } else if (requestCode == Crop.REQUEST_CROP && resultCode == Activity.RESULT_OK)
+        {
+            // set the cropped image to the image view
+            imageUri = Crop.getOutput(result);
+            Picasso.with(getContext().getApplicationContext())
+                    .load(imageUri)
+                    .into(ProfilePic);
+        }
     }
 
+    @OnClick(R.id.ProfilePic)
+    void pickProfilePicture()
+    {
+        Crop.pickImage(getActivity());
+    }
 
     /**
      * gather user's entered data and upload to backend
@@ -223,20 +235,46 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
         });
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    /**
+     * downloads the user's profile and shows it
+     */
+    private void loadProfile()
     {
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        UserApiController controller = new UserApiController(getContext());
+        controller.getProfile(new AuthenticationAPIController(getContext()).getCurrentUser().getUserId(), new GetProfileCallback()
+        {
+            @Override
+            public void success(User user)
+            {
+                //  set profile data to views
+                Name.setText(user.getFirstName());
+                Lastname.setText(user.getLastName());
+                Email.setText(user.getEmail());
+                Phonenumber.setText(user.getPhoneNumber());
+                Bio.setText(user.getBio());
+                if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
 
+                    Picasso.with(getContext()).
+                            load(user.getProfilePictureUrl())
+                            .placeholder(R.drawable.ic_user_large)
+                            .into(ProfilePic);
 
-        return rootView;
-    }
+                // TODO age
+                CarModel.setText(user.getCarDetails().getModel());
+                CarYear.setText(user.getCarDetails().getYear());
+                CarPlate.setText(user.getCarDetails().getPlateNumber());
+                Aircondition.setChecked(user.getCarDetails().isConditioned());
 
-    @Override
-    public void onDestroyView()
-    {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
+            }
+
+            @Override
+            public void fail(String message)
+            {
+                //  show error using snack bar
+                //done by ra2fat imported linearLayout and make linearLayput content
+                Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

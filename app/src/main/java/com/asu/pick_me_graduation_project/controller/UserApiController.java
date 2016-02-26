@@ -2,6 +2,7 @@ package com.asu.pick_me_graduation_project.controller;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 
 import com.asu.pick_me_graduation_project.callback.EditProfileCallback;
 import com.asu.pick_me_graduation_project.callback.GetProfileCallback;
@@ -9,6 +10,11 @@ import com.asu.pick_me_graduation_project.callback.SearchUserCallback;
 import com.asu.pick_me_graduation_project.model.CarDetails;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.future.ResponseFuture;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +27,7 @@ public class UserApiController
 {
     /* fields */
     Context context;
+    private ResponseFuture<String> searchUsersRequest;
 
     /* constructor */
     public UserApiController(Context context)
@@ -35,37 +42,55 @@ public class UserApiController
      */
     public void getProfile(String userId, final GetProfileCallback callback)
     {
-        // make a delay to mock the request
-        new Handler().postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                // make mock data
-                User user = new User();
-                user.setUserId("42");
-                user.setEmail("nash@mail.com");
-                user.setFirstName("John");
-                user.setLastName("Nash");
-                user.setProfilePictureUrl("https://upload.wikimedia.org/wikipedia/en/7/70/Shawn_Tok_Profile.jpg");
-                user.setGender("Male");
-                user.setLocationLatitude(30.0412772);
-                user.setLocationAltitude(31.2658458);
-                user.setPhoneNumber("0114385332");
-                user.setBio("This is my bio....");
+        String url = "http://pickmeasu.azurewebsites.net/api/get_profile"
+                + "?userId=" + userId;
+        Ion.with(context)
+                .load("GET", url)
+                .asString()
+                .setCallback(new FutureCallback<String>()
+                {
+                    @Override
+                    public void onCompleted(Exception e, String result)
+                    {
+                        Log.e("Game", "error ? " + (e != null));
 
-                CarDetails carDetails = new CarDetails();
-                carDetails.setModel("Kia");
-                carDetails.setYear("2013");
-                carDetails.setConditioned(true);
-                carDetails.setPlateNumber("1234");
-                user.setCarDetails(carDetails);
+                        // check failed
+                        if (e != null)
+                        {
+                            Log.e("Game", "error " + e.getMessage());
+                            callback.fail(e.getMessage());
+                            return;
+                        }
 
-                // invoke callback
-                callback.success(user);
+                        // parse the response
+                        Log.e("Game", "get profile result = " + result);
+                        try
+                        {
+                            // check status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
 
-            }
-        }, 1000);
+                            // parse user
+                            JSONObject userJson = response.getJSONObject("user");
+                            User user = User.fromJson(userJson);
+
+
+                            // invoke callback
+                            callback.success(user);
+                        } catch (Exception e2)
+                        {
+                            Log.e("Game", "parsing failed " + e2.getMessage());
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+                });
     }
 
     /**
@@ -92,33 +117,63 @@ public class UserApiController
      */
     public void searchusers(final String searchString, final SearchUserCallback callback)
     {
-        // make a delay to mock the request
-        new Handler().postDelayed(new Runnable()
+        // cancel any previous request
+        if (searchUsersRequest != null)
+        {
+            searchUsersRequest.cancel();
+        }
+
+        String url = "http://pickmeasu.azurewebsites.net/api/search"
+                + "?searchString=" + searchString
+                + "&count=-1";
+        searchUsersRequest = Ion.with(context)
+                .load("GET", url)
+                .setHeader("Content-Type", "application/json")
+                .asString();
+        searchUsersRequest.setCallback(new FutureCallback<String>()
         {
             @Override
-            public void run()
+            public void onCompleted(Exception e, String result)
             {
-                // make mock data
-                List<User> result = new ArrayList<User>();
-                for (int i = 1; i < 15; i++)
+                // check failed
+                if (e != null)
                 {
-                    User user = new User();
-                    user.setEmail("egor@mail.com");
-                    user.setFirstName("ahmed " + searchString + i + "");
-                    user.setLastName("Egor Kulikov");
-                    user.setProfilePictureUrl("https://www.morganstanley.com/assets/images/people/tiles/adam-parker-large.jpg");
-                    user.setGender(Constants.GENDER_MALE);
-                    user.setLocationLatitude(30.0412772);
-                    user.setLocationAltitude(31.2658458);
-
-                    result.add(user);
+                    if (!searchUsersRequest.isCancelled())
+                        callback.fail(e.getMessage());
+                    return;
                 }
 
-                // invoke callback
-                callback.success(result);
+                // parse the response
+                try
+                {
+                    // check status
+                    JSONObject response = new JSONObject(result);
+                    int status = response.getInt("status");
+                    if (status == 0)
+                    {
+                        String message = response.getString("message");
+                        callback.fail(message);
+                        return;
+                    }
 
+                    // parse user
+                    JSONObject usersJson = response.getJSONObject("users");
+                    JSONObject userJson = usersJson.getJSONObject("user");
+                    List<User> usersList = new ArrayList<User>();
+
+                    User user = User.fromJson(userJson);
+                    if (userJson.has("Id"))
+                        usersList.add(User.fromJson(userJson));
+
+                    // invoke callback
+                    callback.success(usersList);
+                } catch (Exception e2)
+                {
+                    callback.fail(e2.getMessage());
+                    return;
+                }
             }
-        }, 1000);
+        });
     }
 
 

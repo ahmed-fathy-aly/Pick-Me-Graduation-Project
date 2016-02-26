@@ -1,6 +1,7 @@
 package com.asu.pick_me_graduation_project.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 
 import com.asu.pick_me_graduation_project.R;
@@ -29,6 +30,15 @@ public class MainActivity extends BaseActivity
         // setup common views
         setupNavigationBar(this, toolbar);
         toolbar.setTitle("Dashboard");
+
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                drawer.openDrawer();
+            }
+        }, 700);
     }
 
 }

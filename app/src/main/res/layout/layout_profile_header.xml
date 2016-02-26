@@ -1,53 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@color/primary"
+              android:gravity="center_vertical"
               android:minHeight="200dp"
               android:orientation="vertical"
-              android:gravity="center_vertical"
+              android:id="@+id/profileHeaderRoot"
+              android:visibility="invisible"
+
     >
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="16dp">
+        android:layout_marginLeft="16dp"
+        android:orientation="horizontal">
 
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.pkmmte.view.CircularImageView
             android:id="@+id/imageViewProfilePicture"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:src="@drawable/profilepic"/>
+            android:src="@drawable/ic_user_large"
+            app:shadow="true"
+            />
 
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="80dp"
-            android:orientation="vertical"
             android:layout_marginLeft="8dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
 
             <TextView
                 android:id="@+id/textViewUserName"
+                style="@style/TextAppearance.AppCompat.Large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                style="@style/TextAppearance.AppCompat.Large"
                 />
 
             <RatingBar
                 android:id="@+id/ratingBar"
+                style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/ratingBarStyleSmall"
                 android:layout_marginTop="4dp"
-                android:rating="4"/>
+                />
         </LinearLayout>
 
     </LinearLayout>
-
 </LinearLayout>

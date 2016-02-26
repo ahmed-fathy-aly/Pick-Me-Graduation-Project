@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.model.User;
+import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.CircleTransform;
 import com.squareup.picasso.Picasso;
 
@@ -49,10 +50,11 @@ public class UsersAdapter extends ArrayAdapter<User>
         // set data
         final User user = getItem(position);
         textViewUsername.setText(user.getFirstName());
-        Picasso.with(getContext()).
-                load(user.getProfilePictureUrl())
-                .transform(new CircleTransform())
-                .into(imageViewPP);
+        if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
+            Picasso.with(getContext()).
+                    load(user.getProfilePictureUrl())
+                    .placeholder(R.drawable.ic_user_small)
+                    .into(imageViewPP);
 
         // add listenrs
         view.setOnClickListener(new View.OnClickListener()
@@ -67,6 +69,8 @@ public class UsersAdapter extends ArrayAdapter<User>
 
         return view;
     }
+
+
 
     public interface Listener
     {

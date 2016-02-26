@@ -1,17 +1,32 @@
 package com.asu.pick_me_graduation_project.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -20,6 +35,10 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
+import com.mikepenz.materialdrawer.util.DrawerImageLoader;
+import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 
 
 public class BaseActivity extends AppCompatActivity
@@ -33,6 +52,7 @@ public class BaseActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
     }
+
 
     /**
      * sets up the navigation drawer in the actibity
@@ -55,7 +75,8 @@ public class BaseActivity extends AppCompatActivity
         final User user = new AuthenticationAPIController(activity).getCurrentUser();
 
         // profile header
-        ProfileDrawerItem userProfile = new ProfileDrawerItem().withName(user.getFirstName()).withEmail(user.getEmail()).withNameShown(true);
+        final ProfileDrawerItem userProfile = new ProfileDrawerItem().withName(user.getFirstName()).
+                withEmail(user.getEmail()).withIcon(user.getProfilePictureUrl());
         final AccountHeader accountHeader = new AccountHeaderBuilder()
                 .withActivity(activity)
                 .addProfiles(userProfile)
@@ -63,6 +84,24 @@ public class BaseActivity extends AppCompatActivity
                 .withHeaderBackground(R.drawable.drawer_profile_header)
                 .withCompactStyle(true)
                 .build();
+
+        Ion.with(getApplicationContext())
+                .load(user.getProfilePictureUrl())
+                .asBitmap()
+                .setCallback(new FutureCallback<Bitmap>()
+                {
+                    @Override
+                    public void onCompleted(Exception e, Bitmap result)
+                    {
+                        for (IProfile profile : accountHeader.getProfiles())
+                            accountHeader.removeProfile(profile);
+                        if (result != null)
+                            userProfile.withIcon(result);
+                        else
+                            userProfile.withIcon(R.drawable.ic_user_small);
+                        accountHeader.addProfiles(userProfile);
+                    }
+                });
 
 
         // build navigation drawer

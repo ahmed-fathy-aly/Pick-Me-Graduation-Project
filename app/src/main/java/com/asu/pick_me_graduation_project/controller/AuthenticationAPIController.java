@@ -10,6 +10,12 @@ import com.asu.pick_me_graduation_project.model.CarDetails;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.PreferencesUtils;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by ahmed on 12/17/2015.
@@ -35,40 +41,61 @@ public class AuthenticationAPIController
      */
     public void login(String mail, String password, final LoginCallback callback)
     {
-        // make a delay to mock the request
-        new Handler().postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                // make mock data
-                User user = new User();
-                user.setUserId("42");
-                user.setEmail("egor@mail.com");
-                user.setFirstName("Egor");
-                user.setLastName("Egor Kulikov");
-                user.setProfilePictureUrl("https://upload.wikimedia.org/wikipedia/en/7/70/Shawn_Tok_Profile.jpg");
-                user.setGender(Constants.GENDER_MALE);
-                user.setLocationLatitude(30.0412772);
-                user.setLocationAltitude(31.2658458);
 
-                CarDetails carDetails = new CarDetails();
-                carDetails.setModel("Kia");
-                carDetails.setYear("2013");
-                carDetails.setConditioned(true);
-                carDetails.setPlateNumber("1234");
-                user.setCarDetails(carDetails);
+        // make a post request
+        String url = "http://pickmeasu.azurewebsites.net/api/login";
+        JsonObject userJson = new JsonObject();
+        userJson.addProperty("email", mail);
+        userJson.addProperty("password", password);
+        Ion.with(context)
+                .load("GET", url)
+                .addHeader("Content-Type", "application/json")
+                .setJsonObjectBody(userJson)
+                .asString()
+                .setCallback(new FutureCallback<String>()
+                {
+                    @Override
+                    public void onCompleted(Exception e, String result)
+                    {
+                        // check failed
+                        if (e != null)
+                        {
+                            callback.fail(e.getMessage());
+                            return;
+                        }
 
-                String token = "abfgfgf_fdsfd";
+                        // parse the response
+                        Log.e("Game", "log in result = " + result);
+                        try
+                        {
+                            // check status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
 
-                // update preferences
-                setCurrentUser(user, token);
+                            // parse user
+                            JSONObject userJson = response.getJSONObject("user");
+                            User user = User.fromJson(userJson);
+                            String token = response.getString("token");
 
-                // invoke callback
-                callback.success(user, token);
+                            // update preferences
+                            setCurrentUser(user, token);
 
-            }
-        }, 1000);
+                            // invoke callback
+                            callback.success(user, token);
+                        } catch (Exception e2)
+                        {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+                });
+
 
     }
 
@@ -79,42 +106,66 @@ public class AuthenticationAPIController
      */
     public void signUp(final String email, final String firstName, final String lastName, String password, final String gender, final SignUpCallback callback)
     {
-        // make a delay to mock the request
-        new Handler().postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                // make mock data
-                User user = new User();
-                user.setUserId("42");
-                user.setEmail(email);
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                user.setProfilePictureUrl("https://upload.wikimedia.org/wikipedia/en/7/70/Shawn_Tok_Profile.jpg");
-                user.setGender(gender);
-                user.setLocationLatitude(30.0412772);
-                user.setLocationAltitude(31.2658458);
-                user.setPhoneNumber("0114385332");
-                user.setBio("this is my bio....");
+        // make user json
+        JsonObject userJson = new JsonObject();
+        userJson.addProperty("fname", firstName);
+        userJson.addProperty("lname", lastName);
+        userJson.addProperty("email", email);
+        userJson.addProperty("password", password);
+        userJson.addProperty("gender", gender.equals(Constants.GENDER_MALE) ? 1 : 0);
 
-                CarDetails carDetails = new CarDetails();
-                carDetails.setModel("Kia");
-                carDetails.setYear("2013");
-                carDetails.setConditioned(true);
-                carDetails.setPlateNumber("1234");
-                user.setCarDetails(carDetails);
+        Log.e("Game", "sent user" + userJson.toString());
 
-                String token = "abfgfgf_fdsfd";
+        // make a post request
+        Ion.with(context)
+                .load("POST", "http://pickmeasu.azurewebsites.net/api/sign_up")
+                .addHeader("Content-Type", "application/json")
+                .setJsonObjectBody(userJson)
+                .asString()
+                .setCallback(new FutureCallback<String>()
+                {
+                    @Override
+                    public void onCompleted(Exception e, String result)
+                    {
+                        // check failed
+                        if (e != null)
+                        {
+                            callback.fail(e.getMessage());
+                            return;
+                        }
 
-                // update preferences
-                setCurrentUser(user, token);
+                        // parse the response
+                        Log.e("Game", "sign up result = " + result);
+                        try
+                        {
+                            // check status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
 
-                // invoke callback
-                callback.success(user, token);
+                            // parse user
+                            JSONObject userJson = response.getJSONObject("user");
+                            User user = User.fromJson(userJson);
+                            String token = response.getString("token");
 
-            }
-        }, 1000);
+                            // update preferences
+                            setCurrentUser(user, token);
+
+                            // invoke callback
+                            callback.success(user, token);
+                        } catch (Exception e2)
+                        {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+                });
+
     }
 
 
@@ -129,6 +180,7 @@ public class AuthenticationAPIController
 
     /**
      * returns the info of the user that has previously logged in
+     *
      * @return null if no user is logged in
      */
     public User getCurrentUser()

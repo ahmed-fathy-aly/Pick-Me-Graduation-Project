@@ -32,6 +32,8 @@
             android:label="@string/title_search_users">
         </activity>
 
+        <!-- external libraries activities -->
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
 
     </application>

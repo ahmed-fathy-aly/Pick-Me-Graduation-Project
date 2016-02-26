@@ -1,5 +1,9 @@
 package com.asu.pick_me_graduation_project.model;
 
+import android.util.Log;
+
+import com.asu.pick_me_graduation_project.utils.Constants;
+
 import org.json.JSONObject;
 
 /**
@@ -152,8 +156,27 @@ public class User
     {
         User user = new User();
 
-        // TODO - still waiting for backend to give the data
+        try
+        {
+            user.setUserId(json.getString("Id"));
+            user.setEmail(json.getString("Email"));
+            user.setFirstName(json.getString("Fname"));
+            user.setLastName(json.getString("Lname"));
+            user.setGender(json.getBoolean("Gender") ? Constants.GENDER_MALE : Constants.GENDER_FEMALE_);
+            user.setBio(json.getString("Bio"));
+            user.setPhoneNumber(json.getString("PhoneNumber"));
 
+            CarDetails carDetails = new CarDetails();
+            carDetails.setPlateNumber(json.getString("Platenumber"));
+            carDetails.setModel(json.getString("C_model"));
+            carDetails.setYear(json.getString("C_year"));
+            carDetails.setConditioned(false);
+            user.setCarDetails(carDetails);
+
+        } catch (Exception e)
+        {
+            Log.e("Game", "error parsing user"  + e.getMessage());
+        }
         return user;
     }
 
