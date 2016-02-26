@@ -43,14 +43,12 @@ public class AuthenticationAPIController
     {
 
         // make a post request
-        String url = "http://pickmeasu.azurewebsites.net/api/login";
-        JsonObject userJson = new JsonObject();
-        userJson.addProperty("email", mail);
-        userJson.addProperty("password", password);
+        String url = "http://pickmeasu.azurewebsites.net/api/login"
+                + "?email=" + mail
+                + "&password=" + password;
         Ion.with(context)
                 .load("GET", url)
                 .addHeader("Content-Type", "application/json")
-                .setJsonObjectBody(userJson)
                 .asString()
                 .setCallback(new FutureCallback<String>()
                 {

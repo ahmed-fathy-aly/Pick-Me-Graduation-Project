@@ -17,7 +17,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -29,7 +28,6 @@ import com.asu.pick_me_graduation_project.controller.UserApiController;
 import com.asu.pick_me_graduation_project.model.CarDetails;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
-import com.asu.pick_me_graduation_project.view.CircleTransform;
 import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.Picasso;
 
@@ -77,7 +75,7 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
     EditText CarYear;
     @Bind(R.id.CarPlate)
     EditText CarPlate;
-    @Bind(R.id.Aircondition)
+    @Bind(R.id.checkBoxAirConditioned)
     CheckBox Aircondition;
     @Bind(R.id.carcontent)
     LinearLayout carcontent;

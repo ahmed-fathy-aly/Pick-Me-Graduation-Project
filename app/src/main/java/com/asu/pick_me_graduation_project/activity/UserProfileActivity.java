@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -58,8 +59,8 @@ public class UserProfileActivity extends BaseActivity
     TextView textViewCarYear;
     @Bind(R.id.textViewCarPlateNumber)
     TextView textViewCarPlateNumber;
-    @Bind(R.id.iamgeViewCarIsConditioned)
-    ImageView iamgeViewCarIsConditioned;
+    @Bind(R.id.checkBoxAirConditioned)
+    CheckBox checkBoxAirConditioned;
     @Bind(R.id.fab)
     FloatingActionButton fab;
     @Bind(R.id.imageViewProfilePicture)
@@ -112,7 +113,7 @@ public class UserProfileActivity extends BaseActivity
             {
                 if (verticalOffset == 0)
                     ViewCompat.animate(imageViewProfilePicture).scaleX(1).scaleY(1).setDuration(300).start();
-                if (verticalOffset == -collapsingToolbar.getHeight() + toolbar.getHeight())
+                if (verticalOffset< -30)
                     ViewCompat.animate(imageViewProfilePicture).scaleX(0).scaleY(0).setDuration(300).start();
 
             }
@@ -155,27 +156,24 @@ public class UserProfileActivity extends BaseActivity
                 progressBar.setVisibility(View.INVISIBLE);
                 appBarLayout.setExpanded(true, true);
 
-                Log.e("Game", "success");
                 //  set profile data to views
                 textViewUserName.setText(user.getFirstName() + " " + user.getLastName());
                 ratingBar.setNumStars(user.getRate());
                 textViewEmail.setText(user.getEmail());
                 textViewPhoneNumber.setText(user.getPhoneNumber());
+                textViewBio.setText(user.getBio());
+                textViewAge.setText("30");
                 if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
                     Picasso.with(getApplicationContext()).
                             load(user.getProfilePictureUrl())
                             .placeholder(R.drawable.ic_user_large)
                             .into(imageViewProfilePicture);
 
-                textViewBio.setText(user.getBio());
                 textViewCarModel.setText(user.getCarDetails().getModel());
                 textViewCarYear.setText(user.getCarDetails().getYear());
                 textViewCarPlateNumber.setText(user.getCarDetails().getPlateNumber());
-                //iamgeViewCarIsConditioned.setImageResource(Integer.parseInt(String.valueOf(user.getCarDetails().isConditioned())));//not sure
-
-
-                Log.e("Game", "used id = " + userId);
-                Log.e("Game", "current id = " + new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId());
+                checkBoxAirConditioned.setVisibility(View.VISIBLE);
+                checkBoxAirConditioned.setChecked(user.getCarDetails().isConditioned());
 
                 // set the icon of the fab...depending on it's the profile of this user or not
                 if (userId.equals(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId()))

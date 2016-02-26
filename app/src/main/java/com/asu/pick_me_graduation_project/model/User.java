@@ -162,15 +162,15 @@ public class User
             user.setEmail(json.getString("Email"));
             user.setFirstName(json.getString("Fname"));
             user.setLastName(json.getString("Lname"));
+            user.setProfilePictureUrl(json.getString("Profile_pic"));
             user.setGender(json.getBoolean("Gender") ? Constants.GENDER_MALE : Constants.GENDER_FEMALE_);
             user.setBio(json.getString("Bio"));
             user.setPhoneNumber(json.getString("PhoneNumber"));
-
             CarDetails carDetails = new CarDetails();
             carDetails.setPlateNumber(json.getString("Platenumber"));
             carDetails.setModel(json.getString("C_model"));
             carDetails.setYear(json.getString("C_year"));
-            carDetails.setConditioned(false);
+            carDetails.setConditioned(json.getBoolean("AC"));
             user.setCarDetails(carDetails);
 
         } catch (Exception e)

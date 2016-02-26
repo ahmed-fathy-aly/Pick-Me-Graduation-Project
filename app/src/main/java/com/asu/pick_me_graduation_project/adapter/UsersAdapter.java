@@ -49,7 +49,7 @@ public class UsersAdapter extends ArrayAdapter<User>
 
         // set data
         final User user = getItem(position);
-        textViewUsername.setText(user.getFirstName());
+        textViewUsername.setText(user.getFirstName() + " " + user.getLastName());
         if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
             Picasso.with(getContext()).
                     load(user.getProfilePictureUrl())

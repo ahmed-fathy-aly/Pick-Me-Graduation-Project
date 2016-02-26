@@ -86,22 +86,14 @@
             android:layout_marginTop="8dp"
             android:background="@color/grey"/>
 
-        <LinearLayout
+        <CheckBox
+            android:id="@+id/checkBoxAirConditioned"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Air conditioned"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black"/>
-
-            <ImageView
-                android:id="@+id/iamgeViewCarIsConditioned"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:text="Air conditioned"
+            android:textSize="15.0sp"
+            android:textColor="@color/black"
+            android:enabled="false"/>
 
     </LinearLayout>
 

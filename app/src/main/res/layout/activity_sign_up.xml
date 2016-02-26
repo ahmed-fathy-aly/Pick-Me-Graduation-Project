@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-
     android:orientation="vertical"
     >
 
@@ -43,6 +42,7 @@
                     android:orientation="vertical"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
+                    android:elevation="4dp"
 
                     >
 
