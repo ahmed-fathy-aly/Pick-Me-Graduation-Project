@@ -10,8 +10,11 @@ import android.widget.TextView;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.model.User;
+import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.CircleTransform;
+import com.github.florent37.materialimageloading.MaterialImageLoading;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 
@@ -45,7 +48,7 @@ public class UsersAdapter extends ArrayAdapter<User>
 
         // reference views
         TextView textViewUsername = (TextView) view.findViewById(R.id.textViewUserName);
-        ImageView imageViewPP = (ImageView) view.findViewById(R.id.imageViewPP);
+        final ImageView imageViewPP = (ImageView) view.findViewById(R.id.imageViewPP);
 
         // set data
         final User user = getItem(position);
@@ -54,16 +57,29 @@ public class UsersAdapter extends ArrayAdapter<User>
             Picasso.with(getContext()).
                     load(user.getProfilePictureUrl())
                     .placeholder(R.drawable.ic_user_small)
-                    .into(imageViewPP);
+                    .into(imageViewPP,  new Callback()
+                    {
+                        @Override
+                        public void onSuccess()
+                        {
+                        }
+
+                        @Override
+                        public void onError()
+                        {
+
+                        }
+                    });
 
         // add listenrs
+        final View finalView = view;
         view.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
                 if (listener != null)
-                    listener.onClick(user, position);
+                    listener.onClick(user, position, finalView);
             }
         });
 
@@ -74,7 +90,7 @@ public class UsersAdapter extends ArrayAdapter<User>
 
     public interface Listener
     {
-        public void onClick(User user, int position);
+        public void onClick(User user, int position, View v);
 
     }
 }

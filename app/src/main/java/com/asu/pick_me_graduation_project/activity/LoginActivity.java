@@ -1,10 +1,20 @@
 package com.asu.pick_me_graduation_project.activity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.Transition;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -22,7 +32,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity
+public class LoginActivity extends BaseActivity
 {
 
     /* UI */
@@ -40,19 +50,31 @@ public class LoginActivity extends AppCompatActivity
     LinearLayout content;
 
     @Override
+    // set an exit transition
     protected void onCreate(Bundle savedInstanceState)
     {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        {
+            Transition exitTrans = new Fade();
+            getWindow().setExitTransition(exitTrans);
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+
+        }
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
 
         // reference views
         ButterKnife.bind(this);
+
 
     }
 
     @OnClick(R.id.buttonLogIn)
     void logIn()
     {
+        closeKeyboard();
+
         // gather data
         String email = editTextUserEmail.getText().toString();
         String password = editTextPassword.getText().toString();
@@ -67,12 +89,20 @@ public class LoginActivity extends AppCompatActivity
             {
                 // show succes
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(getApplicationContext(), getString(R.string.success), Toast.LENGTH_SHORT).show();
 
                 // open the main activity
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
+                //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(LoginActivity.this);
+                ActivityCompat.startActivity(LoginActivity.this, intent, options.toBundle());
+                new Handler().postDelayed(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        finish();
+                    }
+                }, 1000);
             }
 
             @Override

@@ -1,7 +1,9 @@
 package com.asu.pick_me_graduation_project.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -9,10 +11,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
+import android.transition.Transition;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -28,6 +34,9 @@ import com.asu.pick_me_graduation_project.controller.UserApiController;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
+import com.github.florent37.materialimageloading.MaterialImageLoading;
+import com.koushikdutta.ion.Ion;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
@@ -101,7 +110,7 @@ public class UserProfileActivity extends BaseActivity
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         progressBar = (ProgressBar) toolbar.findViewById(R.id.progressBar);
 
-        Log.e("Game", "null?" + (progressBar==null));
+        Log.e("Game", "null?" + (progressBar == null));
         // add a progress bar
         //progressBar = addProgressBar(toolbar);
 
@@ -113,7 +122,7 @@ public class UserProfileActivity extends BaseActivity
             {
                 if (verticalOffset == 0)
                     ViewCompat.animate(imageViewProfilePicture).scaleX(1).scaleY(1).setDuration(300).start();
-                if (verticalOffset< -30)
+                if (verticalOffset < -30)
                     ViewCompat.animate(imageViewProfilePicture).scaleX(0).scaleY(0).setDuration(300).start();
 
             }
@@ -129,8 +138,26 @@ public class UserProfileActivity extends BaseActivity
 
     }
 
-
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                appBarLayout.setExpanded(false, true);
+                new Handler().postDelayed(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        UserProfileActivity.super.onBackPressed();
+                    }
+                }, 300);
+                return true;
+            default:
+        }
+        return super.onOptionsItemSelected(item);
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -157,21 +184,35 @@ public class UserProfileActivity extends BaseActivity
                 appBarLayout.setExpanded(true, true);
 
                 //  set profile data to views
-                textViewUserName.setText(user.getFirstName() + " " + user.getLastName());
-                ratingBar.setNumStars(user.getRate());
-                textViewEmail.setText(user.getEmail());
-                textViewPhoneNumber.setText(user.getPhoneNumber());
-                textViewBio.setText(user.getBio());
+                textViewUserName.setText( ValidationUtils.correct(user.getFirstName()) + " " + ValidationUtils.correct(user.getLastName()));
+                ratingBar.setRating(5);
+                textViewEmail.setText(ValidationUtils.correct(user.getEmail()));
+                textViewPhoneNumber.setText(ValidationUtils.correct(user.getPhoneNumber()));
+                textViewBio.setText(ValidationUtils.correct(user.getBio()));
                 textViewAge.setText("30");
+                ratingBar.setRating(5.0f);
                 if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
                     Picasso.with(getApplicationContext()).
                             load(user.getProfilePictureUrl())
                             .placeholder(R.drawable.ic_user_large)
-                            .into(imageViewProfilePicture);
+                            .into(imageViewProfilePicture, new Callback()
+                            {
+                                @Override
+                                public void onSuccess()
+                                {
+                                    MaterialImageLoading.animate(imageViewProfilePicture).setDuration(Constants.IMAGE_LOAD_ANIMATION_DURATION).start();
+                                }
 
-                textViewCarModel.setText(user.getCarDetails().getModel());
-                textViewCarYear.setText(user.getCarDetails().getYear());
-                textViewCarPlateNumber.setText(user.getCarDetails().getPlateNumber());
+                                @Override
+                                public void onError()
+                                {
+
+                                }
+                            });
+
+                textViewCarModel.setText(ValidationUtils.correct(user.getCarDetails().getModel()));
+                textViewCarYear.setText(ValidationUtils.correct(user.getCarDetails().getYear()));
+                textViewCarPlateNumber.setText(ValidationUtils.correct(user.getCarDetails().getPlateNumber()));
                 checkBoxAirConditioned.setVisibility(View.VISIBLE);
                 checkBoxAirConditioned.setChecked(user.getCarDetails().isConditioned());
 
@@ -211,5 +252,21 @@ public class UserProfileActivity extends BaseActivity
                 editProfileFragment.show(getSupportFragmentManager(), getString(R.string.title_edit_profile));
             }
         }
+    }
+
+
+    @Override
+    public void onBackPressed()
+    {
+        appBarLayout.setExpanded(false, true);
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                UserProfileActivity.super.onBackPressed();
+            }
+        }, 300);
+
     }
 }

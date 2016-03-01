@@ -58,6 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
+        android:transitionName="@string/transition_user_list_to_profile"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -88,6 +89,7 @@
         app:layout_anchor="@id/app_bar_layout"
         app:layout_anchorGravity="bottom|right|end"
         app:theme="@style/ThemeOverlay.AppCompat.Light"
+        android:transitionName="@string/transition_fab_to_edit"
         />
 
 

@@ -14,6 +14,7 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.future.ResponseFuture;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -52,7 +53,6 @@ public class UserApiController
                     @Override
                     public void onCompleted(Exception e, String result)
                     {
-                        Log.e("Game", "error ? " + (e != null));
 
                         // check failed
                         if (e != null)
@@ -142,6 +142,7 @@ public class UserApiController
                         callback.fail(e.getMessage());
                     return;
                 }
+                Log.e("Game", "search result = " + result);
 
                 // parse the response
                 try
@@ -157,13 +158,15 @@ public class UserApiController
                     }
 
                     // parse user
-                    JSONObject usersJson = response.getJSONObject("users");
-                    JSONObject userJson = usersJson.getJSONObject("user");
+                    JSONArray usersJson = response.getJSONArray("users");
                     List<User> usersList = new ArrayList<User>();
+                    for (int i = 0; i < usersJson.length(); i++)
+                    {
+                        JSONObject userJson = usersJson.getJSONObject(i).getJSONObject("user");
+                        User user = User.fromJson(userJson);
+                        usersList.add(user);
 
-                    User user = User.fromJson(userJson);
-                    if (userJson.has("Id"))
-                        usersList.add(User.fromJson(userJson));
+                    }
 
                     // invoke callback
                     callback.success(usersList);

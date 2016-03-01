@@ -9,4 +9,5 @@ public class Constants
     public static final String GENDER_MALE = "male";
     public static final String USER_ID = "userId";
     public static final String GENDER_FEMALE_ = "female";
+    public static final int IMAGE_LOAD_ANIMATION_DURATION = 1000;
 }

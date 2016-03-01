@@ -28,5 +28,9 @@
     <string name="phone_hint_pre">+20</string>
     <string name="edit">Edit</string>
     <string name="cancel">Cancel</string>
+    <string name="transition_user_list_to_profile">transitionUserListToProfile</string>
+    <string name="transition_user_list_to_profile_picture">transitionUserListToProfilePicture</string>
+    <string name="transition_user_list_to_profile_name">transitionUserListToProfileName</string>
+    <string name="transition_fab_to_edit">transitionFabToEdit</string>
 
 </resources>

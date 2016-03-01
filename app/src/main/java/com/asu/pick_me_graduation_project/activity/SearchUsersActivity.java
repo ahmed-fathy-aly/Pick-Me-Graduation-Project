@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -82,14 +84,14 @@ public class SearchUsersActivity extends BaseActivity implements UsersAdapter.Li
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
-                if (s.length() > 1)
-                    searchUsers(s.toString());
+
             }
 
             @Override
             public void afterTextChanged(Editable s)
             {
-
+                if (s.length() >= 1)
+                    searchUsers(s.toString());
             }
         });
         // setup contoller
@@ -134,11 +136,15 @@ public class SearchUsersActivity extends BaseActivity implements UsersAdapter.Li
     }
 
     @Override
-    public void onClick(User user, int position)
+    public void onClick(User user, int position, View v)
     {
         // go to the user profile activity
         Intent intent = new Intent(this, UserProfileActivity.class);
         intent.putExtra(Constants.USER_ID, user.getUserId());
-        ActivityCompat.startActivity(this, intent, null);
+        ActivityOptionsCompat options =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                        android.support.v4.util.Pair.create(v, getString(R.string.transition_user_list_to_profile))
+                );
+        ActivityCompat.startActivity(this, intent, options.toBundle());
     }
 }

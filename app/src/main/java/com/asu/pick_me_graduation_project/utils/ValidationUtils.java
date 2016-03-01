@@ -16,4 +16,12 @@ public class ValidationUtils
             return false;
         return true;
     }
+
+    /**
+     * checks if the string is null then replace it with an empty string
+     */
+    public static String correct(String str)
+    {
+        return  notEmpty(str) ? str : "";
+    }
 }

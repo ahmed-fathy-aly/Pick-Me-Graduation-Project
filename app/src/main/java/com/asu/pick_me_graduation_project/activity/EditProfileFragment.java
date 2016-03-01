@@ -8,6 +8,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.SharedElementCallback;
+import android.support.v4.view.ViewCompat;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +37,8 @@ import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.List;
+import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -167,7 +174,7 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
         if (requestCode == Crop.REQUEST_PICK && resultCode == Activity.RESULT_OK)
         {
             // crop the picked image
-            Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped"));
+            Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped" +  new Random(1000000)));
             Crop.of(result.getData(), destination).asSquare().start(getActivity());
         } else if (requestCode == Crop.REQUEST_CROP && resultCode == Activity.RESULT_OK)
         {
@@ -178,6 +185,8 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
                     .into(ProfilePic);
         }
     }
+
+    /* listeners */
 
     @OnClick(R.id.ProfilePic)
     void pickProfilePicture()
@@ -233,6 +242,9 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
         });
     }
 
+
+    /* methods */
+
     /**
      * downloads the user's profile and shows it
      */
@@ -244,12 +256,15 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
             @Override
             public void success(User user)
             {
+                if (!isAdded())
+                    return;
+
                 //  set profile data to views
-                Name.setText(user.getFirstName());
-                Lastname.setText(user.getLastName());
-                Email.setText(user.getEmail());
-                Phonenumber.setText(user.getPhoneNumber());
-                Bio.setText(user.getBio());
+                Name.setText(ValidationUtils.correct(user.getFirstName()));
+                Lastname.setText(ValidationUtils.correct(user.getLastName()));
+                Email.setText(ValidationUtils.correct(user.getEmail()));
+                Phonenumber.setText(ValidationUtils.correct(user.getPhoneNumber()));
+                Bio.setText(ValidationUtils.correct(user.getBio()));
                 if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
 
                     Picasso.with(getContext()).
@@ -258,9 +273,10 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
                             .into(ProfilePic);
 
                 // TODO age
-                CarModel.setText(user.getCarDetails().getModel());
-                CarYear.setText(user.getCarDetails().getYear());
-                CarPlate.setText(user.getCarDetails().getPlateNumber());
+                Age.setText("30");
+                CarModel.setText(ValidationUtils.correct(user.getCarDetails().getModel()));
+                CarYear.setText(ValidationUtils.correct(user.getCarDetails().getYear()));
+                CarPlate.setText(ValidationUtils.correct(user.getCarDetails().getPlateNumber()));
                 Aircondition.setChecked(user.getCarDetails().isConditioned());
 
             }
@@ -270,6 +286,8 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
             {
                 //  show error using snack bar
                 //done by ra2fat imported linearLayout and make linearLayput content
+                if (!isAdded())
+                    return;
                 Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
             }
         });
