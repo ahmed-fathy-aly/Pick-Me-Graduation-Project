@@ -113,6 +113,7 @@ public class BaseActivity extends AppCompatActivity
         builder.addDrawerItems(new PrimaryDrawerItem().withIdentifier(1).withName("DashBoard")
                 , new PrimaryDrawerItem().withIdentifier(2).withName("My Profile")
                 , new PrimaryDrawerItem().withIdentifier(3).withName("Find User")
+                , new PrimaryDrawerItem().withIdentifier(4).withName("Messages")
                 , new DividerDrawerItem()
                 , new PrimaryDrawerItem().withIdentifier(10).withName("Log Out"));
 
@@ -138,6 +139,9 @@ public class BaseActivity extends AppCompatActivity
                     } else if (id == 3)
                     {
                         intent.setClass(activity, SearchUsersActivity.class);
+                    }else if (id == 4)
+                    {
+                        intent.setClass(activity, RecentChatsActivity.class);
                     }
 
                     // launch the activity after some milliseconds to show the drawer close animation

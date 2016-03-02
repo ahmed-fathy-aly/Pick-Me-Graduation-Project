@@ -12,8 +12,9 @@
         android:theme="@style/AppTheme" >
         <activity android:name=".activity.LoginActivity" >
         </activity>
-        <activity android:name=".activity.UserProfileActivity"
-            android:label="@string/title_profile">
+        <activity
+            android:name=".activity.UserProfileActivity"
+            android:label="@string/title_profile" >
         </activity>
         <activity android:name=".activity.SignUpActivity" >
         </activity>
@@ -28,14 +29,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SearchUsersActivity"
-            android:label="@string/title_search_users">
+        <activity
+            android:name=".activity.SearchUsersActivity"
+            android:label="@string/title_search_users" >
         </activity>
 
         <!-- external libraries activities -->
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
-
-
+        <activity android:name=".activity.RecentChatsActivity"
+            android:label="@string/title_messages">
+        </activity>
     </application>
 
 </manifest>

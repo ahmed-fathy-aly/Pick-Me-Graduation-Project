@@ -32,5 +32,6 @@
     <string name="transition_user_list_to_profile_picture">transitionUserListToProfilePicture</string>
     <string name="transition_user_list_to_profile_name">transitionUserListToProfileName</string>
     <string name="transition_fab_to_edit">transitionFabToEdit</string>
+    <string name="title_messages">Messages</string>
 
 </resources>
