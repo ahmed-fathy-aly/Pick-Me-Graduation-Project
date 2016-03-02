@@ -11,21 +11,31 @@ import java.util.Date;
 public class ChatMessage
 {
     /* fields */
-    User user;
+    User from;
+    User to;
     String content;
     Calendar date;
 
     /* getters and setters */
-    public User getUser()
+    public User getFrom()
+    {
+        return from;
+    }
+
+    public void setFrom(User user)
+    {
+        this.from = user;
+    }
+
+  public User getTo()
     {
         return user;
     }
 
-    public void setUser(User user)
+    public void setTo(User user)
     {
-        this.user = user;
+        this.to = user;
     }
-
     public String getContent()
     {
         return content;
