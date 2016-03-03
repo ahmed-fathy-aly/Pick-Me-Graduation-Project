@@ -33,5 +33,12 @@
     <string name="transition_user_list_to_profile_name">transitionUserListToProfileName</string>
     <string name="transition_fab_to_edit">transitionFabToEdit</string>
     <string name="title_messages">Messages</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_create_community">Create Community</string>
+    <string name="create">create</string>
+    <string name="title_communities">Communities</string>
 
 </resources>

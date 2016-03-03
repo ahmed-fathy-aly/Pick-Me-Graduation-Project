@@ -36,8 +36,12 @@
 
         <!-- external libraries activities -->
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
-        <activity android:name=".activity.RecentChatsActivity"
-            android:label="@string/title_messages">
+        <activity
+            android:name=".activity.RecentChatsActivity"
+            android:label="@string/title_messages" >
+        </activity>
+        <activity android:name=".activity.CommunitiesActivity"
+            android:label="@string/title_communities">
         </activity>
     </application>
 
