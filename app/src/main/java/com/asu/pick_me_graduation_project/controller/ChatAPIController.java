@@ -39,7 +39,8 @@ public class ChatAPIController
             ChatMessage message = new ChatMessage();
             message.setContent("content " + i);
             message.setDate(Calendar.getInstance());
-            message.setUser(user);
+            message.setFrom(user);
+            message.setTo(user);
 
             messages.add(message);
         }

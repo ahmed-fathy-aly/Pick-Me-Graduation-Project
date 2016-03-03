@@ -27,7 +27,7 @@ public class ChatMessage
         this.from = user;
     }
 
-  public User getTo()
+    public User getTo()
     {
         return user;
     }

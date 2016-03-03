@@ -129,14 +129,6 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
         return editProfileDialog;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-
-
-        return rootView;
-    }
 
     @Override
     public void onDestroyView()
