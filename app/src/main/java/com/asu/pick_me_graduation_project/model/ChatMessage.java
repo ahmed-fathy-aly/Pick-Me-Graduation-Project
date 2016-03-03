@@ -17,7 +17,25 @@ public class ChatMessage
     Calendar date;
 
     /* getters and setters */
+    public User getFrom()
+    {
+        return from;
+    }
 
+    public void setFrom(User user)
+    {
+        this.from = user;
+    }
+
+    public User getTo()
+    {
+        return user;
+    }
+
+    public void setTo(User user)
+    {
+        this.to = user;
+    }
     public String getContent()
     {
         return content;
@@ -38,25 +56,6 @@ public class ChatMessage
         this.date = date;
     }
 
-    public User getFrom()
-    {
-        return from;
-    }
-
-    public void setFrom(User from)
-    {
-        this.from = from;
-    }
-
-    public User getTo()
-    {
-        return to;
-    }
-
-    public void setTo(User to)
-    {
-        this.to = to;
-    }
     /* methods */
     public static ChatMessage fromJson(JSONObject json)
     {
