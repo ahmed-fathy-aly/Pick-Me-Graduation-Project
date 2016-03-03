@@ -29,7 +29,7 @@ public class ChatMessage
 
     public User getTo()
     {
-        return user;
+        return to;
     }
 
     public void setTo(User user)
