@@ -14,6 +14,8 @@ public class ValidationUtils
             return  false;
         if (str.length() == 0)
             return false;
+        if (str.equals("null"))
+            return false;
         return true;
     }
 
