@@ -158,24 +158,25 @@ public class User
 
         try
         {
-            user.setUserId(json.getString("Id"));
-            user.setEmail(json.getString("Email"));
-            user.setFirstName(json.getString("Fname"));
-            user.setLastName(json.getString("Lname"));
-            user.setProfilePictureUrl(json.getString("Profile_pic"));
-            user.setGender(json.getBoolean("Gender") ? Constants.GENDER_MALE : Constants.GENDER_FEMALE_);
-            user.setBio(json.getString("Bio"));
-            user.setPhoneNumber(json.getString("PhoneNumber"));
+            user.setUserId(json.getString("id"));
+            user.setEmail(json.getString("email"));
+            user.setFirstName(json.getString("firstName"));
+            user.setLastName(json.getString("lastName"));
+            user.setProfilePictureUrl(json.getString("profilePicture"));
+            user.setGender(json.getBoolean("gender") ? Constants.GENDER_MALE : Constants.GENDER_FEMALE_);
+            user.setBio(json.getString("bio"));
+            user.setPhoneNumber(json.getString("phoneNumber"));
             CarDetails carDetails = new CarDetails();
-            carDetails.setPlateNumber(json.getString("Platenumber"));
-            carDetails.setModel(json.getString("C_model"));
-            carDetails.setYear(json.getString("C_year"));
-            carDetails.setConditioned(json.getBoolean("AC"));
+            carDetails.setPlateNumber(json.getString("carPlateNumber"));
+            carDetails.setModel(json.getString("carModel"));
+            carDetails.setYear(json.getString("carYear"));
+            if (!json.isNull("carAC"))
+                carDetails.setConditioned(json.getBoolean("carAC"));
             user.setCarDetails(carDetails);
 
         } catch (Exception e)
         {
-            Log.e("Game", "error parsing user"  + e.getMessage());
+            Log.e("Game", "error parsing user" + e.getMessage());
         }
         return user;
     }

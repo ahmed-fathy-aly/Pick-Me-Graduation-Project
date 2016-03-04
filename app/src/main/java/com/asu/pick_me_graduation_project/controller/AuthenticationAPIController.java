@@ -104,21 +104,17 @@ public class AuthenticationAPIController
      */
     public void signUp(final String email, final String firstName, final String lastName, String password, final String gender, final SignUpCallback callback)
     {
-        // make user json
-        JsonObject userJson = new JsonObject();
-        userJson.addProperty("fname", firstName);
-        userJson.addProperty("lname", lastName);
-        userJson.addProperty("email", email);
-        userJson.addProperty("password", password);
-        userJson.addProperty("gender", gender.equals(Constants.GENDER_MALE) ? 1 : 0);
-
-        Log.e("Game", "sent user" + userJson.toString());
 
         // make a post request
+        String url = "http://pickmeasu.azurewebsites.net/api/sign_up"
+                + "?email=" + email
+                + "&password=" + password
+                + "&firstName=" + firstName
+                + "&lastName=" + lastName
+                + "&gender=" + (gender.equals(Constants.GENDER_MALE) ? true : false);
+        Log.e("Game", "posting = " + url);
         Ion.with(context)
-                .load("POST", "http://pickmeasu.azurewebsites.net/api/sign_up")
-                .addHeader("Content-Type", "application/json")
-                .setJsonObjectBody(userJson)
+                .load(url)
                 .asString()
                 .setCallback(new FutureCallback<String>()
                 {
@@ -126,8 +122,10 @@ public class AuthenticationAPIController
                     public void onCompleted(Exception e, String result)
                     {
                         // check failed
+                        Log.e("Game", "error ? " + (e != null));
                         if (e != null)
                         {
+                            Log.e("Game", "error sign up " + e.getMessage());
                             callback.fail(e.getMessage());
                             return;
                         }

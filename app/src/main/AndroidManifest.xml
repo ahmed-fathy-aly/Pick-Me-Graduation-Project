@@ -39,6 +39,9 @@
         <activity android:name=".activity.RecentChatsActivity"
             android:label="@string/title_messages">
         </activity>
+        <activity android:name=".activity.CommunitiesActivity"
+                  android:label="@string/title_communities">
+        </activity>
     </application>
 
 </manifest>

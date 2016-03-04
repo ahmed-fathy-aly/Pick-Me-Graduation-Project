@@ -123,9 +123,10 @@ public class UserApiController
             searchUsersRequest.cancel();
         }
 
-        String url = "http://pickmeasu.azurewebsites.net/api/search"
+        String url = "http://pickmeasu.azurewebsites.net/api/search_for_user"
                 + "?searchString=" + searchString
                 + "&count=-1";
+        Log.e("Game", "searching for " + url);
         searchUsersRequest = Ion.with(context)
                 .load("GET", url)
                 .setHeader("Content-Type", "application/json")
