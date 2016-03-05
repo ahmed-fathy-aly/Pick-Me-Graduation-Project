@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.asu.pick_me_graduation_project.activity.RecentChatsActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.asu.pick_me_graduation_project.activity.RecentChatsActivity">
 
-    <include layout="@layout/layout_toolbar" />
+    <include layout="@layout/layout_toolbar"/>
 
-    <TextView
-        android:text="Tmam Afandem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+
+    <ListView
+        android:id="@+id/listViewUsersChat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 </LinearLayout>
