@@ -110,13 +110,13 @@ public class BaseActivity extends AppCompatActivity
                 .withActivity(activity)
                 .withAccountHeader(accountHeader)
                 .withToolbar(toolbar);
-        builder.addDrawerItems(new PrimaryDrawerItem().withIdentifier(1).withName("DashBoard")
-                , new PrimaryDrawerItem().withIdentifier(2).withName("My Profile")
-                , new PrimaryDrawerItem().withIdentifier(3).withName("Find User")
-                , new PrimaryDrawerItem().withIdentifier(4).withName("Messages")
-                , new PrimaryDrawerItem().withIdentifier(5).withName("Communities")
+        builder.addDrawerItems(new PrimaryDrawerItem().withIdentifier(1).withName("DashBoard").withIcon(R.drawable.ic_menu_black_48dp)
+                , new PrimaryDrawerItem().withIdentifier(2).withName("My Profile").withIcon(R.drawable.ic_face_black_48dp)
+                , new PrimaryDrawerItem().withIdentifier(3).withName("Find User").withIcon(R.drawable.ic_search_black_48dp)
+                , new PrimaryDrawerItem().withIdentifier(4).withName("Messages").withIcon(R.drawable.ic_chat_bubble_outline_black_48dp)
+                , new PrimaryDrawerItem().withIdentifier(5).withName("Communities").withIcon(R.drawable.ic_people_outline_black_48dp)
                 , new DividerDrawerItem()
-                , new PrimaryDrawerItem().withIdentifier(10).withName("Log Out"));
+                , new PrimaryDrawerItem().withIdentifier(10).withName("Log Out").withIcon(R.drawable.ic_exit_to_app_black_48dp));
 
         builder.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener()
         {

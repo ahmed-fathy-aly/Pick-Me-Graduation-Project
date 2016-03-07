@@ -1,6 +1,7 @@
 package com.asu.pick_me_graduation_project.adapter;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
 
         //  reference views
         TextView UserName = (TextView) view.findViewById(R.id.UserName);
+        TextView date = (TextView) view.findViewById(R.id.MsgDate);
         TextView LastMSg = (TextView) view.findViewById(R.id.LastMsg);
         final ImageView imageViewPPChat = (ImageView) view.findViewById(R.id.imageViewPPChat);
 
@@ -41,7 +43,9 @@ public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
         final ChatMessage message = getItem(position);
         User user = message.getFrom();
         UserName.setText(user.getFirstName() + " " + user.getLastName());
-
+       // date.setText((CharSequence) message.getDate().toString());
+        long now= System.currentTimeMillis();
+        date.setText(DateUtils.getRelativeTimeSpanString(getContext(), message.getDate().getTimeInMillis()));
         // set LastMsg
         LastMSg.setText(getItem(position).getContent());
         if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
