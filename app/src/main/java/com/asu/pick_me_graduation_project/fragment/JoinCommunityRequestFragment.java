@@ -37,7 +37,8 @@ public class JoinCommunityRequestFragment extends android.support.v4.app.DialogF
         rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_request_join_community, null);
 
         // receive argument
-        getArguments().getString(Constants.COMMUNITY_ID)
+        communityId = getArguments().getString(Constants.COMMUNITY_ID);
+        communityName = getArguments().getString(Constants.COMMUNITY_NAME);
 
         // create the dialog
         dialog = new AlertDialog.Builder(getContext())

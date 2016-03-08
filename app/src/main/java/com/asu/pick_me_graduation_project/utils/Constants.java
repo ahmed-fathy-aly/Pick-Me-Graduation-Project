@@ -15,4 +15,5 @@ public class Constants
 
     /* community constants */
     public static final java.lang.String COMMUNITY_ID = "communityId";
+    public static final java.lang.String COMMUNITY_NAME = "communityName";
 }

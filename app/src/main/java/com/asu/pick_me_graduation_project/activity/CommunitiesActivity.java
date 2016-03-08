@@ -163,4 +163,5 @@ public class CommunitiesActivity extends BaseActivity
         CreateCommunityFragment createCommunityFragment = new CreateCommunityFragment();
         createCommunityFragment.show(getSupportFragmentManager(), getString(R.string.title_create_community));
     }
+
 }

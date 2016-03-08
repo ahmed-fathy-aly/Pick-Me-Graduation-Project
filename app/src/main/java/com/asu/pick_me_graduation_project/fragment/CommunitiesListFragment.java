@@ -3,6 +3,7 @@ package com.asu.pick_me_graduation_project.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.asu.pick_me_graduation_project.R;
+import com.asu.pick_me_graduation_project.activity.CreateCommunityFragment;
 import com.asu.pick_me_graduation_project.adapter.CommunitiesAdapter;
 import com.asu.pick_me_graduation_project.model.Community;
+import com.asu.pick_me_graduation_project.utils.Constants;
 
 import java.util.List;
 
@@ -47,7 +50,7 @@ public class CommunitiesListFragment extends android.support.v4.app.Fragment imp
 
         // setup adapter
         adapterCommunities = new CommunitiesAdapter(getContext());
-    adapterCommunities.setListener(this);
+        adapterCommunities.setListener(this);
         listViewCommunities.setAdapter(adapterCommunities);
 
         return view;
@@ -65,7 +68,14 @@ public class CommunitiesListFragment extends android.support.v4.app.Fragment imp
     @Override
     public void onJoinClicked(int position, Community community)
     {
-        Log.e("Game", "join " + community.getName());
+
+        // open the join request dialog
+        JoinCommunityRequestFragment joinCommunityRequestFragment = new JoinCommunityRequestFragment();
+        Bundle arguments = new Bundle();
+        arguments.putString(Constants.COMMUNITY_ID, community.getId());
+        arguments.putString(Constants.COMMUNITY_NAME, community.getName());
+        joinCommunityRequestFragment.setArguments(arguments);
+        joinCommunityRequestFragment.show(((AppCompatActivity)getContext()).getSupportFragmentManager(), getString(R.string.title_request_to_join));
     }
 
     @Override
