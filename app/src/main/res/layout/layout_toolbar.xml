@@ -12,10 +12,25 @@
     android:titleTextColor="@color/white"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
     >
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity = "right"
-        android:visibility="invisible"/>
-    </android.support.v7.widget.Toolbar>
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/editTextSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/grey2"
+            />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:visibility="invisible"/>
+    </LinearLayout>
+</android.support.v7.widget.Toolbar>
