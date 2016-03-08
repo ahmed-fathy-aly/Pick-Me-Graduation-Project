@@ -68,12 +68,64 @@ public class CommunitiesActivity extends BaseActivity
                 replace(R.id.fragmentCommunitiesListContent, communitiesListFragment)
                 .commit();
 
-        
+        // text watcher for search edit text
+        editTextSearch.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+                if (s.length() >= 1)
+                    searchCommunities(s.toString());
+                else
+                    getMyCommunities();
+            }
+        });
         // get data
         getMyCommunities();
     }
 
+    /**
+     * asks the backend to search for all communities with that substring
+     */
+    private void searchCommunities(String searchString)
+    {
+        progressBar.setVisibility(View.VISIBLE);
+        controller.searchCommunities(new AuthenticationAPIController(this).getCurrentUser().getUserId()
+                ,searchString
+                , new GetCommunitiesCallback()
+        {
+            @Override
+            public void success(List<Community> communityList)
+            {
+                progressBar.setVisibility(View.GONE);
 
+                // show the communities in the fragment
+                textViewMyCommunities.setVisibility(View.GONE);
+                if (communitiesListFragment != null)
+                    communitiesListFragment.setData(communityList);
+            }
+
+            @Override
+            public void fail(String errorMessage)
+            {
+                progressBar.setVisibility(View.GONE);
+                Snackbar.make(content, errorMessage, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+    }
 
     /**
      * asks the backend to get my communities

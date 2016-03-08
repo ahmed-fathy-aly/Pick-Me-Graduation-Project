@@ -85,7 +85,7 @@ public class CommunityAPIController
                     Community community = new Community();
                     community.setId(i + "");
                     community.setIsAdmin(i % 3 == 0);
-                    community.setIsMember(true);
+                    community.setIsMember(new Random(3).nextInt() == 0);
                     community.setName(searchString + i);
                     community.setDescription("description " + i);
                     community.setProfilePictureUrl("http://faculty.engineering.asu.edu/zhao/wp-content/uploads/2014/08/ASU-new-logo.jpg");

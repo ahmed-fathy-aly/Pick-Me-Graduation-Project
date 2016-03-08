@@ -43,5 +43,7 @@
     <string name="join">Join</string>
     <string name="joined">Joined</string>
     <string name="search_community">Search Communities</string>
+    <string name="title_request_to_join">Join Request</string>
+    <string name="send">Send</string>
 
 </resources>
