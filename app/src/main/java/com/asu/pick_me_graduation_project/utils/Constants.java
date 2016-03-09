@@ -9,5 +9,11 @@ public class Constants
     public static final String GENDER_MALE = "male";
     public static final String USER_ID = "userId";
     public static final String GENDER_FEMALE_ = "female";
+
+    /* image constants */
     public static final int IMAGE_LOAD_ANIMATION_DURATION = 1000;
+
+    /* community constants */
+    public static final java.lang.String COMMUNITY_ID = "communityId";
+    public static final java.lang.String COMMUNITY_NAME = "communityName";
 }

@@ -57,19 +57,8 @@ public class UsersAdapter extends ArrayAdapter<User>
             Picasso.with(getContext()).
                     load(user.getProfilePictureUrl())
                     .placeholder(R.drawable.ic_user_small)
-                    .into(imageViewPP,  new Callback()
-                    {
-                        @Override
-                        public void onSuccess()
-                        {
-                        }
+                    .into(imageViewPP);
 
-                        @Override
-                        public void onError()
-                        {
-
-                        }
-                    });
 
         // add listenrs
         final View finalView = view;

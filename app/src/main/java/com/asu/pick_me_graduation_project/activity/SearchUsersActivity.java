@@ -39,18 +39,19 @@ public class SearchUsersActivity extends BaseActivity implements UsersAdapter.Li
     /* UI */
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    SearchView searchView;
     @Bind(R.id.listViewUsers)
     ListView listViewUsers;
     @Bind(R.id.content)
     LinearLayout content;
+    @Bind(R.id.progressBar)
     ProgressBar progressBar;
+    @Bind(R.id.editTextSearch)
+    EditText editTextSearch;
 
 
     /* fields */
     private UsersAdapter adapterUsers;
     private UserApiController controller;
-    private EditText editTextSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -64,8 +65,8 @@ public class SearchUsersActivity extends BaseActivity implements UsersAdapter.Li
         // setup common views
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        progressBar = (ProgressBar) toolbar.findViewById(R.id.progressBar);
-        editTextSearch = (EditText) toolbar.findViewById(R.id.editTextSearch);
+        editTextSearch.setVisibility(View.VISIBLE);
+        editTextSearch.setHint(getString(R.string.search_by_username));
 
         // setup users list
         adapterUsers = new UsersAdapter(this);

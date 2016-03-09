@@ -12,6 +12,8 @@ public class Community
     String name;
     String description;
     boolean isAdmin; // am i an admin of this community ?
+    private boolean isMember;
+    private String profilePictureUrl;
 
     /* setters and getters */
 
@@ -55,6 +57,26 @@ public class Community
         this.isAdmin = isAdmin;
     }
 
+    public void setIsMember(boolean isMember)
+    {
+        this.isMember = isMember;
+    }
+
+    public boolean isMember()
+    {
+        return isMember;
+    }
+
+    public String getProfilePictureUrl()
+    {
+        return profilePictureUrl;
+    }
+
+    public void setProfilePictureUrl(String profilePictureUrl)
+    {
+        this.profilePictureUrl = profilePictureUrl;
+    }
+
     /* methods */
     public Community fromJson(JSONObject jsonObject)
     {
@@ -64,4 +86,7 @@ public class Community
 
         return community;
     }
+
+
+
 }
