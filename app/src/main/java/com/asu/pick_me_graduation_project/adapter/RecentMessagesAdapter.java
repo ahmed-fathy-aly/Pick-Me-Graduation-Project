@@ -21,9 +21,19 @@ import com.squareup.picasso.Picasso;
  */
 public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
 {
+    Listener listener;
+
     public RecentMessagesAdapter(Context context, int resource)
     {
         super(context, resource);
+    }
+
+    /**
+     * registers to be invoked on onClick callbacks
+     */
+    public void addListener(Listener listener)
+    {
+        this.listener = listener;
     }
 
     @Override
@@ -38,6 +48,7 @@ public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
         TextView LastMSg = (TextView) view.findViewById(R.id.LastMsg);
         final ImageView imageViewPPChat = (ImageView) view.findViewById(R.id.imageViewPPChat);
 
+        // TODO - add listener
         // set data
 
         final ChatMessage message = getItem(position);
@@ -68,5 +79,10 @@ public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
 
 
         return view;
+    }
+
+    public interface  Listener
+    {
+        void onClick(int position, ChatMessage message,View view);
     }
 }
