@@ -6,9 +6,9 @@ package com.asu.pick_me_graduation_project.utils;
 public class Constants
 {
     /* user constants */
-    public static final String GENDER_MALE = "male";
+    public static final String GENDER_MALE = "Male";
     public static final String USER_ID = "userId";
-    public static final String GENDER_FEMALE_ = "female";
+    public static final String GENDER_FEMALE_ = "Female";
 
     /* image constants */
     public static final int IMAGE_LOAD_ANIMATION_DURATION = 1000;

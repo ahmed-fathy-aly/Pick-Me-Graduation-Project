@@ -209,7 +209,9 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
 
         // upload user data
         final UserApiController controller = new UserApiController(getContext());
-        controller.editProfile(user, new EditProfileCallback()
+        controller.editProfile(user
+                , new AuthenticationAPIController(getContext()).getTokken()
+                ,new EditProfileCallback()
         {
             @Override
             public void success(User user)
@@ -242,7 +244,7 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
      */
     private void loadProfile()
     {
-        UserApiController controller = new UserApiController(getContext());
+        UserApiController controller = new UserApiController(getContext().getApplicationContext());
         controller.getProfile(new AuthenticationAPIController(getContext()).getCurrentUser().getUserId(), new GetProfileCallback()
         {
             @Override
