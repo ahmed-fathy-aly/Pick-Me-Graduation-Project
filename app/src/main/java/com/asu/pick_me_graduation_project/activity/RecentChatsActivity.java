@@ -2,7 +2,6 @@ package com.asu.pick_me_graduation_project.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -15,8 +14,6 @@ import com.asu.pick_me_graduation_project.callback.GetMessagesCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.ChatAPIController;
 import com.asu.pick_me_graduation_project.model.ChatMessage;
-import com.asu.pick_me_graduation_project.utils.Constants;
-import com.asu.pick_me_graduation_project.utils.PreferencesUtils;
 
 import java.util.List;
 
@@ -71,29 +68,31 @@ public class RecentChatsActivity extends BaseActivity
 
         //  get the messages from the controller
         progressBar.setVisibility(View.VISIBLE);
-        String currentUserId = new AuthenticationAPIController(this).getCurrentUser().getUserId();
-        controller.getChats(currentUserId, new GetMessagesCallback()
-        {
-            @Override
-            public void success(List<ChatMessage> messages)
-            {
-                progressBar.setVisibility(View.INVISIBLE);
-                adapter.clear();
-                adapter.addAll(messages);
+        controller.getRecentChats(
+                new AuthenticationAPIController(this).getTokken()
+                , new AuthenticationAPIController(this).getCurrentUser().getUserId()
+                , new GetMessagesCallback()
+                {
+                    @Override
+                    public void success(List<ChatMessage> messages)
+                    {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        adapter.clear();
+                        adapter.addAll(messages);
 
-            }
+                    }
 
-            @Override
-            public void fail(String error)
-            {
-                if (error == null)
-                    return;
-                progressBar.setVisibility(View.INVISIBLE);
+                    @Override
+                    public void fail(String error)
+                    {
+                        if (error == null)
+                            return;
+                        progressBar.setVisibility(View.INVISIBLE);
 
-                // show error
-                Snackbar.make(content, error, Snackbar.LENGTH_SHORT).show();
-            }
-        });
+                        // show error
+                        Snackbar.make(content, error, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
 
 
     }
