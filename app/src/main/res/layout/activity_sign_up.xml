@@ -80,7 +80,6 @@
                         android:ems="10"
                         android:gravity="left"
                         android:hint="Password"
-
                         android:inputType="textPassword"/>
 
                     <Spinner

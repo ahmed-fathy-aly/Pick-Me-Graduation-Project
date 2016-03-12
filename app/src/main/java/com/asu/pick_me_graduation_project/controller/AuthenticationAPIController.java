@@ -104,17 +104,19 @@ public class AuthenticationAPIController
      */
     public void signUp(final String email, final String firstName, final String lastName, String password, final String gender, final SignUpCallback callback)
     {
+        JsonObject json = new JsonObject();
+        json.addProperty("email", email);
+        json.addProperty("password", password);
+        json.addProperty("firstName", firstName);
+        json.addProperty("lastName", lastName);
+        json.addProperty("gender", gender.equals(Constants.GENDER_MALE) ? "true" : "false");
 
-        // make a post request
-        String url = "http://pickmeasu.azurewebsites.net/api/sign_up"
-                + "?email=" + email
-                + "&password=" + password
-                + "&firstName=" + firstName
-                + "&lastName=" + lastName
-                + "&gender=" + (gender.equals(Constants.GENDER_MALE) ? true : false);
-        Log.e("Game", "posting = " + url);
+        // make a post request,
+        String url = "http://pickmeasu.azurewebsites.net/api/sign_up";
         Ion.with(context)
                 .load(url)
+                .addHeader("Content-Type", "application/json")
+                .setJsonObjectBody(json)
                 .asString()
                 .setCallback(new FutureCallback<String>()
                 {
@@ -184,6 +186,16 @@ public class AuthenticationAPIController
         return PreferencesUtils.getUser(context);
     }
 
+
+    /**
+     * returns the authorization tokken of the user currently logged in
+     * returns "" if no user is logged in
+     */
+    public String getTokken()
+    {
+        return PreferencesUtils.getAuthenticationToken(context);
+    }
+
     /**
      * checks if there's a user that has logged in before
      * a logged in user has an authentication token
@@ -210,4 +222,5 @@ public class AuthenticationAPIController
     {
         PreferencesUtils.setUser(context, user);
     }
+
 }

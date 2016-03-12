@@ -10,6 +10,7 @@ import com.asu.pick_me_graduation_project.callback.SearchUserCallback;
 import com.asu.pick_me_graduation_project.model.CarDetails;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.future.ResponseFuture;
@@ -96,20 +97,34 @@ public class UserApiController
     /**
      * updates the user's profile
      */
-    public void editProfile(final User user, final EditProfileCallback callback)
+    public void editProfile(final User user, String token, final EditProfileCallback callback)
     {
-        // make a delay to mock the request
-        new Handler().postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
+        JsonObject json = new JsonObject();
+        json.addProperty("bio", user.getBio());
 
-                // invoke callback
-                callback.success(user);
+        Ion.with(context)
+                .load("PUT", "http://pickmeasu.azurewebsites.net/api/EditProfile")
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer " + token)
+                .setJsonObjectBody(json)
+                .asString()
+                .setCallback(new FutureCallback<String>()
+                {
+                    @Override
+                    public void onCompleted(Exception e, String result)
+                    {
+                        // check failed
+                        if (e != null)
+                        {
+                            Log.e("Game", "error " + e.getMessage());
+                            callback.fail(e.getMessage());
+                            return;
+                        }
 
-            }
-        }, 1000);
+                        callback.success(user);
+                        Log.e("Game", "result = " + result);
+                    }
+                });
     }
 
     /**
