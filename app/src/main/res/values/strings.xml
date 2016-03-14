@@ -36,6 +36,8 @@
     <string name="title_create_community">Communities</string>
     <string name="create">Create</string>
     <string name="title_communities">Communities</string>
+    <string name="message_hint">Write a message...</string>
+    <string name="transition_recentChat_list_to_chat">transitionRecentChatListToChat</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -21,7 +21,7 @@ import com.squareup.picasso.Picasso;
  */
 public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
 {
-    Listener listener;
+    Listener listener2;
 
     public RecentMessagesAdapter(Context context, int resource)
     {
@@ -31,13 +31,13 @@ public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
     /**
      * registers to be invoked on onClick callbacks
      */
-    public void addListener(Listener listener)
+    public void setListener(Listener listener)
     {
-        this.listener = listener;
+        this.listener2= listener;
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup parent)
+    public View getView(final int position, View view, ViewGroup parent)
     {
         // inflate view
         view = LayoutInflater.from(getContext()).inflate(R.layout.row_user_chat, parent, false);
@@ -47,12 +47,22 @@ public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
         TextView date = (TextView) view.findViewById(R.id.MsgDate);
         TextView LastMSg = (TextView) view.findViewById(R.id.LastMsg);
         final ImageView imageViewPPChat = (ImageView) view.findViewById(R.id.imageViewPPChat);
-
-        // TODO - add listener
-        // set data
-
         final ChatMessage message = getItem(position);
         User user = message.getFrom();
+
+        // TODO - add listener
+        final View finalView = view;
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener2 != null)
+                    listener2.onClick(position, message, finalView);
+            }
+        });
+
+        // set data
+
+
         UserName.setText(user.getFirstName() + " " + user.getLastName());
        // date.setText((CharSequence) message.getDate().toString());
         long now= System.currentTimeMillis();
@@ -78,11 +88,14 @@ public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
                     });
 
 
+
+
+
         return view;
     }
 
     public interface  Listener
     {
-        void onClick(int position, ChatMessage message,View view);
+       void onClick(int position, ChatMessage message, View view);
     }
 }

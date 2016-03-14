@@ -9,6 +9,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.asu.pick_me_graduation_project.R;
+import com.asu.pick_me_graduation_project.adapter.ChatMessagesAdapter;
 import com.asu.pick_me_graduation_project.callback.GetMessagesCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.ChatAPIController;
@@ -28,10 +29,13 @@ public class ChatActivity extends AppCompatActivity
     Toolbar toolbar;
     @Bind(R.id.content)
     LinearLayout content;
+    @Bind(R.id.listViewChat)
+    ListView ListViewChat;
 
     /* fields */
     String userId;
     ChatAPIController controller;
+    private ChatMessagesAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,6 +56,8 @@ public class ChatActivity extends AppCompatActivity
         controller = new ChatAPIController(this);
 
         // TODO - setup list view and its adapter
+        adapter=new ChatMessagesAdapter(this,new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId());
+         ListViewChat.setAdapter(adapter);
 
         // load data
         loadMessages();
