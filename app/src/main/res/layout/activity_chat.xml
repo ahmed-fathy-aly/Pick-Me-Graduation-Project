@@ -28,6 +28,25 @@
             android:orientation="horizontal">
 
             <!-- TODO  add profile picture and user name here -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/receiverPP"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_user_small"/>
+            <TextView
+                android:id="@+id/receiverName"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Receiver name"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -38,4 +57,30 @@
 
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
+    <ListView
+        android:id="@+id/listViewChat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/MessageEditor"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/message_hint"
+            android:inputType="textLongMessage"/>
+        <android.support.design.widget.VisibilityAwareImageButton
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:id="@+id/SendButton"
+            android:src="@drawable/ic_send_black_48dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center"
+            />
+    </LinearLayout>
+
 </LinearLayout>

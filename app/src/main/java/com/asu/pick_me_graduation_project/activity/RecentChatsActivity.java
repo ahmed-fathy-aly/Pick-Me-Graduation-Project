@@ -1,7 +1,10 @@
 package com.asu.pick_me_graduation_project.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -15,12 +18,14 @@ import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController
 import com.asu.pick_me_graduation_project.controller.ChatAPIController;
 import com.asu.pick_me_graduation_project.model.ChatMessage;
 
+import com.asu.pick_me_graduation_project.utils.Constants;
+
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class RecentChatsActivity extends BaseActivity
+public class RecentChatsActivity extends BaseActivity implements RecentMessagesAdapter.Listener
 {
 
     /* UI */
@@ -55,7 +60,9 @@ public class RecentChatsActivity extends BaseActivity
 
         //  setup list view and its adapter
         adapter = new RecentMessagesAdapter(this, R.layout.row_user_chat);
+        adapter.setListener(this);
         ListViewChat.setAdapter(adapter);
+
 
 
         // load data
@@ -71,11 +78,9 @@ public class RecentChatsActivity extends BaseActivity
         controller.getRecentChats(
                 new AuthenticationAPIController(this).getTokken()
                 , new AuthenticationAPIController(this).getCurrentUser().getUserId()
-                , new GetMessagesCallback()
-                {
+                , new GetMessagesCallback() {
                     @Override
-                    public void success(List<ChatMessage> messages)
-                    {
+                    public void success(List<ChatMessage> messages) {
                         progressBar.setVisibility(View.INVISIBLE);
                         adapter.clear();
                         adapter.addAll(messages);
@@ -83,8 +88,7 @@ public class RecentChatsActivity extends BaseActivity
                     }
 
                     @Override
-                    public void fail(String error)
-                    {
+                    public void fail(String error) {
                         if (error == null)
                             return;
                         progressBar.setVisibility(View.INVISIBLE);
@@ -96,4 +100,17 @@ public class RecentChatsActivity extends BaseActivity
 
 
     }
+
+    @Override
+    public void onClick(int position, ChatMessage message, View view) {
+        // go to the user profile activity
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra(Constants.USER_ID, message.getTo().getUserId());
+        ActivityOptionsCompat options =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                        android.support.v4.util.Pair.create(view, getString(R.string.transition_recentChat_list_to_chat))
+                );
+        ActivityCompat.startActivity(this, intent, options.toBundle());
+    }
 }
+
