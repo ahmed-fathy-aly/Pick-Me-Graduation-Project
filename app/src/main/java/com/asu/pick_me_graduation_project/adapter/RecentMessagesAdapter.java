@@ -33,14 +33,15 @@ public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
      */
     public void setListener(Listener listener)
     {
-        this.listener2= listener;
+        this.listener2 = listener;
     }
 
     @Override
     public View getView(final int position, View view, ViewGroup parent)
     {
         // inflate view
-        view = LayoutInflater.from(getContext()).inflate(R.layout.row_user_chat, parent, false);
+        if (view == null)
+            view = LayoutInflater.from(getContext()).inflate(R.layout.row_user_chat, parent, false);
 
         //  reference views
         TextView UserName = (TextView) view.findViewById(R.id.UserName);
@@ -52,9 +53,11 @@ public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
 
         // TODO - add listener
         final View finalView = view;
-        view.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 if (listener2 != null)
                     listener2.onClick(position, message, finalView);
             }
@@ -64,8 +67,8 @@ public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
 
 
         UserName.setText(user.getFirstName() + " " + user.getLastName());
-       // date.setText((CharSequence) message.getDate().toString());
-        long now= System.currentTimeMillis();
+        // date.setText((CharSequence) message.getDate().toString());
+        long now = System.currentTimeMillis();
         date.setText(DateUtils.getRelativeTimeSpanString(getContext(), message.getDate().getTimeInMillis()));
         // set LastMsg
         LastMSg.setText(getItem(position).getContent());
@@ -88,14 +91,11 @@ public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
                     });
 
 
-
-
-
         return view;
     }
 
-    public interface  Listener
+    public interface Listener
     {
-       void onClick(int position, ChatMessage message, View view);
+        void onClick(int position, ChatMessage message, View view);
     }
 }

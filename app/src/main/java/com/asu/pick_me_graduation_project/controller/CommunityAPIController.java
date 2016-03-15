@@ -26,17 +26,25 @@ public class CommunityAPIController
     /**
      * makes a new community with that user as admin
      */
-    public void createCommunity(String userId, String name, String description, CreateCommunityCallback callback)
+    public void createCommunity(String userId, final String name, final String description, final CreateCommunityCallback callback)
     {
         // TODO - make a post to the back end
 
-        // mock data for now
-        Community community = new Community();
-        community.setId("42");
-        community.setName(name);
-        community.setDescription(description);
-        community.setIsAdmin(true);
-        callback.success(community);
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+
+                // mock data for now
+                Community community = new Community();
+                community.setId("42");
+                community.setName(name);
+                community.setDescription(description);
+                community.setIsAdmin(true);
+                callback.success(community);
+            }
+        }, 2000);
     }
 
     public void getMyCommunities(String userId, final GetCommunitiesCallback callback)
