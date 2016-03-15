@@ -18,10 +18,16 @@
         android:layout_height="wrap_content"
         android:text="Create Community"/>
 
+
     <Button
         android:id="@+id/buttonEditProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Edit Profile"/>
 
+    <Button
+        android:id="@+id/buttonSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign Up"/>
 </LinearLayout>

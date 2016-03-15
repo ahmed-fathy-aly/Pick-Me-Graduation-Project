@@ -19,8 +19,9 @@ import com.asu.pick_me_graduation_project.utils.Constants;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
-public class ChatActivity extends AppCompatActivity
+public class ChatActivity extends BaseActivity
 {
     /* UI */
     @Bind(R.id.progressBar)
@@ -43,6 +44,8 @@ public class ChatActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        // reference views
+        ButterKnife.bind(this);
 
         // setup common views
         setSupportActionBar(toolbar);
@@ -77,7 +80,7 @@ public class ChatActivity extends AppCompatActivity
                     @Override
                     public void success(List<ChatMessage> messages)
                     {
-
+                    adapter.addAll(messages);
                     }
 
                     @Override

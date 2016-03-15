@@ -51,8 +51,11 @@ public class RecentChatsActivity extends BaseActivity implements RecentMessagesA
         ButterKnife.bind(this);
 
         // setup common views
+        toolbar.setTitle(getString(R.string.title_messages));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(getString(R.string.title_messages));
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
         progressBar = (ProgressBar) toolbar.findViewById(R.id.progressBar);
 
         //setup fields

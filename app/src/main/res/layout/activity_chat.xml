@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/content"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,7 +13,7 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-       android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="@dimen/toolbar_elevation"
@@ -37,6 +38,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/ic_user_small"/>
+
             <TextView
                 android:id="@+id/receiverName"
 
@@ -57,29 +59,33 @@
 
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
+
     <ListView
         android:id="@+id/listViewChat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <EditText
             android:id="@+id/MessageEditor"
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:hint="@string/message_hint"
             android:inputType="textLongMessage"/>
+
         <android.support.design.widget.VisibilityAwareImageButton
+            android:id="@+id/SendButton"
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:id="@+id/SendButton"
-            android:src="@drawable/ic_send_black_48dp"
-            android:layout_marginRight="10dp"
             android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_send_black_48dp"
             />
     </LinearLayout>
 
