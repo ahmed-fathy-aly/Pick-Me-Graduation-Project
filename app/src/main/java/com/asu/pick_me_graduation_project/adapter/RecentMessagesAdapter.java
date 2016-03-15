@@ -40,7 +40,7 @@ public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
     public View getView(final int position, View view, ViewGroup parent)
     {
         // inflate view
-        if (view != null)
+        if (view == null)
             view = LayoutInflater.from(getContext()).inflate(R.layout.row_user_chat, parent, false);
 
         //  reference views
