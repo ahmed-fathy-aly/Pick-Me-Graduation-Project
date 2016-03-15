@@ -76,19 +76,29 @@ public class ChatAPIController
         List<ChatMessage> messages = new ArrayList<>();
         for (int i = 0; i < 15; i++)
         {
-            User user = new User();
-            user.setUserId(i + "");
-            user.setFirstName("name " + i);
-            user.setLastName("afandem");
-            user.setProfilePictureUrl("http://zblogged.com/wp-content/uploads/2015/11/17.jpg");
+            User from = new User();
+            from.setUserId(i + "");
+            from.setFirstName("name " + i);
+            from.setLastName("afandem");
+            from.setProfilePictureUrl("http://zblogged.com/wp-content/uploads/2015/11/17.jpg");
+
+
+            User to = new User();
+            from.setUserId(i + "");
+            from.setFirstName("name " + i);
+            from.setLastName("afandem");
+            from.setProfilePictureUrl("http://zblogged.com/wp-content/uploads/2015/11/17.jpg");
 
             ChatMessage message = new ChatMessage();
             message.setContent("content " + i);
             message.setDate(Calendar.getInstance());
             message.getDate().add(Calendar.DAY_OF_MONTH, -1);
-            message.setFrom(user);
-            message.setTo(user);
-
+            message.setFrom(from);
+            message.setTo(from);
+            if (i % 2 == 0)
+                to.setUserId(new AuthenticationAPIController(context).getCurrentUser().getUserId());
+            else
+                from.setUserId(new AuthenticationAPIController(context).getCurrentUser().getUserId());
             messages.add(message);
             if (i >= 3 && i <= 7)
             {
