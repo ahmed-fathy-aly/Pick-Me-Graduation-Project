@@ -47,5 +47,8 @@
     <string name="search_community">Search Communities</string>
     <string name="title_request_to_join">Join Request</string>
     <string name="send">Send</string>
+    <string name="comm_name">Community Name</string>
+    <string name="description">Description</string>
+    <string name="creating_community">Creating Community</string>
 
 </resources>
