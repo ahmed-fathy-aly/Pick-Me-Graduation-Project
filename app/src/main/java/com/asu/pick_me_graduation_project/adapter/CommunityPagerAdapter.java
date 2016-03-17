@@ -19,21 +19,23 @@ import java.util.List;
  */
 public class CommunityPagerAdapter extends FragmentPagerAdapter
 {
-    private List<String> mFragmentTitleList = Arrays.asList("Info", "Members", "Posts");
-    private List<Fragment> mFragmentList = new ArrayList<>();
+
+    CommunityInfoFragment communityInfoFragment;
+    MembersListFragment membersListFragment;
+    private List<String> mFragmentTitleList = Arrays.asList("Info", "Members");
+    private List<Fragment> mFragmentList = Arrays.asList(communityInfoFragment, membersListFragment);
 
     public CommunityPagerAdapter(FragmentManager fm)
     {
-
         super(fm);
-        mFragmentList = Arrays.asList(new CommunityInfoFragment(), new MembersListFragment(), new CommunityInfoFragment());
-
+        communityInfoFragment = new CommunityInfoFragment();
+        membersListFragment = new MembersListFragment();
     }
 
     @Override
     public Fragment getItem(int position)
     {
-        mFragmentList.get(position);
+        return mFragmentList.get(position);
     }
 
     @Override
