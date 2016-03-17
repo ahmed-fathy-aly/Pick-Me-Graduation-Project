@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.asu.pick_me_graduation_project.fragment.CommunitiesListFragment;
 import com.asu.pick_me_graduation_project.fragment.CommunityInfoFragment;
+import com.asu.pick_me_graduation_project.fragment.MembersListFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,17 +19,21 @@ import java.util.List;
  */
 public class CommunityPagerAdapter extends FragmentPagerAdapter
 {
-    private final List<String> mFragmentTitleList = Arrays.asList("Info", "Members", "Posts");
+    private List<String> mFragmentTitleList = Arrays.asList("Info", "Members", "Posts");
+    private List<Fragment> mFragmentList = new ArrayList<>();
 
     public CommunityPagerAdapter(FragmentManager fm)
     {
+
         super(fm);
+        mFragmentList = Arrays.asList(new CommunityInfoFragment(), new MembersListFragment(), new CommunityInfoFragment());
+
     }
 
     @Override
     public Fragment getItem(int position)
     {
-        return new CommunityInfoFragment();
+        mFragmentList.get(position);
     }
 
     @Override
