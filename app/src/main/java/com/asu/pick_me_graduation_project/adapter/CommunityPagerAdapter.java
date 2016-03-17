@@ -10,6 +10,7 @@ import com.asu.pick_me_graduation_project.fragment.CommunitiesListFragment;
 import com.asu.pick_me_graduation_project.fragment.CommunityInfoFragment;
 import com.asu.pick_me_graduation_project.fragment.MembersListFragment;
 
+import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,13 +24,14 @@ public class CommunityPagerAdapter extends FragmentPagerAdapter
     CommunityInfoFragment communityInfoFragment;
     MembersListFragment membersListFragment;
     private List<String> mFragmentTitleList = Arrays.asList("Info", "Members");
-    private List<Fragment> mFragmentList = Arrays.asList(communityInfoFragment, membersListFragment);
+    private List<Fragment> mFragmentList = new ArrayList<>();
 
     public CommunityPagerAdapter(FragmentManager fm)
     {
         super(fm);
         communityInfoFragment = new CommunityInfoFragment();
         membersListFragment = new MembersListFragment();
+        mFragmentList = Arrays.asList(communityInfoFragment, membersListFragment);
     }
 
     @Override
@@ -47,6 +49,11 @@ public class CommunityPagerAdapter extends FragmentPagerAdapter
     @Override
     public int getCount()
     {
-        return mFragmentTitleList.size();
+        return mFragmentList.size();
+    }
+
+    public MembersListFragment getMembersListFragment()
+    {
+        return membersListFragment;
     }
 }

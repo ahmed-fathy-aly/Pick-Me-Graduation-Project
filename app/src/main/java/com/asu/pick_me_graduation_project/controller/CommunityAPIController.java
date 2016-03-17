@@ -2,10 +2,18 @@ package com.asu.pick_me_graduation_project.controller;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 
 import com.asu.pick_me_graduation_project.callback.CreateCommunityCallback;
 import com.asu.pick_me_graduation_project.callback.GetCommunitiesCallback;
+import com.asu.pick_me_graduation_project.callback.GetUsersCallback;
 import com.asu.pick_me_graduation_project.model.Community;
+import com.asu.pick_me_graduation_project.model.User;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,4 +115,66 @@ public class CommunityAPIController
     }
 
 
+    /**
+     * gets the members who are in this community
+     */
+    public void getCommunityMembers(String tokken, String userId, String communityId, final GetUsersCallback callback)
+    {
+        // TODO now it just gets all users who have the character m
+
+        String url = "http://pickmeasu.azurewebsites.net/api/search_for_user"
+                + "?searchString=" + "m"
+                + "&count=-1";
+        Log.e("Game", "searching for " + url);
+        Ion.with(context)
+                .load("GET", url)
+                .setHeader("Content-Type", "application/json")
+                .asString()
+                .setCallback(new FutureCallback<String>()
+                {
+                    @Override
+                    public void onCompleted(Exception e, String result)
+                    {
+                        // check failed
+                        if (e != null)
+                        {
+                                callback.fail(e.getMessage());
+                            return;
+                        }
+                        Log.e("Game", "search result = " + result);
+
+                        // parse the response
+                        try
+                        {
+                            // check status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
+
+                            // parse user
+                            JSONArray usersJson = response.getJSONArray("users");
+                            List<User> usersList = new ArrayList<User>();
+                            for (int i = 0; i < usersJson.length(); i++)
+                            {
+                                JSONObject userJson = usersJson.getJSONObject(i).getJSONObject("user");
+                                User user = User.fromJson(userJson);
+                                usersList.add(user);
+
+                            }
+
+                            // invoke callback
+                            callback.success(usersList);
+                        } catch (Exception e2)
+                        {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+                });
+    }
 }

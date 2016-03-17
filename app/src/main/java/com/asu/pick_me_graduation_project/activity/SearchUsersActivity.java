@@ -5,27 +5,18 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.util.Pair;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.adapter.UsersAdapter;
-import com.asu.pick_me_graduation_project.callback.SearchUserCallback;
+import com.asu.pick_me_graduation_project.callback.GetUsersCallback;
 import com.asu.pick_me_graduation_project.controller.UserApiController;
-import com.asu.pick_me_graduation_project.fragment.CommunitiesListFragment;
 import com.asu.pick_me_graduation_project.fragment.MembersListFragment;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
@@ -112,7 +103,7 @@ public class SearchUsersActivity extends BaseActivity implements UsersAdapter.Li
     private void searchUsers(String searchString)
     {
         progressBar.setVisibility(View.VISIBLE);
-        controller.searchusers(searchString, new SearchUserCallback()
+        controller.searchusers(searchString, new GetUsersCallback()
         {
             @Override
             public void success(List<User> users)
