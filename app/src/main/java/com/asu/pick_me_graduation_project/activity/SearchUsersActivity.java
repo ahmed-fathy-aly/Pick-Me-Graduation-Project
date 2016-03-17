@@ -25,6 +25,8 @@ import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.adapter.UsersAdapter;
 import com.asu.pick_me_graduation_project.callback.SearchUserCallback;
 import com.asu.pick_me_graduation_project.controller.UserApiController;
+import com.asu.pick_me_graduation_project.fragment.CommunitiesListFragment;
+import com.asu.pick_me_graduation_project.fragment.MembersListFragment;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 
@@ -39,8 +41,6 @@ public class SearchUsersActivity extends BaseActivity implements UsersAdapter.Li
     /* UI */
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.listViewUsers)
-    ListView listViewUsers;
     @Bind(R.id.content)
     LinearLayout content;
     @Bind(R.id.progressBar)
@@ -50,8 +50,8 @@ public class SearchUsersActivity extends BaseActivity implements UsersAdapter.Li
 
 
     /* fields */
-    private UsersAdapter adapterUsers;
     private UserApiController controller;
+    private MembersListFragment membersListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -68,10 +68,11 @@ public class SearchUsersActivity extends BaseActivity implements UsersAdapter.Li
         editTextSearch.setVisibility(View.VISIBLE);
         editTextSearch.setHint(getString(R.string.search_by_username));
 
-        // setup users list
-        adapterUsers = new UsersAdapter(this);
-        adapterUsers.setListener(this);
-        listViewUsers.setAdapter(adapterUsers);
+        // setup members  list fragment
+        membersListFragment = new MembersListFragment();
+        getSupportFragmentManager().beginTransaction().
+                replace(R.id.fragmentMembersListContent, membersListFragment )
+                .commit();
 
         // edit text listener
         editTextSearch.addTextChangedListener(new TextWatcher()
@@ -119,8 +120,7 @@ public class SearchUsersActivity extends BaseActivity implements UsersAdapter.Li
                 progressBar.setVisibility(View.INVISIBLE);
 
                 // set new date to list
-                adapterUsers.clear();
-                adapterUsers.addAll(users);
+                membersListFragment.setMembers(users);
             }
 
             @Override
