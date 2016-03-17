@@ -77,15 +77,18 @@ public class CommunitiesListFragment extends android.support.v4.app.Fragment imp
         arguments.putString(Constants.COMMUNITY_ID, community.getId());
         arguments.putString(Constants.COMMUNITY_NAME, community.getName());
         joinCommunityRequestFragment.setArguments(arguments);
-        joinCommunityRequestFragment.show(((AppCompatActivity)getContext()).getSupportFragmentManager(), getString(R.string.title_request_to_join));
+        joinCommunityRequestFragment.show(((AppCompatActivity) getContext()).getSupportFragmentManager(), getString(R.string.title_request_to_join));
     }
 
     @Override
     public void onCommunityClicked(int position, Community community, View v)
     {
-        Intent intent = new Intent(getContext(), CommunityProfileActivity.class);
-        intent.putExtra(Constants.COMMUNITY_ID, community.getId());
-        startActivity(intent);
+        if (community.isMember())
+        {
+            Intent intent = new Intent(getContext(), CommunityProfileActivity.class);
+            intent.putExtra(Constants.COMMUNITY_ID, community.getId());
+            startActivity(intent);
+        }
     }
 
     /* methods */
