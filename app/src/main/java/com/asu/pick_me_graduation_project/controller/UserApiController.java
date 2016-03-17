@@ -1,15 +1,12 @@
 package com.asu.pick_me_graduation_project.controller;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 
 import com.asu.pick_me_graduation_project.callback.EditProfileCallback;
 import com.asu.pick_me_graduation_project.callback.GetProfileCallback;
-import com.asu.pick_me_graduation_project.callback.SearchUserCallback;
-import com.asu.pick_me_graduation_project.model.CarDetails;
+import com.asu.pick_me_graduation_project.callback.GetUsersCallback;
 import com.asu.pick_me_graduation_project.model.User;
-import com.asu.pick_me_graduation_project.utils.Constants;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -130,7 +127,7 @@ public class UserApiController
     /**
      * seraches for all users having that substring
      */
-    public void searchusers(final String searchString, final SearchUserCallback callback)
+    public void searchusers(final String searchString, final GetUsersCallback callback)
     {
         // cancel any previous request
         if (searchUsersRequest != null)

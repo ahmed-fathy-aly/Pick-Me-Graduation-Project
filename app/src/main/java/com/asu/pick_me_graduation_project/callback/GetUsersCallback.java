@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by ahmed on 12/18/2015.
  */
-public interface SearchUserCallback
+public interface GetUsersCallback
 {
     void success(List<User> users);
 
