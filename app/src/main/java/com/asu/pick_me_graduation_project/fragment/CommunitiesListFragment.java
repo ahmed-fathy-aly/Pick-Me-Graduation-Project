@@ -2,6 +2,7 @@ package com.asu.pick_me_graduation_project.fragment;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.asu.pick_me_graduation_project.R;
+import com.asu.pick_me_graduation_project.activity.CommunityProfileActivity;
 import com.asu.pick_me_graduation_project.activity.CreateCommunityFragment;
 import com.asu.pick_me_graduation_project.adapter.CommunitiesAdapter;
 import com.asu.pick_me_graduation_project.model.Community;
@@ -75,13 +77,18 @@ public class CommunitiesListFragment extends android.support.v4.app.Fragment imp
         arguments.putString(Constants.COMMUNITY_ID, community.getId());
         arguments.putString(Constants.COMMUNITY_NAME, community.getName());
         joinCommunityRequestFragment.setArguments(arguments);
-        joinCommunityRequestFragment.show(((AppCompatActivity)getContext()).getSupportFragmentManager(), getString(R.string.title_request_to_join));
+        joinCommunityRequestFragment.show(((AppCompatActivity) getContext()).getSupportFragmentManager(), getString(R.string.title_request_to_join));
     }
 
     @Override
     public void onCommunityClicked(int position, Community community, View v)
     {
-        Log.e("Game", "click " + community.getName());
+        if (community.isMember())
+        {
+            Intent intent = new Intent(getContext(), CommunityProfileActivity.class);
+            intent.putExtra(Constants.COMMUNITY_ID, community.getId());
+            startActivity(intent);
+        }
     }
 
     /* methods */
