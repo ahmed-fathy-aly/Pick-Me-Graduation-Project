@@ -38,8 +38,8 @@ public class ChatAPIController
         {
             User user = new User();
             user.setUserId(i + "");
-            user.setFirstName("name " + i);
-            user.setLastName("afandem");
+            user.setFirstName("hamada " + i);
+            user.setLastName("mido");
             user.setProfilePictureUrl("http://zblogged.com/wp-content/uploads/2015/11/17.jpg");
 
             ChatMessage message = new ChatMessage();
@@ -53,6 +53,7 @@ public class ChatAPIController
             if (i >= 3 && i <= 7)
             {
                 message.getDate().add(Calendar.DAY_OF_MONTH, -2);
+                //user.setProfilePictureUrl("http://img02.taobaocdn.com/bao/uploaded/i2/T17gyyXXxiXXbTvUg3_051422.jpg");
             }
             if (i >= 8)
             {
@@ -78,23 +79,23 @@ public class ChatAPIController
         {
             User from = new User();
             from.setUserId(i + "");
-            from.setFirstName("name " + i);
-            from.setLastName("afandem");
+            from.setFirstName("hamada  " + i);
+            from.setLastName("mido ");
             from.setProfilePictureUrl("http://zblogged.com/wp-content/uploads/2015/11/17.jpg");
 
 
             User to = new User();
-            from.setUserId(i + "");
-            from.setFirstName("name " + i);
-            from.setLastName("afandem");
-            from.setProfilePictureUrl("http://zblogged.com/wp-content/uploads/2015/11/17.jpg");
+            to.setUserId(i + "");
+            to.setFirstName("name " + i);
+            to.setLastName("afandem");
+            to.setProfilePictureUrl("http://zblogged.com/wp-content/uploads/2015/11/17.jpg");
 
             ChatMessage message = new ChatMessage();
-            message.setContent("content " + i);
+            message.setContent("hi " + i);
             message.setDate(Calendar.getInstance());
             message.getDate().add(Calendar.DAY_OF_MONTH, -1);
             message.setFrom(from);
-            message.setTo(from);
+            message.setTo(to);
             if (i % 2 == 0)
                 to.setUserId(new AuthenticationAPIController(context).getCurrentUser().getUserId());
             else
@@ -103,6 +104,7 @@ public class ChatAPIController
             if (i >= 3 && i <= 7)
             {
                 message.getDate().add(Calendar.DAY_OF_MONTH, -2);
+                //from.setProfilePictureUrl("http://img02.taobaocdn.com/bao/uploaded/i2/T17gyyXXxiXXbTvUg3_051422.jpg");
             }
             if (i >= 8)
             {
@@ -113,7 +115,7 @@ public class ChatAPIController
         {
             public int compare(ChatMessage M1, ChatMessage M2)
             {
-                return M2.getDate().compareTo(M1.getDate());
+                return M1.getDate().compareTo(M2.getDate());
             }
         });
 
