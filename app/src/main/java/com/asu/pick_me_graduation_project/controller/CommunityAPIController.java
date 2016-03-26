@@ -9,6 +9,7 @@ import com.asu.pick_me_graduation_project.callback.GetCommunitiesCallback;
 import com.asu.pick_me_graduation_project.callback.GetUsersCallback;
 import com.asu.pick_me_graduation_project.model.Community;
 import com.asu.pick_me_graduation_project.model.User;
+import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -34,25 +35,31 @@ public class CommunityAPIController
     /**
      * makes a new community with that user as admin
      */
-    public void createCommunity(String userId, final String name, final String description, final CreateCommunityCallback callback)
+    public void createCommunity(String token, final String name, final String description, final CreateCommunityCallback callback)
     {
+
         // TODO - make a post to the back end
+        JsonObject json = new JsonObject();
+        json.addProperty("communityName", name);
+        //json.addProperty("description", description);
 
-        new Handler().postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
+        Ion.with(context)
+                .load("http://pickmeasu.azurewebsites.net/api/Create_Community")
+                .addHeader("Authorization", "Bearer " + token)
+                .addHeader("Content-Type", "application/json")
+                .setJsonObjectBody(json)
+                .asString()
+                .setCallback(new FutureCallback<String>() {
+                    @Override
+                    public void onCompleted(Exception e, String result) {
+                        if (e != null) {
+                            Log.e("Game", "error " + e.getMessage());
+                        } else
+                            Log.e("Game", "test create community result " + result);
+                    }
+                });
 
-                // mock data for now
-                Community community = new Community();
-                community.setId("42");
-                community.setName(name);
-                community.setDescription(description);
-                community.setIsAdmin(true);
-                callback.success(community);
-            }
-        }, 2000);
+
     }
 
     public void getMyCommunities(String userId, final GetCommunitiesCallback callback)
