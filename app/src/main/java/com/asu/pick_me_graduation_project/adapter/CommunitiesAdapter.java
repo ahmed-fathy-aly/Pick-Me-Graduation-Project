@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.model.Community;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
+import com.koushikdutta.ion.future.ResponseFuture;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
@@ -23,6 +24,7 @@ import java.util.List;
  */
 public class CommunitiesAdapter extends ArrayAdapter<Community>
 {
+    /* fields */
     Listener listener;
 
     public CommunitiesAdapter(Context context)

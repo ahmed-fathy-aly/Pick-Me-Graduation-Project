@@ -1,5 +1,7 @@
 package com.asu.pick_me_graduation_project.model;
 
+import android.util.Log;
+
 import org.json.JSONObject;
 
 /**
@@ -78,15 +80,28 @@ public class Community
     }
 
     /* methods */
-    public Community fromJson(JSONObject jsonObject)
+    public static Community fromJson(JSONObject jsonObject)
     {
         Community community = new Community();
 
         // TODO - parse json
-
+        try
+        {
+            if (!jsonObject.isNull("id"))
+                community.setId(jsonObject.getString("id"));
+            else
+                community.setId(jsonObject.getString("communityId"));
+            community.setName(jsonObject.getString("name"));
+            community.setProfilePictureUrl(jsonObject.getString("profilePicture"));
+            community.setIsAdmin(jsonObject.getBoolean("isAdmin"));
+            community.setIsMember(jsonObject.getBoolean("isJoinedByMe"));
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            Log.e("Game", "parsing community error " + e.getMessage());
+        }
         return community;
     }
-
 
 
 }

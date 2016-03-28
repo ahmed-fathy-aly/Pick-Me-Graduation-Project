@@ -9,9 +9,11 @@ import com.asu.pick_me_graduation_project.callback.GetCommunitiesCallback;
 import com.asu.pick_me_graduation_project.callback.GetUsersCallback;
 import com.asu.pick_me_graduation_project.model.Community;
 import com.asu.pick_me_graduation_project.model.User;
+import com.asu.pick_me_graduation_project.utils.Constants;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.future.ResponseFuture;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,7 +27,9 @@ import java.util.Random;
  */
 public class CommunityAPIController
 {
+    /* fields */
     Context context;
+    private ResponseFuture<String> searchCommunitiesRequest;
 
     public CommunityAPIController(Context context)
     {
@@ -49,10 +53,13 @@ public class CommunityAPIController
                 .addHeader("Content-Type", "application/json")
                 .setJsonObjectBody(json)
                 .asString()
-                .setCallback(new FutureCallback<String>() {
+                .setCallback(new FutureCallback<String>()
+                {
                     @Override
-                    public void onCompleted(Exception e, String result) {
-                        if (e != null) {
+                    public void onCompleted(Exception e, String result)
+                    {
+                        if (e != null)
+                        {
                             Log.e("Game", "error " + e.getMessage());
                         } else
                             Log.e("Game", "test create community result " + result);
@@ -62,63 +69,120 @@ public class CommunityAPIController
 
     }
 
-    public void getMyCommunities(String userId, final GetCommunitiesCallback callback)
+    public void getMyCommunities(String token, final GetCommunitiesCallback callback)
     {
-        new Handler().postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-
-
-                // mock data
-                List<Community> communityList = new ArrayList<>();
-                for (int i = 0; i < 5; i++)
+        Ion.with(context)
+                .load("GET", Constants.HOST + "get_my_communities")
+                .setHeader("Authorization", "Bearer " + token)
+                .asString()
+                .setCallback(new FutureCallback<String>()
                 {
-                    Community community = new Community();
-                    community.setId(i + "");
-                    community.setIsAdmin(i % 3 == 0);
-                    community.setIsMember(true);
-                    community.setName("Community " + i);
-                    community.setDescription("description " + i);
-                    community.setProfilePictureUrl("http://faculty.engineering.asu.edu/zhao/wp-content/uploads/2014/08/ASU-new-logo.jpg");
-                    communityList.add(community);
+                    @Override
+                    public void onCompleted(Exception e, String result)
+                    {
 
-                }
+                        // check failed
+                        if (e != null)
+                        {
+                            callback.fail(e.getMessage());
+                            return;
+                        }
+                        Log.e("Game", "my communities result = " + result);
+                        // parse the response
+                        try
+                        {
+                            // check status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
 
-                callback.success(communityList);
-            }
-        }, 1000);
+                            // parse communities
+                            JSONArray usersJson = response.getJSONArray("communities");
+                            List<Community> communityList = new ArrayList<Community>();
+                            for (int i = 0; i < usersJson.length(); i++)
+                            {
+                                JSONObject communityJson = usersJson.getJSONObject(i);
+                                Community community = Community.fromJson(communityJson);
+                                community.setIsMember(true);
+                                communityList.add(community);
+                            }
+
+                            // invoke callback
+                            callback.success(communityList);
+                        } catch (Exception e2)
+                        {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+                });
     }
 
-    public void searchCommunities(String userId, final String searchString, final GetCommunitiesCallback callback)
+    public void searchCommunities(String token, final String searchString, final GetCommunitiesCallback callback)
     {
-        new Handler().postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
+        // cancel any previous request
+        if (searchCommunitiesRequest != null)
+            searchCommunitiesRequest.cancel();
 
-
-                // mock data
-                List<Community> communityList = new ArrayList<>();
-                int size = new Random().nextInt(6) + 1;
-                for (int i = 0; i < size; i++)
+        // make the request
+        String url = Constants.HOST + "search_communities?searchString=" + searchString;
+        searchCommunitiesRequest = Ion.with(context)
+                .load("GET", url)
+                .setHeader("Authorization", "Bearer " + token)
+                .asString();
+        searchCommunitiesRequest
+                .setCallback(new FutureCallback<String>()
                 {
-                    Community community = new Community();
-                    community.setId(i + "");
-                    community.setIsAdmin(i % 3 == 0);
-                    community.setIsMember(new Random(3).nextInt() == 0);
-                    community.setName(searchString + i);
-                    community.setDescription("description " + i);
-                    community.setProfilePictureUrl("http://faculty.engineering.asu.edu/zhao/wp-content/uploads/2014/08/ASU-new-logo.jpg");
-                    communityList.add(community);
+                    @Override
+                    public void onCompleted(Exception e, String result)
+                    {
 
-                }
+                        // check failed
+                        if (e != null)
+                        {
+                            if (!searchCommunitiesRequest.isCancelled())
+                                callback.fail(e.getMessage());
+                            return;
+                        }
+                        Log.e("Game", "search communities result = " + result);
 
-                callback.success(communityList);
-            }
-        }, 1000);
+                        // parse the response
+                        try
+                        {
+                            // check status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
+
+                            // parse communities
+                            JSONArray communities = response.getJSONArray("communities");
+                            List<Community> communityList = new ArrayList<Community>();
+                            for (int i = 0; i < communities.length(); i++)
+                            {
+                                JSONObject communityJson = communities.getJSONObject(i);
+                                Community community = Community.fromJson(communityJson);
+                                communityList.add(community);
+                            }
+
+                            // invoke callback
+                            callback.success(communityList);
+                        } catch (Exception e2)
+                        {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+                });
     }
 
 
@@ -145,7 +209,7 @@ public class CommunityAPIController
                         // check failed
                         if (e != null)
                         {
-                                callback.fail(e.getMessage());
+                            callback.fail(e.getMessage());
                             return;
                         }
                         Log.e("Game", "search result = " + result);
