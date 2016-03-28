@@ -131,9 +131,7 @@ public class UserApiController
     {
         // cancel any previous request
         if (searchUsersRequest != null)
-        {
             searchUsersRequest.cancel();
-        }
 
         String url = "http://pickmeasu.azurewebsites.net/api/search_for_user"
                 + "?searchString=" + searchString

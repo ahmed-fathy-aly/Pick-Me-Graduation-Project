@@ -102,7 +102,7 @@ public class CommunitiesActivity extends BaseActivity
     private void searchCommunities(String searchString)
     {
         progressBar.setVisibility(View.VISIBLE);
-        controller.searchCommunities(new AuthenticationAPIController(this).getCurrentUser().getUserId()
+        controller.searchCommunities(new AuthenticationAPIController(this).getTokken()
                 ,searchString
                 , new GetCommunitiesCallback()
         {
@@ -133,7 +133,7 @@ public class CommunitiesActivity extends BaseActivity
     private void getMyCommunities()
     {
         progressBar.setVisibility(View.VISIBLE);
-        controller.getMyCommunities(new AuthenticationAPIController(this).getCurrentUser().getUserId()
+        controller.getMyCommunities(new AuthenticationAPIController(this).getTokken()
                 , new GetCommunitiesCallback()
         {
             @Override
