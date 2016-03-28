@@ -4,16 +4,23 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.adapter.CommunityPagerAdapter;
+import com.asu.pick_me_graduation_project.callback.GetCommunityCallback;
 import com.asu.pick_me_graduation_project.callback.GetUsersCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.CommunityAPIController;
+import com.asu.pick_me_graduation_project.model.Community;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.asu.pick_me_graduation_project.utils.ValidationUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -34,6 +41,10 @@ public class CommunityProfileActivity extends BaseActivity
     TabLayout tabLayout;
     @Bind(R.id.content)
     View content;
+    @Bind(R.id.textViewCommunityName)
+    TextView textViewCommunityName;
+    @Bind(R.id.imageViewCommunityPP)
+    ImageView imageViewCommunityPP;
 
     /* Fields */
     private String communityId;
@@ -64,10 +75,52 @@ public class CommunityProfileActivity extends BaseActivity
         tabLayout.setupWithViewPager(viewPager);
 
         // load data
+        loadInfo();
         loadMembers();
 
     }
 
+    /**
+     * loads the community profile from backend
+     */
+    private void loadInfo()
+    {
+        contoller.getCommunityProfile(
+                new AuthenticationAPIController(this).getTokken()
+                ,communityId
+                ,new GetCommunityCallback()
+        {
+                    @Override
+                    public void success(Community community)
+                    {
+                        // popoulate views
+                        textViewCommunityName.setText(community.getName());
+                        if (ValidationUtils.notEmpty(community.getProfilePictureUrl()))
+                            Picasso.with(getApplicationContext()).
+                                    load(community.getProfilePictureUrl())
+                                    .placeholder(R.drawable.ic_user_small)
+                                    .into(imageViewCommunityPP);
+                        else
+                            Picasso.with(getApplicationContext()).
+                                    load("http://www.churchmilitant.com/images/uploads/news_feature/2015-07-02-special-announcement.jpg")
+                                    .placeholder(R.drawable.ic_user_small)
+                                    .into(imageViewCommunityPP);
+
+                    }
+
+                    @Override
+                    public void fail(String message)
+                    {
+                        Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+    }
+
+    /**
+     * loads the community members from the backend
+     */
     private void loadMembers()
     {
         contoller.getCommunityMembers(
