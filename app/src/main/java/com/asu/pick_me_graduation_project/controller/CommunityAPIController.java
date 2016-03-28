@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.asu.pick_me_graduation_project.callback.CreateCommunityCallback;
 import com.asu.pick_me_graduation_project.callback.GetCommunitiesCallback;
+import com.asu.pick_me_graduation_project.callback.GetCommunityCallback;
 import com.asu.pick_me_graduation_project.callback.GetUsersCallback;
 import com.asu.pick_me_graduation_project.model.Community;
 import com.asu.pick_me_graduation_project.model.User;
@@ -248,4 +249,52 @@ public class CommunityAPIController
                     }
                 });
     }
+
+    /**
+     * downloads the community profile
+     */
+    public void getCommunityProfile(String token, String communityId, final GetCommunityCallback callback)
+    {
+        String url = Constants.HOST + "get_community_profile?communityID=" + communityId;
+        Ion.with(context)
+                .load("GET", url)
+                .setHeader("Authorization", "Bearer " + token)
+                .asString()
+                .setCallback(new FutureCallback<String>()
+                {
+                    @Override
+                    public void onCompleted(Exception e, String result)
+                    {
+
+                        // check failed
+                        if (e != null)
+                        {
+                            callback.fail(e.getMessage());
+                            return;
+                        }
+                        Log.e("Game", "community profile result = " + result);
+
+                        // parse the response
+                        try
+                        {
+                            // check status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
+
+                            // parse the community
+                            Community community = Community.fromJson(response.getJSONObject("community"));
+                            callback.success(community);
+                        } catch (Exception e2)
+                        {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+                });    }
 }
