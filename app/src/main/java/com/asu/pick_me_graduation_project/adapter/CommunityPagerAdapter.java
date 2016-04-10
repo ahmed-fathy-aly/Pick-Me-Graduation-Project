@@ -1,5 +1,6 @@
 package com.asu.pick_me_graduation_project.adapter;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -8,7 +9,11 @@ import android.util.Log;
 
 import com.asu.pick_me_graduation_project.fragment.CommunitiesListFragment;
 import com.asu.pick_me_graduation_project.fragment.CommunityInfoFragment;
+import com.asu.pick_me_graduation_project.fragment.CommunityJoinRequestsFragment;
+import com.asu.pick_me_graduation_project.fragment.CommunityPostsFragment;
 import com.asu.pick_me_graduation_project.fragment.MembersListFragment;
+import com.asu.pick_me_graduation_project.model.Community;
+import com.asu.pick_me_graduation_project.utils.Constants;
 
 import java.lang.reflect.Member;
 import java.util.ArrayList;
@@ -23,15 +28,28 @@ public class CommunityPagerAdapter extends FragmentPagerAdapter
 
     CommunityInfoFragment communityInfoFragment;
     MembersListFragment membersListFragment;
-    private List<String> mFragmentTitleList = Arrays.asList("Info", "Members");
+    CommunityPostsFragment communityPostsFragment;
+    CommunityJoinRequestsFragment communityJoinRequestsFragment;
+    private List<String> mFragmentTitleList = Arrays.asList("Info", "Posts", "Members", "Requests");
     private List<Fragment> mFragmentList = new ArrayList<>();
 
-    public CommunityPagerAdapter(FragmentManager fm)
+    public CommunityPagerAdapter(FragmentManager fm, String communityId)
     {
         super(fm);
+
+        // the arguments bundle
+        Bundle arguments = new Bundle();
+        arguments.putString(Constants.COMMUNITY_ID, communityId);
+
         communityInfoFragment = new CommunityInfoFragment();
+        communityInfoFragment.setArguments(arguments);
+        communityPostsFragment = new CommunityPostsFragment();
+        communityPostsFragment.setArguments(arguments);
         membersListFragment = new MembersListFragment();
-        mFragmentList = Arrays.asList(communityInfoFragment, membersListFragment);
+        membersListFragment.setArguments(arguments);
+        communityJoinRequestsFragment = new CommunityJoinRequestsFragment();
+        communityJoinRequestsFragment.setArguments(arguments);
+        mFragmentList = Arrays.asList(communityInfoFragment, communityPostsFragment, membersListFragment, communityJoinRequestsFragment);
     }
 
     @Override
