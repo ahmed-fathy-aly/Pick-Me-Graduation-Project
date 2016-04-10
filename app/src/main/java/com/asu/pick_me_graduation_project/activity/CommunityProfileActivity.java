@@ -70,7 +70,7 @@ public class CommunityProfileActivity extends BaseActivity
         contoller = new CommunityAPIController(this);
 
         // setup view pager
-        communityPagerAdapter = new CommunityPagerAdapter(getSupportFragmentManager());
+        communityPagerAdapter = new CommunityPagerAdapter(getSupportFragmentManager(), communityId);
         viewPager.setAdapter(communityPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
