@@ -80,28 +80,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFF8E1"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/MessageEditor"
-                android:layout_marginLeft="3dp"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/message_hint"
                 android:inputType="textMultiLine"
-                android:background="@drawable/rounded_corner_forchat2"
+                android:background="#E0F7FA"
                 />
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fabSend"
-                style="@style/fab2"
-                android:layout_gravity="bottom|right"
-                app:fabSize="mini"
-
-                android:src="@drawable/send"
-                app:theme="@style/ThemeOverlay.AppCompat.Light"
+            <android.support.design.widget.VisibilityAwareImageButton
+                android:id="@+id/SendButton"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_send_black_48dp"
                 />
         </LinearLayout>
     </LinearLayout>
