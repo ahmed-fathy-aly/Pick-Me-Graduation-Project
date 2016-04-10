@@ -1,9 +1,11 @@
 package com.asu.pick_me_graduation_project.activity;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -14,6 +16,7 @@ import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.adapter.ChatMessagesAdapter;
 import com.asu.pick_me_graduation_project.callback.GetMessagesCallback;
 import com.asu.pick_me_graduation_project.callback.GetProfileCallback;
+import com.asu.pick_me_graduation_project.callback.SendMessageCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.ChatAPIController;
 import com.asu.pick_me_graduation_project.controller.UserApiController;
@@ -28,6 +31,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ChatActivity extends BaseActivity
 {
@@ -40,6 +44,8 @@ public class ChatActivity extends BaseActivity
     LinearLayout content;
     @Bind(R.id.listViewChat)
     ListView ListViewChat;
+    @Bind(R.id.MessageEditor)
+    EditText MessageEditor;
 
     /* fields */
     String userId;
@@ -55,10 +61,10 @@ public class ChatActivity extends BaseActivity
 
         // reference views
         ButterKnife.bind(this);
-         name= (TextView) findViewById(R.id.receiverName);
+        name= (TextView) findViewById(R.id.receiverName);
         image= (ImageView) findViewById(R.id.receiverPP);
         User u=new User();
-       // u.setFirstName();
+        // u.setFirstName();
         // setup common views
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -75,7 +81,7 @@ public class ChatActivity extends BaseActivity
 
         // TODO - setup list view and its adapter
         adapter=new ChatMessagesAdapter(this,new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId());
-         ListViewChat.setAdapter(adapter);
+        ListViewChat.setAdapter(adapter);
 
 
         // load data
@@ -138,4 +144,30 @@ public class ChatActivity extends BaseActivity
 
         );
     }
+    @OnClick(R.id.fabSend)
+    public void onClick()
+    {
+        final String contentt= MessageEditor.getText().toString();
+        controller.sendMessage(contentt, userId, new AuthenticationAPIController(this).getTokken(), new SendMessageCallback() {
+            @Override
+            public void success(ChatMessage chatMessage2) {
+
+                progressBar.setVisibility(View.INVISIBLE);
+                MessageEditor.setText("");
+
+                adapter.add(chatMessage2);
+
+
+            }
+
+            @Override
+            public void fail(String message) {
+                Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
+
 }
