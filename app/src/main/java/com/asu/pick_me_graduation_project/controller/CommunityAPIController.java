@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.asu.pick_me_graduation_project.callback.CreateCommunityCallback;
+import com.asu.pick_me_graduation_project.callback.CreatePostCallback;
 import com.asu.pick_me_graduation_project.callback.GetCommunitiesCallback;
 import com.asu.pick_me_graduation_project.callback.GetCommunityCallback;
 import com.asu.pick_me_graduation_project.callback.GetCommunityPostsCalback;
@@ -301,6 +302,58 @@ public class CommunityAPIController {
                             for (int i = 0; i < postsJson.length(); i++)
                                 posts.add(CommunityPost.parseFromJson(postsJson.getJSONObject(i)));
                             callback.success(posts);
+                        } catch (Exception e2) {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+                });
+    }
+
+    /**
+     * creates a new post to a community
+     *
+     * @param tokken
+     * @param conentText
+     */
+    public void createPost(String tokken, String communityId, String conentText, final CreatePostCallback callback) {
+        String url = Constants.HOST + "make_community_post";
+        JsonObject json = new JsonObject();
+        json.addProperty("communityId", communityId);
+        json.addProperty("content", conentText);
+
+
+        Ion.with(context)
+                .load("http://pickmeasu.azurewebsites.net/api/Create_Community")
+                .addHeader("Authorization", "Bearer " + tokken)
+                .addHeader("Content-Type", "application/json")
+                .setJsonObjectBody(json)
+                .asString()
+                .setCallback(new FutureCallback<String>() {
+                    @Override
+                    public void onCompleted(Exception e, String result) {
+                        // check failed
+                        if (e != null) {
+                            callback.fail(e.getMessage());
+                            return;
+                        }
+                        Log.e("Game", "create post result = " + result);
+
+                        // parse the response
+                        try {
+                            // check status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0) {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
+
+                            // parse the post
+                            JSONObject postJson = response.getJSONObject("newPost");
+                            CommunityPost post = CommunityPost.parseFromJson(postJson);
+                            callback.success(post);
                         } catch (Exception e2) {
                             callback.fail(e2.getMessage());
                             return;

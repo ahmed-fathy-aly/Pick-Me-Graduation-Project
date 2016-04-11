@@ -14,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.asu.pick_me_graduation_project.R;
+import com.asu.pick_me_graduation_project.activity.EditProfileFragment;
 import com.asu.pick_me_graduation_project.adapter.CommunityPostsAdapter;
+import com.asu.pick_me_graduation_project.callback.CreatePostCallback;
 import com.asu.pick_me_graduation_project.callback.GetCommunityPostsCalback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.CommunityAPIController;
@@ -109,7 +111,12 @@ public class CommunityPostsFragment extends Fragment {
     @OnClick(R.id.fab)
     void openCreatePost()
     {
-
+        // open the create post dialog
+        CreatePostFragment createPostFragment = new CreatePostFragment();
+        Bundle args = new Bundle();
+        args.putString(Constants.COMMUNITY_ID, communityId);
+        createPostFragment.setArguments(args);
+        createPostFragment.show(getFragmentManager(), getString(R.string.title_new_post));
     }
 
     /* methods */
