@@ -1,6 +1,7 @@
 package com.asu.pick_me_graduation_project.model;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import com.asu.pick_me_graduation_project.utils.TimeUtils;
 
