@@ -35,6 +35,7 @@ public class RecentChatsActivity extends BaseActivity implements RecentMessagesA
     Toolbar toolbar;
     @Bind(R.id.listViewUsersChat)
     ListView ListViewChat;
+    @Bind(R.id.content)
     LinearLayout content;
 
     /* fields */
