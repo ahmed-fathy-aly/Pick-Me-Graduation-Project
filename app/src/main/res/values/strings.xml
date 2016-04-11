@@ -50,5 +50,9 @@
     <string name="comm_name">Community Name</string>
     <string name="description">Description</string>
     <string name="creating_community">Creating Community</string>
+    <string name="write_a_post">Write a Post</string>
+    <string name="title_new_post">New Post</string>
+    <string name="post">Post</string>
+    <string name="posting">Posting</string>
 
 </resources>
