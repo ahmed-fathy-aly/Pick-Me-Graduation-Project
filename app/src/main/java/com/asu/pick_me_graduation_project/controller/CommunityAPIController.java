@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.asu.pick_me_graduation_project.callback.CreateCommunityCallback;
 import com.asu.pick_me_graduation_project.callback.CreatePostCallback;
+import com.asu.pick_me_graduation_project.callback.GenericSuccessCallback;
 import com.asu.pick_me_graduation_project.callback.GetCommunitiesCallback;
 import com.asu.pick_me_graduation_project.callback.GetCommunityCallback;
 import com.asu.pick_me_graduation_project.callback.GetCommunityPostsCalback;
@@ -357,5 +358,14 @@ public class CommunityAPIController {
                         }
                     }
                 });
+    }
+
+    public void requestToJoinCommunity(String tokken, String id, final GenericSuccessCallback callback) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                callback.success();
+            }
+        }, 3000);
     }
 }

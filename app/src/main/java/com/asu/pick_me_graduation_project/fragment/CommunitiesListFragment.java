@@ -4,6 +4,7 @@ package com.asu.pick_me_graduation_project.fragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,9 @@ import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.activity.CommunityProfileActivity;
 import com.asu.pick_me_graduation_project.activity.CreateCommunityFragment;
 import com.asu.pick_me_graduation_project.adapter.CommunitiesAdapter;
+import com.asu.pick_me_graduation_project.callback.GenericSuccessCallback;
+import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
+import com.asu.pick_me_graduation_project.controller.CommunityAPIController;
 import com.asu.pick_me_graduation_project.model.Community;
 import com.asu.pick_me_graduation_project.utils.Constants;
 
@@ -32,15 +36,25 @@ public class CommunitiesListFragment extends android.support.v4.app.Fragment imp
     /* UI */
     @Bind(R.id.listViewCommunities)
     ListView listViewCommunities;
+    @Bind(R.id.content)
+    View content;
 
     /* fields */
     private CommunitiesAdapter adapterCommunities;
+    private CommunityAPIController controller;
 
     public CommunitiesListFragment()
     {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        controller = new CommunityAPIController(getContext());
+
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,16 +82,28 @@ public class CommunitiesListFragment extends android.support.v4.app.Fragment imp
 
     /* listeners */
     @Override
-    public void onJoinClicked(int position, Community community)
+    public void onJoinClicked(int position, final Community community)
     {
+        // make a request to join
+        adapterCommunities.markRequestSending(community.getId());
+        controller.requestToJoinCommunity(
+                new AuthenticationAPIController(getContext()).getTokken()
+                , community.getId()
+                , new GenericSuccessCallback() {
 
-        // open the join request dialog
-        JoinCommunityRequestFragment joinCommunityRequestFragment = new JoinCommunityRequestFragment();
-        Bundle arguments = new Bundle();
-        arguments.putString(Constants.COMMUNITY_ID, community.getId());
-        arguments.putString(Constants.COMMUNITY_NAME, community.getName());
-        joinCommunityRequestFragment.setArguments(arguments);
-        joinCommunityRequestFragment.show(((AppCompatActivity) getContext()).getSupportFragmentManager(), getString(R.string.title_request_to_join));
+                    @Override
+                    public void success() {
+                        Snackbar.make(content, getString(R.string.sent), Snackbar.LENGTH_SHORT).show();
+                        adapterCommunities.markRequestSent(community.getId());
+                    }
+
+                    @Override
+                    public void fail(String message) {
+                        Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
     }
 
     @Override

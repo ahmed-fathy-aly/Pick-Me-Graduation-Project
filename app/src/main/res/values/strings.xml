@@ -54,5 +54,6 @@
     <string name="title_new_post">New Post</string>
     <string name="post">Post</string>
     <string name="posting">Posting</string>
+    <string name="sent">Sent</string>
 
 </resources>
