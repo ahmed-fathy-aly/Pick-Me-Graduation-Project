@@ -27,8 +27,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CommunityProfileActivity extends BaseActivity
-{
+public class CommunityProfileActivity extends BaseActivity {
 
     /* UI */
     @Bind(R.id.toolbar)
@@ -52,8 +51,7 @@ public class CommunityProfileActivity extends BaseActivity
     private CommunityPagerAdapter communityPagerAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_profile);
 
@@ -72,6 +70,7 @@ public class CommunityProfileActivity extends BaseActivity
         // setup view pager
         communityPagerAdapter = new CommunityPagerAdapter(getSupportFragmentManager(), communityId);
         viewPager.setAdapter(communityPagerAdapter);
+        viewPager.setOffscreenPageLimit(4);
         tabLayout.setupWithViewPager(viewPager);
 
         // load data
@@ -83,16 +82,13 @@ public class CommunityProfileActivity extends BaseActivity
     /**
      * loads the community profile from backend
      */
-    private void loadInfo()
-    {
+    private void loadInfo() {
         contoller.getCommunityProfile(
                 new AuthenticationAPIController(this).getTokken()
-                ,communityId
-                ,new GetCommunityCallback()
-        {
+                , communityId
+                , new GetCommunityCallback() {
                     @Override
-                    public void success(Community community)
-                    {
+                    public void success(Community community) {
                         // popoulate views
                         textViewCommunityName.setText(community.getName());
                         if (ValidationUtils.notEmpty(community.getProfilePictureUrl()))
@@ -109,8 +105,7 @@ public class CommunityProfileActivity extends BaseActivity
                     }
 
                     @Override
-                    public void fail(String message)
-                    {
+                    public void fail(String message) {
                         Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
                     }
                 }
@@ -121,23 +116,19 @@ public class CommunityProfileActivity extends BaseActivity
     /**
      * loads the community members from the backend
      */
-    private void loadMembers()
-    {
+    private void loadMembers() {
         contoller.getCommunityMembers(
                 new AuthenticationAPIController(this).getTokken()
                 , new AuthenticationAPIController(this).getCurrentUser().getUserId()
-                , communityId, new GetUsersCallback()
-                {
+                , communityId, new GetUsersCallback() {
 
                     @Override
-                    public void success(List<User> users)
-                    {
+                    public void success(List<User> users) {
                         communityPagerAdapter.getMembersListFragment().setMembers(users);
                     }
 
                     @Override
-                    public void fail(String message)
-                    {
+                    public void fail(String message) {
                         Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
                     }
                 });
