@@ -360,12 +360,45 @@ public class CommunityAPIController {
                 });
     }
 
-    public void requestToJoinCommunity(String tokken, String id, final GenericSuccessCallback callback) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                callback.success();
-            }
-        }, 3000);
+    public void requestToJoinCommunity(String tokken, String communityId, final GenericSuccessCallback callback) {
+        String url = Constants.HOST + "join_community";
+        JsonObject json = new JsonObject();
+        json.addProperty("communityId", communityId);
+
+
+        Ion.with(context)
+                .load("http://pickmeasu.azurewebsites.net/api/Create_Community")
+                .addHeader("Authorization", "Bearer " + tokken)
+                .addHeader("Content-Type", "application/json")
+                .setJsonObjectBody(json)
+                .asString()
+                .setCallback(new FutureCallback<String>() {
+                    @Override
+                    public void onCompleted(Exception e, String result) {
+                        // check failed
+                        if (e != null) {
+                            callback.fail(e.getMessage());
+                            return;
+                        }
+                        Log.e("Game", "join community result = " + result);
+
+                        // parse the response
+                        try {
+                            // check status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0) {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
+
+                            callback.success();
+                        } catch (Exception e2) {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+                });
     }
 }

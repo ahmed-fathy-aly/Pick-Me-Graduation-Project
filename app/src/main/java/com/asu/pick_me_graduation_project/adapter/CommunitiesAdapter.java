@@ -84,21 +84,16 @@ public class CommunitiesAdapter extends ArrayAdapter<Community> {
                     load(community.getProfilePictureUrl())
                     .placeholder(R.drawable.ic_group_black_48dp)
                     .into(imageViewPP);
-        buttonJoin.setVisibility(community.isMember() ? View.INVISIBLE : View.VISIBLE);
+
 
         // check if join is still loading
-        if (joiningSet.contains(community.getId())) {
-            buttonJoin.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
+        boolean showJoin = !community.isMember()
+                && !joiningSet.contains(community.getId())
+                && !joinedSet.contains(community.getId());
+        boolean showProgress = joiningSet.contains(community.getId());
+        buttonJoin.setVisibility(showJoin ? View.VISIBLE : View.INVISIBLE);
+        progressBar.setVisibility(showProgress ? View.VISIBLE : View.INVISIBLE);
 
-            buttonJoin.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.INVISIBLE);
-        }
-
-        // check if already requested to join this community
-        if (joinedSet.contains(community.getId()))
-            buttonJoin.setVisibility(View.INVISIBLE);
         return view;
     }
 
