@@ -134,7 +134,7 @@ public class ChatAPIController
         String url="http://pickmeasu.azurewebsites.net/api/Message/get_a_conversation"+"?count=2"+"&userId=44";
         Ion.with(context)
                 .load("GET",url).
-                addHeader("Authorization","Bearer"+tokken)
+                addHeader("Authorization","Bearer "+tokken)
                 .asString().setCallback(new FutureCallback<String>() {
             @Override
             public void onCompleted(Exception e, String result) {
@@ -159,7 +159,7 @@ public class ChatAPIController
                     JSONArray messegesJson = response.getJSONArray("messages");
                     List<ChatMessage> messages3 = new ArrayList<ChatMessage>();
                     for (int i = 0; i < messegesJson.length(); i++) {
-                        JSONObject messageJson = messegesJson.getJSONObject(i).getJSONObject("message");
+                        JSONObject messageJson = messegesJson.getJSONObject(i);
                         ChatMessage message = ChatMessage.fromJson(messageJson);
                         messages3.add(message);
                     }
