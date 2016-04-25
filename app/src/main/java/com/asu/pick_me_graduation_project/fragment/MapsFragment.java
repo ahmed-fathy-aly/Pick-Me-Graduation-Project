@@ -21,7 +21,13 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.HashMap;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,7 +37,8 @@ import butterknife.ButterKnife;
  * arguments :
  * ARG_START_WITH_MY_LOCATION : go to my location when once the map is loaded
  */
-public class MapsFragment extends Fragment implements OnMapReadyCallback {
+public class MapsFragment extends Fragment implements OnMapReadyCallback
+{
 
     /* constants */
     public static final String ARG_START_WITH_MY_LOCATION = "startWithMyLocation";
@@ -44,15 +51,23 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     /* fields */
     private GoogleMap googleMap;
+    HashMap<String, Marker> markers;
 
-
-    public MapsFragment() {
+    public MapsFragment()
+    {
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        markers = new HashMap<>();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
         ButterKnife.bind(this, view);
 
@@ -65,13 +80,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onMapReady(final GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap)
+    {
         Log.e("Game", "map ready");
         this.googleMap = googleMap;
 
         if (ActivityCompat.checkSelfPermission(getContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
             return;
         }
         googleMap.setMyLocationEnabled(true);
@@ -80,9 +97,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
         // zoom to my location
         if (getArguments() != null && getArguments().getBoolean(ARG_START_WITH_MY_LOCATION, false))
-            googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+            googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener()
+            {
                 @Override
-                public void onMyLocationChange(Location location) {
+                public void onMyLocationChange(Location location)
+                {
                     LatLng myLocation = new LatLng(location.getLatitude(),
                             location.getLongitude());
                     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation,
@@ -96,14 +115,75 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
     /* public methods */
-    public void setCenterLocationVisible(boolean visible) {
+
+    /**
+     * shows or hide the marker in the middle of the map
+     */
+    public void setCenterLocationVisible(boolean visible)
+    {
         imageViewCenterLocation.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
+
+    /**
+     * gets the location in the center of the map shown
+     */
+    public LatLng getCurrentLatlng()
+    {
+        if (googleMap != null)
+            return googleMap.getCameraPosition().target;
+        else
+            return null;
+    }
+
+    /**
+     * adds a marker on the map
+     * if there's a marker with that id already, update its position
+     */
+    public void addMarker(String id, String title, float color, LatLng latLng)
+    {
+        if (!markers.containsKey(id))
+        {
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .position(latLng)
+                    .title(title)
+                    .icon(BitmapDescriptorFactory.defaultMarker(color));
+            markers.put(id, googleMap.addMarker(markerOptions));
+        } else
+        {
+            Marker marker = markers.get(id);
+            marker.setPosition(latLng);
+            marker.setTitle(title);
+            marker.setIcon(BitmapDescriptorFactory.defaultMarker(color));
+        }
+    }
+
+    /**
+     * gets the position of a previously added marker
+     * returns null if no marker with that id is found
+     */
+    public LatLng getMarkerPosition(String id)
+    {
+        if (!markers.containsKey(id))
+            return null;
+
+        Marker marker = markers.get(id);
+        return marker.getPosition();
+    }
+
+    /**
+     * draw the route containing between the given position 0 -> 1 -> 2...etc
+     */
+    public void drawRoute(List<LatLng> latLngs)
+    {
+
     }
 }

@@ -59,6 +59,9 @@
     <string name="maps_api_key">AIzaSyA9AA9f8sSClTlBMyzAU0KFlb1GpLCWibE</string>
 
     <string name="maps_api_key_debug">AIzaSyCrvcZp-42PWT2tLq1CY5kP9jCaWKy9qyA</string>
+    <string name="post_ride">Post Ride</string>
+    <string name="select_source">Select Source</string>
+    <string name="select_destination">Select Destination</string>
 
 
 </resources>
