@@ -56,4 +56,9 @@
     <string name="posting">Posting</string>
     <string name="sent">Sent</string>
 
+    <string name="maps_api_key">AIzaSyA9AA9f8sSClTlBMyzAU0KFlb1GpLCWibE</string>
+
+    <string name="maps_api_key_debug">AIzaSyCrvcZp-42PWT2tLq1CY5kP9jCaWKy9qyA</string>
+
+
 </resources>
