@@ -3,6 +3,7 @@ package com.asu.pick_me_graduation_project.fragment;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -15,6 +16,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.asu.pick_me_graduation_project.R;
+import com.asu.pick_me_graduation_project.callback.GetRouteCallback;
+import com.asu.pick_me_graduation_project.controller.MapsAPIController;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -25,6 +28,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +57,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     /* fields */
     private GoogleMap googleMap;
     HashMap<String, Marker> markers;
+    private Polyline polyline;
 
     public MapsFragment()
     {
@@ -72,7 +78,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         ButterKnife.bind(this, view);
 
 
-        Log.e("Game", "get map yala ");
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
@@ -82,7 +87,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onMapReady(final GoogleMap googleMap)
     {
-        Log.e("Game", "map ready");
         this.googleMap = googleMap;
 
         if (ActivityCompat.checkSelfPermission(getContext(),
@@ -120,6 +124,24 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+
+    /**
+     * draw a polyline consisting of a path of latlngs
+     * removes any existing polylines
+     */
+    private void drawPolyline(List<LatLng> latLngs)
+    {
+        // remove any existing polylines
+        if (polyline != null)
+            polyline.remove();
+
+        // draw the new polyline
+        PolylineOptions polyLineOptions = new PolylineOptions();
+        for (LatLng latlng : latLngs)
+            polyLineOptions.add(latlng);
+        polyline = googleMap.addPolyline(polyLineOptions);
     }
 
     /* public methods */
@@ -184,6 +206,23 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
      */
     public void drawRoute(List<LatLng> latLngs)
     {
+        // make a request to get the route
+        MapsAPIController controller = new MapsAPIController(getContext());
+        controller.getRoute(latLngs, new GetRouteCallback()
+        {
+            @Override
+            public void success(List<LatLng> latLngs)
+            {
+                Log.e("Game", "got latlngs " + latLngs.size());
+                drawPolyline(latLngs);
+            }
 
+            @Override
+            public void fail(String error)
+            {
+                Log.e("Game", "Get route error " + error);
+            }
+        });
     }
+
 }

@@ -97,9 +97,11 @@ public class ChooseRouteFragment extends Fragment
         // add a marker
         mapsFragment.addMarker("Destination", "Destination", BitmapDescriptorFactory.HUE_GREEN, latLng);
 
-
         // change check color
         imageViewCheckDestination.setImageResource(R.drawable.ic_check_green);
+
+        // draw route
+        drawRoute();
     }
 
 
