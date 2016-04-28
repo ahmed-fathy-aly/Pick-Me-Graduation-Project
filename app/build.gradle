@@ -33,6 +33,12 @@ dependencies {
     compile ('com.github.florent37:materialimageloading:1.0.1@aar'){
         transitive=true
     }
+
+    compile 'com.google.android.gms:play-services-maps:8.4.0'
+    compile 'com.pacioianu.david:ink-page-indicator:1.1.1'
+    compile 'com.google.maps.android:android-maps-utils:0.4.+'
+    testCompile 'junit:junit:4.12'
+
 }
 
 // can you see me ? you sohuldn't...tb now? tb now?
