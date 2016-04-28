@@ -1,5 +1,6 @@
 package com.asu.pick_me_graduation_project.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +9,7 @@ import com.asu.pick_me_graduation_project.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * blank activity :D
@@ -41,4 +43,9 @@ public class MainActivity extends BaseActivity
         }, 700);
     }
 
+    @OnClick(R.id.buttonPostRide)
+    void openPostRide()
+    {
+        startActivity(new Intent(this, PostRideActivity.class));
+    }
 }

@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.asu.pick_me_graduation_project.R;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -119,7 +119,29 @@ public class ChooseRouteFragment extends Fragment
             return;
 
         // draw route
-        mapsFragment.drawRoute(Arrays.asList(source, destination));
+        mapsFragment.drawRoute(Arrays.asList(source, destination)
+                , getResources().getColor(R.color.primary));
     }
 
+    /**
+     * checks that a source and a destinatoin are entered
+     * shows a toast if one of them is not entered
+     * @return true if both are entered
+     */
+    public boolean checkDataEntered()
+    {
+        if (mapsFragment.getMarkerPosition("Source") == null)
+        {
+            Toast.makeText(getContext(), getString(R.string.select_source), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (mapsFragment.getMarkerPosition("Destination") == null)
+        {
+            Toast.makeText(getContext(), getString(R.string.select_destination), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+
+    }
 }

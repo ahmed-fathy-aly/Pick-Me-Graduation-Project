@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.callback.GetRouteCallback;
 import com.asu.pick_me_graduation_project.controller.MapsAPIController;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -25,6 +26,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -108,8 +110,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
                 {
                     LatLng myLocation = new LatLng(location.getLatitude(),
                             location.getLongitude());
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation,
-                            500));
+                   CameraPosition cameraPosition = CameraPosition.builder()
+                           .target(myLocation)
+                           .zoom(15)
+                           .build();
+                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                     googleMap.setOnMyLocationChangeListener(null);
                 }
             });
@@ -131,7 +136,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
      * draw a polyline consisting of a path of latlngs
      * removes any existing polylines
      */
-    private void drawPolyline(List<LatLng> latLngs)
+    private void drawPolyline(List<LatLng> latLngs, int color)
     {
         // remove any existing polylines
         if (polyline != null)
@@ -139,6 +144,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
 
         // draw the new polyline
         PolylineOptions polyLineOptions = new PolylineOptions();
+        polyLineOptions.color(color);
         for (LatLng latlng : latLngs)
             polyLineOptions.add(latlng);
         polyline = googleMap.addPolyline(polyLineOptions);
@@ -204,7 +210,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     /**
      * draw the route containing between the given position 0 -> 1 -> 2...etc
      */
-    public void drawRoute(List<LatLng> latLngs)
+    public void drawRoute(List<LatLng> latLngs, final int color)
     {
         // make a request to get the route
         MapsAPIController controller = new MapsAPIController(getContext());
@@ -213,8 +219,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
             @Override
             public void success(List<LatLng> latLngs)
             {
-                Log.e("Game", "got latlngs " + latLngs.size());
-                drawPolyline(latLngs);
+                drawPolyline(latLngs, color);
             }
 
             @Override

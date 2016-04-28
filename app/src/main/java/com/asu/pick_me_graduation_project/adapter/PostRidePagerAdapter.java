@@ -49,4 +49,8 @@ public class PostRidePagerAdapter extends FragmentPagerAdapter
         return mFragmentList.size();
     }
 
+    public ChooseRouteFragment getChooseRouteFragment()
+    {
+        return (ChooseRouteFragment) chooseRouteFragment;
+    }
 }

@@ -41,13 +41,11 @@
         <activity android:name=".activity.MainActivity">
         </activity>
         <activity android:name=".activity.StartActivity">
-            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            -->
         </activity>
         <activity
             android:name=".activity.SearchUsersActivity"
@@ -70,11 +68,6 @@
         </activity>
         <activity android:name=".activity.PostRideActivity"
             android:label="@string/post_ride">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
     </application>
 
