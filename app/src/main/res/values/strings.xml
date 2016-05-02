@@ -72,6 +72,7 @@
     <string name="visibility">Visibility    </string>
     <string name="to_all">To All</string>
     <string name="only_these_communities">Only These Communities</string>
+    <string name="title_my_rides">My Rides</string>
 
 
 </resources>

@@ -2,11 +2,11 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="com.asu.pick_me_graduation_project.fragment.MapsFragment">
+             tools:context="com.asu.pick_me_graduation_project.fragment.GenericMapsView">
 
 
     <com.google.android.gms.maps.MapView
-        android:id="@+id/map"
+        android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

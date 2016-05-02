@@ -30,7 +30,8 @@ public class ChooseRouteFragment extends Fragment
     ImageView imageViewCheckSource;
     @Bind(R.id.imageViewCheckDestination)
     ImageView imageViewCheckDestination;
-    private MapsFragment mapsFragment;
+    @Bind(R.id.map)
+    GenericMapsView genericMapsView;
 
     /* fields */
     public ChooseRouteFragment()
@@ -47,15 +48,8 @@ public class ChooseRouteFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_choose_route, container, false);
         ButterKnife.bind(this, view);
 
-        // maps fragment
-        mapsFragment = new MapsFragment();
-        Bundle args = new Bundle();
-        args.putBoolean(MapsFragment.ARG_START_WITH_MY_LOCATION, true);
-        mapsFragment.setArguments(args);
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.mapContainer, mapsFragment)
-                .commit();
+        // go to my location
+        genericMapsView.goToMyLocation();
 
         return view;
     }
@@ -72,12 +66,12 @@ public class ChooseRouteFragment extends Fragment
     void selectSource()
     {
         // get the selected position
-        LatLng latLng = mapsFragment.getCurrentLatlng();
+        LatLng latLng = genericMapsView.getCurrentLatlng();
         if (latLng == null)
             return;
 
         // add a marker
-        mapsFragment.addMarker("Source", "Source", BitmapDescriptorFactory.HUE_ORANGE, latLng);
+        genericMapsView.addMarker("Source", "Source", BitmapDescriptorFactory.HUE_ORANGE, latLng);
 
         // change check color
         imageViewCheckSource.setImageResource(R.drawable.ic_check_green);
@@ -90,12 +84,12 @@ public class ChooseRouteFragment extends Fragment
     void selectDestination()
     {
         // get the selected position
-        LatLng latLng = mapsFragment.getCurrentLatlng();
+        LatLng latLng = genericMapsView.getCurrentLatlng();
         if (latLng == null)
             return;
 
         // add a marker
-        mapsFragment.addMarker("Destination", "Destination", BitmapDescriptorFactory.HUE_GREEN, latLng);
+        genericMapsView.addMarker("Destination", "Destination", BitmapDescriptorFactory.HUE_GREEN, latLng);
 
         // change check color
         imageViewCheckDestination.setImageResource(R.drawable.ic_check_green);
@@ -113,29 +107,30 @@ public class ChooseRouteFragment extends Fragment
     private void drawRoute()
     {
         // get source and destination selected
-        LatLng source = mapsFragment.getMarkerPosition("Source");
-        LatLng destination = mapsFragment.getMarkerPosition("Destination");
+        LatLng source = genericMapsView.getMarkerPosition("Source");
+        LatLng destination = genericMapsView.getMarkerPosition("Destination");
         if (source == null || destination == null)
             return;
 
         // draw route
-        mapsFragment.drawRoute(Arrays.asList(source, destination)
+        genericMapsView.drawRoute(Arrays.asList(source, destination)
                 , getResources().getColor(R.color.primary));
     }
 
     /**
      * checks that a source and a destinatoin are entered
      * shows a toast if one of them is not entered
+     *
      * @return true if both are entered
      */
     public boolean checkDataEntered()
     {
-        if (mapsFragment.getMarkerPosition("Source") == null)
+        if (genericMapsView.getMarkerPosition("Source") == null)
         {
             Toast.makeText(getContext(), getString(R.string.select_source), Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (mapsFragment.getMarkerPosition("Destination") == null)
+        if (genericMapsView.getMarkerPosition("Destination") == null)
         {
             Toast.makeText(getContext(), getString(R.string.select_destination), Toast.LENGTH_SHORT).show();
             return false;
