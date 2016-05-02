@@ -49,6 +49,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
 
     /* constants */
     public static final String ARG_START_WITH_MY_LOCATION = "startWithMyLocation";
+    public static final String ARG_SHOW_CENTER_LOCATION= "showCenterLocation";
 
     /* UI */
     @Bind(R.id.map)
@@ -119,6 +120,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
                 }
             });
 
+        // hide center location
+        if (getArguments() != null && !getArguments().getBoolean(ARG_SHOW_CENTER_LOCATION, true) )
+        {
+            imageViewCenterLocation.setVisibility(View.GONE);
+        }
         mapView.onResume();
 
 
@@ -152,13 +158,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
 
     /* public methods */
 
-    /**
-     * shows or hide the marker in the middle of the map
-     */
-    public void setCenterLocationVisible(boolean visible)
-    {
-        imageViewCenterLocation.setVisibility(visible ? View.VISIBLE : View.GONE);
-    }
 
 
     /**
