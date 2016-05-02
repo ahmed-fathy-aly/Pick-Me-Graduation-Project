@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by ahmed on 5/2/2016.
@@ -46,14 +47,17 @@ public class RidesAPIController
                     user.setProfilePictureUrl("https://upload.wikimedia.org/wikipedia/en/7/70/Shawn_Tok_Profile.jpg");
 
                     Location l1 = new Location();
-                    l1.setLatitude(37.02);
-                    l1.setLongitude(37.02);
+                    l1.setId("1");
+                    l1.setLatitude(30.02);
+                    l1.setLongitude(31.02);
                     l1.setType(Location.LocationType.SOURCE);
                     l1.setUser(user);
 
                     Location l2 = new Location();
-                    l2.setLatitude(37.03);
-                    l2.setLongitude(37.03);
+                    l2.setId("2");
+                    double d = new Random().nextInt(10) / 100.0;
+                    l2.setLatitude(30.01 + d);
+                    l2.setLongitude(31.01 + d);
                     l2.setType(Location.LocationType.DESTINATION);
                     l2.setUser(user);
 

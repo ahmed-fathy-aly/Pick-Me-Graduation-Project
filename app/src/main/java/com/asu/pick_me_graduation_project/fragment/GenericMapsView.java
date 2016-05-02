@@ -2,16 +2,15 @@ package com.asu.pick_me_graduation_project.fragment;
 
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
+import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -22,37 +21,32 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * A generic maps fragment
- * arguments :
- * ARG_START_WITH_MY_LOCATION : go to my location when once the map is loaded
+ * A generic maps view
  */
-public class MapsFragment extends Fragment implements OnMapReadyCallback
+public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
 {
 
-    /* constants */
-    public static final String ARG_START_WITH_MY_LOCATION = "startWithMyLocation";
-    public static final String ARG_SHOW_CENTER_LOCATION= "showCenterLocation";
 
     /* UI */
-    @Bind(R.id.map)
+    @Bind(R.id.mapView)
     MapView mapView;
     @Bind(R.id.imageViewCenterLocation)
     ImageView imageViewCenterLocation;
@@ -60,32 +54,45 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
     /* fields */
     private GoogleMap googleMap;
     HashMap<String, Marker> markers;
+    HashMap<String, MarkerOptions> unaddedMarkers;
     private Polyline polyline;
+    boolean goToMyLocation = false;
+    boolean fitMarkers = false;
 
-    public MapsFragment()
+    public GenericMapsView(Context context)
     {
+        super(context);
+        init();
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState)
+    public GenericMapsView(Context context, AttributeSet attrs)
     {
-        super.onCreate(savedInstanceState);
+        super(context, attrs);
+        init();
+    }
+
+    public GenericMapsView(Context context, AttributeSet attrs, int defStyleAttr)
+    {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
+
+
+    private void init()
+    {
+        // inflate layout
+        inflate(getContext(), R.layout.fragment_maps, this);
+        ButterKnife.bind(this);
+
+        // init fields
         markers = new HashMap<>();
-    }
+        unaddedMarkers = new HashMap<>();
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
-        View view = inflater.inflate(R.layout.fragment_maps, container, false);
-        ButterKnife.bind(this, view);
-
-
-        mapView.onCreate(savedInstanceState);
+        // init map view
+        mapView.onCreate(new Bundle());
         mapView.getMapAsync(this);
-
-        return view;
     }
+
 
     @Override
     public void onMapReady(final GoogleMap googleMap)
@@ -103,40 +110,89 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         googleMap.getUiSettings().setZoomControlsEnabled(true);
 
         // zoom to my location
-        if (getArguments() != null && getArguments().getBoolean(ARG_START_WITH_MY_LOCATION, false))
-            googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener()
-            {
-                @Override
-                public void onMyLocationChange(Location location)
-                {
-                    LatLng myLocation = new LatLng(location.getLatitude(),
-                            location.getLongitude());
-                   CameraPosition cameraPosition = CameraPosition.builder()
-                           .target(myLocation)
-                           .zoom(15)
-                           .build();
-                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    googleMap.setOnMyLocationChangeListener(null);
-                }
-            });
-
-        // hide center location
-        if (getArguments() != null && !getArguments().getBoolean(ARG_SHOW_CENTER_LOCATION, true) )
+        if (goToMyLocation)
         {
-            imageViewCenterLocation.setVisibility(View.GONE);
+            goToMyLocationNow();
+            goToMyLocation = false;
         }
+
+        // unadded markers
+        for(String id : unaddedMarkers.keySet())
+            markers.put(id, googleMap.addMarker(unaddedMarkers.get(id)));
+        unaddedMarkers.clear();
+
+        // fit markers
+        if (fitMarkers)
+        {
+            fitMarkersNow();
+            fitMarkers = false;
+        }
+
         mapView.onResume();
 
 
     }
 
-    @Override
-    public void onDestroyView()
+
+    private void goToMyLocationNow()
     {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
+        googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener()
+        {
+            @Override
+            public void onMyLocationChange(Location location)
+            {
+                LatLng myLocation = new LatLng(location.getLatitude(),
+                        location.getLongitude());
+                CameraPosition cameraPosition = CameraPosition.builder()
+                        .target(myLocation)
+                        .zoom(15)
+                        .build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                googleMap.setOnMyLocationChangeListener(null);
+            }
+        });
     }
 
+
+
+
+    private void fitMarkersNow()
+    {
+        Log.e("Game", "fitting " + markers.keySet());
+
+        // get the bounds
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (Marker marker : markers.values())
+            builder.include(marker.getPosition());
+        LatLngBounds bounds = builder.build();
+
+        // update the map
+        int padding = 25;
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        googleMap.animateCamera(cameraUpdate);
+    }
+
+
+    /* public methods */
+
+    /**
+     * zooms to my current location
+     */
+    public void goToMyLocation()
+    {
+        if (googleMap != null)
+            goToMyLocationNow();
+        else
+            goToMyLocation = true;
+    }
+
+    /**
+     * shows or hide the center marker
+     */
+    public void setCenterMarkerShown(boolean shown)
+    {
+        imageViewCenterLocation.setVisibility(shown ? VISIBLE : GONE);
+    }
 
     /**
      * draw a polyline consisting of a path of latlngs
@@ -156,7 +212,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
         polyline = googleMap.addPolyline(polyLineOptions);
     }
 
-    /* public methods */
 
 
 
@@ -183,7 +238,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
                     .position(latLng)
                     .title(title)
                     .icon(BitmapDescriptorFactory.defaultMarker(color));
-            markers.put(id, googleMap.addMarker(markerOptions));
+            if (googleMap != null)
+                markers.put(id, googleMap.addMarker(markerOptions));
+            else
+                unaddedMarkers.put(id, markerOptions);
         } else
         {
             Marker marker = markers.get(id);
@@ -191,6 +249,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
             marker.setTitle(title);
             marker.setIcon(BitmapDescriptorFactory.defaultMarker(color));
         }
+    }
+
+    /**
+     * zooms to fit all the makers
+     */
+    public void fitMarkers()
+    {
+        if (googleMap != null)
+            fitMarkersNow();
+        else
+            fitMarkers = true;
     }
 
     /**
@@ -228,5 +297,4 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback
             }
         });
     }
-
 }

@@ -38,10 +38,10 @@
                 />
         </LinearLayout>
 
-        <FrameLayout
-            android:id="@+id/mapContainers"
+        <com.asu.pick_me_graduation_project.fragment.GenericMapsView
+            android:id="@+id/genericMapsView"
             android:layout_width="match_parent"
-            android:layout_height="140dp"/>
+            android:layout_height="200dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,7 +57,7 @@
                 android:text="Description"/>
 
             <TextView
-                android:id="@+id/textViewColor"
+                android:id="@+id/textViewTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"

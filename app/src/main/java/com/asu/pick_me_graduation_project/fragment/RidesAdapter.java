@@ -1,8 +1,10 @@
 package com.asu.pick_me_graduation_project.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +12,15 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.asu.pick_me_graduation_project.R;
+import com.asu.pick_me_graduation_project.model.Location;
 import com.asu.pick_me_graduation_project.model.Ride;
+import com.asu.pick_me_graduation_project.model.User;
+import com.asu.pick_me_graduation_project.utils.ValidationUtils;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,20 +70,43 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
     {
         Ride ride = data.get(position);
 
-        /*
-        // set maps fragment
-        MapsFragment mapsFragment = new MapsFragment();
-        Bundle args = new Bundle();
-        args.putBoolean(MapsFragment.ARG_SHOW_CENTER_LOCATION, false);
-        args.putBoolean(MapsFragment.ARG_START_WITH_MY_LOCATION, false);
-        mapsFragment.setArguments(args);
-        holder.mapContainers.setId(position*132 + 5);
-        fragmentManager
-                .beginTransaction()
-                .replace(position*132 + 5, mapsFragment)
-                .commit();
+        // user data
+        User rider = ride.getRider();
+        holder.textViewUserName.setText(rider.getFirstName() + " " + rider.getLastName());
+        if (ValidationUtils.notEmpty(rider.getProfilePictureUrl()))
+            Picasso.with(context).
+                    load(rider.getProfilePictureUrl())
+                    .placeholder(R.drawable.ic_user_small)
+                    .into(holder.imageViewUserPP);
 
-        */
+        // time and description
+        holder.textViewDescription.setText(ride.getDescription());
+        try
+        {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy hh:mm a");
+            holder.textViewTime.setText(sdf.format(ride.getTime().getTimeInMillis()));
+        } catch (Exception e)
+        {
+            Log.e("Game", "ride time exception " + e.getMessage());
+        }
+
+        // locations;
+        for (Location location : ride.getLocations())
+        {
+            holder.mapsView.addMarker(
+                    location.getId()
+                    , location.getUser().getFirstName()
+                    , BitmapDescriptorFactory.HUE_ORANGE
+                    , new LatLng(location.getLatitude(), location.getLongitude()));
+        }
+        holder.mapsView.fitMarkers();
+
+        // route
+        List<LatLng> latLngs = new ArrayList<>();
+        for (Location location : ride.getLocations())
+            latLngs.add(new LatLng(location.getLatitude(), location.getLongitude()));
+        holder.mapsView.drawRoute(latLngs, 0xFF00BCD4);
+
     }
 
     @Override
@@ -89,19 +121,19 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
         CircleImageView imageViewUserPP;
         @Bind(R.id.textViewUserName)
         TextView textViewUserName;
-        @Bind(R.id.mapContainers)
-        FrameLayout mapContainers;
+        @Bind(R.id.genericMapsView)
+        GenericMapsView mapsView;
         @Bind(R.id.textViewDescription)
         TextView textViewDescription;
-        @Bind(R.id.textViewColor)
-        TextView textViewColor;
+        @Bind(R.id.textViewTime)
+        TextView textViewTime;
 
         public ViewHolder(View view)
         {
             super(view);
             ButterKnife.bind(this, view);
 
-
+            mapsView.setCenterMarkerShown(false);
         }
 
     }
