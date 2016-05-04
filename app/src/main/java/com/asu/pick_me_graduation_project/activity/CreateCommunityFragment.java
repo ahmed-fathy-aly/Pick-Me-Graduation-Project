@@ -114,7 +114,7 @@ public class CreateCommunityFragment  extends android.support.v4.app.DialogFragm
         final ProgressDialog progressDialog = ProgressDialog.show(getContext(), "", getString(R.string.creating_community));
         CommunityAPIController controller = new CommunityAPIController(getContext());
         controller.createCommunity(
-                new AuthenticationAPIController(getContext()).getCurrentUser().getUserId(),
+                new AuthenticationAPIController(getContext()).getTokken(),
                 name, desc, new CreateCommunityCallback()
         {
             @Override
