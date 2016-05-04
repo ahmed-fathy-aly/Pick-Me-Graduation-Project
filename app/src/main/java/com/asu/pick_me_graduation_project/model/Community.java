@@ -93,7 +93,8 @@ public class Community
                 community.setId(jsonObject.getString("communityId"));
             community.setName(jsonObject.getString("name"));
             community.setProfilePictureUrl(jsonObject.getString("profilePicture"));
-            community.setIsAdmin(jsonObject.getBoolean("isAdmin"));
+            if (!jsonObject.isNull("isAdmin"))
+                community.setIsAdmin(jsonObject.getBoolean("isAdmin"));
             if (!jsonObject.isNull("isJoinedByMe"))
                 community.setIsMember(jsonObject.getBoolean("isJoinedByMe"));
         } catch (Exception e)
