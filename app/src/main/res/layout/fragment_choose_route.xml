@@ -42,6 +42,7 @@
                 android:padding="4dp">
 
                 <TextView
+                    android:id="@+id/textViewSelectSource"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -78,6 +79,7 @@
                 android:padding="4dp">
 
                 <TextView
+                    android:id="@+id/textViewSelectDestination"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

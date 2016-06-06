@@ -9,6 +9,8 @@ public class CarDetails
     String year;
     String plateNumber;
     boolean conditioned;
+    int numberOfSeats;
+    int sizeOfBags;
 
     /* constructor */
     public CarDetails()
@@ -55,5 +57,25 @@ public class CarDetails
     public void setConditioned(boolean conditioned)
     {
         this.conditioned = conditioned;
+    }
+
+    public int getNumberOfSeats()
+    {
+        return numberOfSeats;
+    }
+
+    public void setNumberOfSeats(int numberOfSeats)
+    {
+        this.numberOfSeats = numberOfSeats;
+    }
+
+    public int getSizeOfBags()
+    {
+        return sizeOfBags;
+    }
+
+    public void setSizeOfBags(int sizeOfBags)
+    {
+        this.sizeOfBags = sizeOfBags;
     }
 }

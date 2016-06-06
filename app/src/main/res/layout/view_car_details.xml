@@ -29,6 +29,7 @@
         android:maxLength="14"
         android:padding="10.0dip"/>
 
+
     <CheckBox
         android:id="@+id/checkBoxAirConditioned"
         android:layout_width="wrap_content"

@@ -38,7 +38,12 @@ public class TimeUtils {
      * converts the calendar to something like "4 days ago"
      */
     public static String getUserFriendlyDate(Context context, Calendar date) {
-        Log.e("Game", "date = " + date.toString());
         return DateUtils.getRelativeTimeSpanString(context, date.getTimeInMillis()).toString();
+    }
+
+    public static String convertToBackendTime(Calendar time)
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
+        return formatter.format(time.getTime()).replace("am", "AM").replace("pm", "PM");
     }
 }

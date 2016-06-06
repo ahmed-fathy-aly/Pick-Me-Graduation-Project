@@ -21,6 +21,7 @@ import com.asu.pick_me_graduation_project.model.Community;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -126,7 +127,7 @@ public class CommunitiesChooserView extends LinearLayout
         for (final Community community : communityList)
         {
             // reference views
-            View view =  LayoutInflater.from(getContext()).inflate(R.layout.row_community_check, null);
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.row_community_check, null);
             TextView textViewCommunityName = (TextView) view.findViewById(R.id.textViewCommunityName);
             CheckBox checkBoxCommunityChecked = (CheckBox) view.findViewById(R.id.checkBoxCommunityChecked);
             ImageView imageViewPP = (ImageView) view.findViewById(R.id.imageViewPP);
@@ -140,6 +141,7 @@ public class CommunitiesChooserView extends LinearLayout
                         .into(imageViewPP);
 
             // add listener
+            filteredCommunities.add(community);
             checkBoxCommunityChecked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
             {
                 @Override
@@ -155,5 +157,16 @@ public class CommunitiesChooserView extends LinearLayout
             // add to layout
             linearLayoutCommunities.addView(view);
         }
+    }
+
+    /**
+     * returns the communities checked or null if the user choosed "All"
+     */
+    public List<Community> getCheckedCommunities()
+    {
+        if (radioGroupVisibility.getCheckedRadioButtonId() == R.id.radioButtonAll)
+            return null;
+        else
+            return new ArrayList<>(filteredCommunities);
     }
 }

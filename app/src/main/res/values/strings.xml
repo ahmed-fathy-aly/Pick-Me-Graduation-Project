@@ -6,8 +6,8 @@
     <string name="email">Email</string>
     <string name="title_profile">Profile</string>
     <string name="infoString">Biograghy Info</string>
-    <string name="CarModelString">Car model</string>
-    <string name="CarColorString">Car color</string>
+    <string name="CarModelString">Model</string>
+    <string name="CarColorString">Color</string>
     <string name="RateString">User Rate</string>
     <string name="dobString">DOB</string>
     <string name="TripsString">Last Trips</string>
@@ -18,9 +18,9 @@
     <string name="last_name1">Last Name</string>
     <string name="age">Age</string>
     <string name="add_car_photo">add your car photo</string>
-    <string name="model">Car Model</string>
+    <string name="model">Model</string>
     <string name="plate_numer">Plate Number</string>
-    <string name="car_year">Car Year</string>
+    <string name="car_year">Year</string>
     <string name="select_brand">select brand</string>
     <string name="Do_you_have_acar">Do you have a car</string>
     <string name="bio_hint">Biograghic info</string>
@@ -72,10 +72,17 @@
     <string name="to_all">All</string>
     <string name="only_these_communities">Only These Communities</string>
     <string name="title_my_rides">My Rides</string>
-    <string name="car_details">Car Details</string>
+    <string name="car">Car</string>
     <string name="search_ride">Search For a Ride</string>
     <string name="communities">Communities</string>
     <string name="searching">Searching...</string>
+    <string name="number_of_seats">Number Of Seats</string>
+    <string name="free_seats">Free Seats</string>
+    <string name="no_smoking">No Smoking</string>
+    <string name="ladies_only">Ladies Only</string>
+    <string name="notes">Notes</string>
+    <string name="details">Details</string>
+    <string name="optional">Optional</string>
 
 
 </resources>
