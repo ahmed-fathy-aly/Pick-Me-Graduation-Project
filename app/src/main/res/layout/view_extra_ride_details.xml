@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+    >
+
+
+    <EditText
+        android:id="@+id/editTextDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/description"
+        />
+
+    <EditText
+        android:id="@+id/editTextNotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/notes"
+        android:lines="2"
+        />
+
+    <EditText
+        android:id="@+id/editTextFreeSeats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:digits="12345"
+        android:hint="@string/free_seats"
+        android:inputType="number"/>
+
+    <CheckBox
+        android:id="@+id/checkBoxNoSmoking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_smoking"
+        android:textSize="15.0sp"/>
+
+    <CheckBox
+        android:id="@+id/checkBoxLadiesOnly"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ladies_only"
+        android:textSize="15.0sp"/>
+
+
+
+
+</LinearLayout>

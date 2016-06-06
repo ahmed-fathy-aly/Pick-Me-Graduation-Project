@@ -41,6 +41,9 @@ public class TimeChooserView extends LinearLayout implements DatePickerDialog.On
     @Bind(R.id.layoutSelectTime)
     LinearLayout layoutSelectTime;
 
+    /* fields */
+    Calendar calendar;
+
     /* constructors */
 
     public TimeChooserView(Context context)
@@ -67,6 +70,8 @@ public class TimeChooserView extends LinearLayout implements DatePickerDialog.On
         // inflate layout
         inflate(getContext(), R.layout.view_time_chooser, this);
         ButterKnife.bind(this);
+
+        calendar = Calendar.getInstance();
     }
 
        /* listeners */
@@ -108,7 +113,6 @@ public class TimeChooserView extends LinearLayout implements DatePickerDialog.On
         try
         {
             // make a calendar
-            Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, monthOfYear);
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -119,6 +123,7 @@ public class TimeChooserView extends LinearLayout implements DatePickerDialog.On
 
             // show
             textViewDate.setText(dateStr);
+            textViewDate.setError(null);
 
         } catch (Exception e)
         {
@@ -133,7 +138,6 @@ public class TimeChooserView extends LinearLayout implements DatePickerDialog.On
         try
         {
             // make a calendar
-            Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             calendar.set(Calendar.MINUTE, minute);
 
@@ -143,10 +147,38 @@ public class TimeChooserView extends LinearLayout implements DatePickerDialog.On
 
             // show
             textViewTime.setText(dateStr);
-
+            textViewTime.setError(null);
         } catch (Exception e)
         {
             Log.e("Game", "date exception  " + e.getMessage());
         }
+    }
+
+    /* methods */
+
+    /**
+     * checks that a date and time were entered
+     */
+    public boolean checkDataEntered()
+    {
+        boolean valid = true;
+
+        if (textViewDate.getText().length() == 0)
+        {
+            textViewDate.setError("");
+            valid = false;
+        }
+        if (textViewTime.getText().length() == 0)
+        {
+            textViewTime.setError("");
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    public Calendar getSelectedTime()
+    {
+        return  calendar;
     }
 }

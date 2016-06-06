@@ -57,6 +57,7 @@ public class CarDetailsView extends LinearLayout
         // inflate layout
         inflate(getContext(), R.layout.view_car_details, this);
         ButterKnife.bind(this);
+
     }
 
     /* methods */
@@ -110,7 +111,25 @@ public class CarDetailsView extends LinearLayout
         carDetails.setPlateNumber(editTextCarPlate.getText().toString());
         carDetails.setYear(editTextcarYear.getText().toString());
         carDetails.setConditioned(checkBoxAirConditioned.isChecked());
-
         return carDetails;
+    }
+
+    /**
+     * checks that all the car details werer entered
+     * @return
+     */
+    public boolean checkDataEntered()
+    {
+        boolean valid = true;
+
+        EditText[] editTexts = {editTextCarModel, editTextCarPlate, editTextcarYear};
+        for (EditText editText : editTexts)
+            if (editText.getText().toString().trim().length() == 0)
+            {
+                editText.setError("");
+                valid = false;
+            }
+
+        return valid;
     }
 }

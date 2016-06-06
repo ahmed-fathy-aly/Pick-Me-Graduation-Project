@@ -47,4 +47,9 @@ public class PostRidePagerAdapter extends FragmentPagerAdapter
     {
         return (ChooseRouteFragment) chooseRouteFragment;
     }
+
+    public PostRidePreferencesFragment getPostRidePreferencesFragment()
+    {
+        return (PostRidePreferencesFragment) editRidePreferencesFragment;
+    }
 }

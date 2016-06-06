@@ -7,14 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.asu.pick_me_graduation_project.R;
+import com.asu.pick_me_graduation_project.model.Location;
+import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.view.GenericMapsView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,6 +38,10 @@ public class ChooseRouteFragment extends Fragment
     ImageView imageViewCheckDestination;
     @Bind(R.id.map)
     GenericMapsView genericMapsView;
+    @Bind(R.id.textViewSelectSource)
+    TextView textViewSelectSource;
+    @Bind(R.id.textViewSelectDestination)
+    TextView textViewSelectDestination;
 
     /* fields */
     public ChooseRouteFragment()
@@ -76,6 +85,7 @@ public class ChooseRouteFragment extends Fragment
 
         // change check color
         imageViewCheckSource.setImageResource(R.drawable.ic_check_green);
+        textViewSelectSource.setError(null);
 
         // draw route
         drawRoute();
@@ -94,6 +104,7 @@ public class ChooseRouteFragment extends Fragment
 
         // change check color
         imageViewCheckDestination.setImageResource(R.drawable.ic_check_green);
+        textViewSelectDestination.setError(null);
 
         // draw route
         drawRoute();
@@ -126,18 +137,39 @@ public class ChooseRouteFragment extends Fragment
      */
     public boolean checkDataEntered()
     {
+        boolean valid = true;
+
         if (genericMapsView.getMarkerPosition("Source") == null)
         {
-            Toast.makeText(getContext(), getString(R.string.select_source), Toast.LENGTH_SHORT).show();
-            return false;
+            textViewSelectSource.setError("");
+            valid = false;
         }
         if (genericMapsView.getMarkerPosition("Destination") == null)
         {
-            Toast.makeText(getContext(), getString(R.string.select_destination), Toast.LENGTH_SHORT).show();
-            return false;
+            textViewSelectDestination.setError("");
+            valid = false;
         }
 
-        return true;
+        return valid;
 
+    }
+
+    /**
+     * sets the selected source and destination to the ride
+     */
+    public void fillRideInfo(Ride ride)
+    {
+        Location source = new Location();
+        source.setLongitude(genericMapsView.getMarkerPosition("Source").longitude);
+        source.setLatitude(genericMapsView.getMarkerPosition("Source").latitude);
+
+
+        Location destination = new Location();
+        destination.setLongitude(genericMapsView.getMarkerPosition("Destination").longitude);
+        destination.setLatitude(genericMapsView.getMarkerPosition("Destination").latitude);
+
+        List<Location> locationList = Arrays.asList(source, destination
+        );
+        ride.setLocations(locationList);
     }
 }

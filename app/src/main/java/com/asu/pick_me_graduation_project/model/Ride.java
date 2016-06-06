@@ -14,10 +14,13 @@ public class Ride
     User rider;
     Calendar time;
     List<Location> locations;
+    RideDetails rideDetails;
+     String notes;
 
     /* constructor */
     public Ride()
     {
+        this.rideDetails = new RideDetails();
     }
 
     /* setters and getters */
@@ -70,6 +73,26 @@ public class Ride
     public void setLocations(List<Location> locations)
     {
         this.locations = locations;
+    }
+
+    public RideDetails getRideDetails()
+    {
+        return rideDetails;
+    }
+
+    public void setRideDetails(RideDetails rideDetails)
+    {
+        this.rideDetails = rideDetails;
+    }
+
+    public void setNotes(String notes)
+    {
+        this.notes = notes;
+    }
+
+    public String getNotes()
+    {
+        return notes;
     }
 }
 
