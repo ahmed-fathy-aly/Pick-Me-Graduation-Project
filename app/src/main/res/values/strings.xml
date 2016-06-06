@@ -59,7 +59,7 @@
     <string name="maps_api_key">AIzaSyA9AA9f8sSClTlBMyzAU0KFlb1GpLCWibE</string>
 
     <string name="maps_api_key_debug">AIzaSyCrvcZp-42PWT2tLq1CY5kP9jCaWKy9qyA</string>
-    <string name="post_ride">Post Ride</string>
+    <string name="post_ride">Post a Ride</string>
     <string name="select_source">Select Source</string>
     <string name="select_destination">Select Destination</string>
     <string name="next">NEXT</string>
@@ -69,11 +69,13 @@
     <string name="select_date">Select Date</string>
     <string name="select_time">Select Time</string>
     <string name="select">SELECT</string>
-    <string name="visibility">Visibility    </string>
-    <string name="to_all">To All</string>
+    <string name="to_all">All</string>
     <string name="only_these_communities">Only These Communities</string>
     <string name="title_my_rides">My Rides</string>
     <string name="car_details">Car Details</string>
+    <string name="search_ride">Search For a Ride</string>
+    <string name="communities">Communities</string>
+    <string name="searching">Searching...</string>
 
 
 </resources>
