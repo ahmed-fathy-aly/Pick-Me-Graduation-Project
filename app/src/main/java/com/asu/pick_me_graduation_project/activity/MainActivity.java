@@ -48,4 +48,11 @@ public class MainActivity extends BaseActivity
     {
         startActivity(new Intent(this, PostRideActivity.class));
     }
+
+    @OnClick(R.id.buttonSearchRide)
+    void openSearchRide()
+    {
+        startActivity(new Intent(this, SearchRideActivity.class));
+    }
+
 }

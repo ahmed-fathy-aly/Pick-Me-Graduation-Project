@@ -72,6 +72,8 @@
         </activity>
         <activity android:name=".activity.MyRidesActivity">
         </activity>
+        <activity android:name=".activity.SearchRideActivity">
+        </activity>
     </application>
 
 </manifest>
