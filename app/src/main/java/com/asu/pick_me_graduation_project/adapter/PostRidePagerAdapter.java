@@ -1,17 +1,11 @@
 package com.asu.pick_me_graduation_project.adapter;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.asu.pick_me_graduation_project.fragment.ChooseRouteFragment;
-import com.asu.pick_me_graduation_project.fragment.CommunityInfoFragment;
-import com.asu.pick_me_graduation_project.fragment.CommunityJoinRequestsFragment;
-import com.asu.pick_me_graduation_project.fragment.CommunityPostsFragment;
-import com.asu.pick_me_graduation_project.fragment.EditRidePreferencesFragment;
-import com.asu.pick_me_graduation_project.fragment.MembersListFragment;
-import com.asu.pick_me_graduation_project.utils.Constants;
+import com.asu.pick_me_graduation_project.fragment.PostRidePreferencesFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +26,7 @@ public class PostRidePagerAdapter extends FragmentPagerAdapter
         super(fm);
 
         chooseRouteFragment = new ChooseRouteFragment();
-        editRidePreferencesFragment = new EditRidePreferencesFragment();
+        editRidePreferencesFragment = new PostRidePreferencesFragment();
         mFragmentList = Arrays.asList(chooseRouteFragment, editRidePreferencesFragment);
     }
 

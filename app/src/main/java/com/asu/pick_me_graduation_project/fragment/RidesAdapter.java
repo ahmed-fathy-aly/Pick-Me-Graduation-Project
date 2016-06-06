@@ -1,14 +1,12 @@
 package com.asu.pick_me_graduation_project.fragment;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.asu.pick_me_graduation_project.R;
@@ -16,6 +14,7 @@ import com.asu.pick_me_graduation_project.model.Location;
 import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
+import com.asu.pick_me_graduation_project.view.GenericMapsView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;

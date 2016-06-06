@@ -1,4 +1,4 @@
-package com.asu.pick_me_graduation_project.fragment;
+package com.asu.pick_me_graduation_project.view;
 
 
 import android.Manifest;
@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -32,7 +30,6 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import butterknife.Bind;
@@ -81,7 +78,7 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
     private void init()
     {
         // inflate layout
-        inflate(getContext(), R.layout.fragment_maps, this);
+        inflate(getContext(), R.layout.view_generic_map, this);
         ButterKnife.bind(this);
 
         // init fields

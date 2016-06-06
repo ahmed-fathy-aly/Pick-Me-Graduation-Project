@@ -18,9 +18,9 @@
     <string name="last_name1">Last Name</string>
     <string name="age">Age</string>
     <string name="add_car_photo">add your car photo</string>
-    <string name="model">car model</string>
-    <string name="plate_numer">plate number</string>
-    <string name="car_year">car year</string>
+    <string name="model">Car Model</string>
+    <string name="plate_numer">Plate Number</string>
+    <string name="car_year">Car Year</string>
     <string name="select_brand">select brand</string>
     <string name="Do_you_have_acar">Do you have a car</string>
     <string name="bio_hint">Biograghic info</string>
@@ -73,6 +73,7 @@
     <string name="to_all">To All</string>
     <string name="only_these_communities">Only These Communities</string>
     <string name="title_my_rides">My Rides</string>
+    <string name="car_details">Car Details</string>
 
 
 </resources>
