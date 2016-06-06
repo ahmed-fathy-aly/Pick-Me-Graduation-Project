@@ -33,6 +33,7 @@ import com.asu.pick_me_graduation_project.controller.UserApiController;
 import com.asu.pick_me_graduation_project.model.CarDetails;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
+import com.asu.pick_me_graduation_project.view.CarDetailsView;
 import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.Picasso;
 
@@ -76,24 +77,14 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
     LinearLayout contentbio;
     @Bind(R.id.Carswitch)
     Switch Carswitch;
-    @Bind(R.id.CarModel)
-    EditText CarModel;
-    @Bind(R.id.CarYear)
-    EditText CarYear;
-    @Bind(R.id.CarPlate)
-    EditText CarPlate;
-    @Bind(R.id.checkBoxAirConditioned)
-    CheckBox Aircondition;
-    @Bind(R.id.carcontent)
-    LinearLayout carcontent;
     @Bind(R.id.content)
     LinearLayout content;
+    @Bind(R.id.carDetailsView)
+    CarDetailsView carDetailsView;
 
     /* fields */
-
     private Uri imageUri;
 
-    /* fields */
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
@@ -117,9 +108,9 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
             {
                 if (isChecked)
-                    carcontent.setVisibility(View.VISIBLE);
+                    carDetailsView.setVisibility(View.VISIBLE);
                 else
-                    carcontent.setVisibility(View.GONE);
+                    carDetailsView.setVisibility(View.GONE);
             }
         });
 
@@ -198,10 +189,7 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
         user.setEmail(Email.getText().toString());
         user.setPhoneNumber(Phonenumber.getText().toString());
         user.setBio(Bio.getText().toString());
-        CarDetails carDetails = new CarDetails();
-        carDetails.setPlateNumber(CarPlate.getText().toString());
-        carDetails.setConditioned(Aircondition.isChecked());
-        carDetails.setYear(CarYear.getText().toString());
+        CarDetails carDetails = carDetailsView.getCarDetails();
         user.setCarDetails(carDetails);
 
         // make a progress dialog
@@ -268,10 +256,7 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
 
                 // TODO age
                 Age.setText("30");
-                CarModel.setText(ValidationUtils.correct(user.getCarDetails().getModel()));
-                CarYear.setText(ValidationUtils.correct(user.getCarDetails().getYear()));
-                CarPlate.setText(ValidationUtils.correct(user.getCarDetails().getPlateNumber()));
-                Aircondition.setChecked(user.getCarDetails().isConditioned());
+                carDetailsView.setCarDetails(user.getCarDetails());
 
             }
 

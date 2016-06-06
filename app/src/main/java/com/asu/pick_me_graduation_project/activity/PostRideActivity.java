@@ -74,8 +74,6 @@ public class PostRideActivity extends BaseActivity
     {
         if (viewPager.getCurrentItem() == 0)
         {
-            if (!postRidePagerAdapter.getChooseRouteFragment().checkDataEntered())
-                return;
             viewPager.setCurrentItem(1, true);
             buttonNextOrSubmit.setText(getString(R.string.submit));
         }

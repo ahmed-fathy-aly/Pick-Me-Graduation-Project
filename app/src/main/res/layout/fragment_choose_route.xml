@@ -12,7 +12,7 @@
         android:layout_gravity="right">
     </RadioGroup>
 
-    <com.asu.pick_me_graduation_project.fragment.GenericMapsView
+    <com.asu.pick_me_graduation_project.view.GenericMapsView
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="0dp"
