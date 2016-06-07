@@ -1,5 +1,9 @@
 package com.asu.pick_me_graduation_project.model;
 
+import android.util.Log;
+
+import org.json.JSONObject;
+
 /**
  * Created by ahmed on 5/2/2016.
  */
@@ -10,6 +14,8 @@ public class Location
     double latitude;
     double longitude;
     LocationType type;
+
+     int order;
     User user;
 
     /* cosntructor */
@@ -69,6 +75,40 @@ public class Location
     public void setUser(User user)
     {
         this.user = user;
+    }
+
+    public int getOrder()
+    {
+        return order;
+    }
+
+    public void setOrder(int order)
+    {
+        this.order = order;
+    }
+
+    public static Location fromJson(JSONObject jsonObject)
+    {
+        Location location = new Location();
+
+        try
+        {
+            location.setId(jsonObject.getString("id"));
+            location.setLatitude(jsonObject.getDouble("latitude"));
+            location.setLongitude(jsonObject.getDouble("longitude"));
+            location.setOrder(jsonObject.getInt("order"));
+            location.setType(jsonObject.getBoolean("type") ?
+                    LocationType.DESTINATION: LocationType.SOURCE);
+
+            // TODO user's stuff
+            User user = new User();
+            user.setUserId(jsonObject.getString("pinpointedUserId"));
+            location.setUser(user);
+        } catch (Exception e)
+        {
+            Log.e("Game", "parse lcoation exception " + e.getMessage());
+        }
+        return location;
     }
 
     public enum LocationType

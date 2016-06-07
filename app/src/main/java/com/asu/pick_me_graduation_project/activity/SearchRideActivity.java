@@ -96,7 +96,7 @@ public class SearchRideActivity extends AppCompatActivity
             // search rides
             final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.searching), "");
             RidesAPIController controller = new RidesAPIController(this);
-            controller.getMyRides(new AuthenticationAPIController(this).getTokken()
+            controller.searchRides(new AuthenticationAPIController(this).getTokken()
                     , new GetRidesCallback()
             {
                 @Override
