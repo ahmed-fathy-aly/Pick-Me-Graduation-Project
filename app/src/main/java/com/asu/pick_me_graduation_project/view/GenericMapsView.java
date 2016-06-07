@@ -114,7 +114,7 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
         }
 
         // unadded markers
-        for(String id : unaddedMarkers.keySet())
+        for (String id : unaddedMarkers.keySet())
             markers.put(id, googleMap.addMarker(unaddedMarkers.get(id)));
         unaddedMarkers.clear();
 
@@ -149,8 +149,6 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
             }
         });
     }
-
-
 
 
     private void fitMarkersNow()
@@ -208,8 +206,6 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
             polyLineOptions.add(latlng);
         polyline = googleMap.addPolyline(polyLineOptions);
     }
-
-
 
 
     /**
@@ -275,7 +271,7 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
     /**
      * draw the route containing between the given position 0 -> 1 -> 2...etc
      */
-    public void drawRoute(List<LatLng> latLngs, final int color)
+    public void drawRoute(final List<LatLng> latLngs, final int color)
     {
         // make a request to get the route
         MapsAPIController controller = new MapsAPIController(getContext());
@@ -293,5 +289,21 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
                 Log.e("Game", "Get route error " + error);
             }
         });
+    }
+
+    /**
+     * removes all markers and routes
+     */
+    public void reset()
+    {
+        // remove markers
+        for (Marker marker : markers.values())
+            marker.remove();
+        markers.clear();
+        unaddedMarkers.clear();
+
+        // remove polyine
+        if (polyline != null)
+            polyline.remove();
     }
 }

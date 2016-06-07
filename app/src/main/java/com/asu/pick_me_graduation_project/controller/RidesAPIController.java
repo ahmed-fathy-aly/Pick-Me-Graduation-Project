@@ -17,6 +17,8 @@ import com.github.kittinunf.fuel.core.FuelError;
 import com.github.kittinunf.fuel.core.Request;
 import com.github.kittinunf.fuel.core.Response;
 import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +28,9 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,50 +51,62 @@ public class RidesAPIController
     }
 
     /* methods */
-    public void getMyRides(String token, final GetRidesCallback callback)
+    public void getMyRides(String token, String userId, final GetRidesCallback callback)
     {
-        new Handler().postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                // TODO now it's dummy data
-                List<Ride> rideList = new ArrayList<>();
-                for (int i = 0; i < 10; i++)
+        String url = Constants.HOST + "/ride/get_my_rides?postUserId=" + userId;
+        Ion.with(context)
+                .load("GET", url)
+                .addHeader("Authorization", "Bearer " + token)
+                .asString()
+                .setCallback(new FutureCallback<String>()
                 {
-                    User user = new User();
-                    user.setUserId(i + "");
-                    user.setFirstName("first");
-                    user.setLastName("last");
-                    user.setProfilePictureUrl("https://upload.wikimedia.org/wikipedia/en/7/70/Shawn_Tok_Profile.jpg");
+                    @Override
+                    public void onCompleted(Exception e, String result)
+                    {
+                        // check failed
+                        if (e != null)
+                        {
+                            callback.fail(e.getMessage());
+                            return;
+                        }
 
-                    Location l1 = new Location();
-                    l1.setId("1");
-                    l1.setLatitude(30.02);
-                    l1.setLongitude(31.02);
-                    l1.setType(Location.LocationType.SOURCE);
-                    l1.setUser(user);
+                        // parse the response
+                        try
+                        {
+                            // check status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
 
-                    Location l2 = new Location();
-                    l2.setId("2");
-                    double d = new Random().nextInt(10) / 100.0;
-                    l2.setLatitude(30.01 + d);
-                    l2.setLongitude(31.01 + d);
-                    l2.setType(Location.LocationType.DESTINATION);
-                    l2.setUser(user);
+                            // parse rides
+                            JSONArray ridesJson = response.getJSONArray("rides");
+                            List<Ride> rides = new ArrayList<Ride>();
+                            for (int i = 0; i < ridesJson.length(); i++)
+                                rides.add(Ride.fromJson(ridesJson.getJSONObject(i)));
 
-                    Ride ride = new Ride();
-                    ride.setId(i + "");
-                    ride.setRider(user);
-                    ride.setDescription("This is ride " + i);
-                    ride.setTime(Calendar.getInstance());
-                    ride.setLocations(Arrays.asList(l1, l2));
+                            // sort by data
+                            Collections.sort(rides, new Comparator<Ride>()
+                            {
+                                @Override
+                                public int compare(Ride lhs, Ride rhs)
+                                {
+                                    return rhs.getTime().compareTo(lhs.getTime());
+                                }
+                            });
+                            callback.success(rides);
+                        } catch (Exception e2)
+                        {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+                });
 
-                    rideList.add(ride);
-                }
-                callback.success(rideList);
-            }
-        }, 2000);
 
     }
 
@@ -170,7 +187,6 @@ public class RidesAPIController
             json.put("destination", destination);
 
             JSONArray communities = new JSONArray();
-            Log.e("Game", "communities size = " +ride.getRideDetails().getFilteredCommunities().size());
             if (ride.getRideDetails().getFilteredCommunities() != null)
                 for (Community community : ride.getRideDetails().getFilteredCommunities())
                     communities.put(community.getId());
@@ -179,18 +195,17 @@ public class RidesAPIController
             json.put("numberOfFreeSeats", ride.getRideDetails().getNumberOfFreeSeats());
             json.put("ladiesOnly", ride.getRideDetails().isLadiesOnly());
             json.put("noSmoking", ride.getRideDetails().isLadiesOnly());
-
             json.put("ac", ride.getRideDetails().getCarDetails().isConditioned());
             json.put("carModel", ride.getRideDetails().getCarDetails().getModel());
             json.put("caryear", ride.getRideDetails().getCarDetails().getYear());
             json.put("carPlateNumber", ride.getRideDetails().getCarDetails().getPlateNumber());
-
 
         } catch (JSONException e)
         {
             e.printStackTrace();
         }
         String body = json.toString();
+        Log.e("Game", "body " + body);
 
         Fuel.post(url)
                 .header(headers)

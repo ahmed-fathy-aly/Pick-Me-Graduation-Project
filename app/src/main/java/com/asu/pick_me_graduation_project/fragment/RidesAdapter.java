@@ -90,11 +90,12 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
         }
 
         // locations;
+        holder.mapsView.reset();
         for (Location location : ride.getLocations())
         {
             holder.mapsView.addMarker(
                     location.getId()
-                    , location.getUser().getFirstName()
+                    , ""
                     , BitmapDescriptorFactory.HUE_ORANGE
                     , new LatLng(location.getLatitude(), location.getLongitude()));
         }
