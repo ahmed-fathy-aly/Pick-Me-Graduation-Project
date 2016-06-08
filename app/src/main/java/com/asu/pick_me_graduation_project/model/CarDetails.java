@@ -1,5 +1,7 @@
 package com.asu.pick_me_graduation_project.model;
 
+import org.json.JSONObject;
+
 /**
  * Created by ahmed on 2/16/2016.
  */
@@ -77,5 +79,22 @@ public class CarDetails
     public void setSizeOfBags(int sizeOfBags)
     {
         this.sizeOfBags = sizeOfBags;
+    }
+
+    public static CarDetails fromJson(JSONObject json)
+    {
+        CarDetails carDetails = new CarDetails();
+
+        try
+        {
+            carDetails.setPlateNumber(json.getString("carPlateNumber"));
+            carDetails.setModel(json.getString("carModel"));
+            carDetails.setYear(json.getString("carYear"));
+            carDetails.setConditioned(json.getBoolean("carAC"));
+        } catch (Exception e)
+        {
+
+        }
+        return carDetails;
     }
 }

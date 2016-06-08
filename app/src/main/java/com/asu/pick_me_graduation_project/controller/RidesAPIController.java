@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.asu.pick_me_graduation_project.callback.GenericSuccessCallback;
+import com.asu.pick_me_graduation_project.callback.GetRideCallback;
 import com.asu.pick_me_graduation_project.callback.GetRidesCallback;
 import com.asu.pick_me_graduation_project.model.Community;
 import com.asu.pick_me_graduation_project.model.Location;
@@ -194,7 +195,7 @@ public class RidesAPIController
 
             json.put("numberOfFreeSeats", ride.getRideDetails().getNumberOfFreeSeats());
             json.put("ladiesOnly", ride.getRideDetails().isLadiesOnly());
-            json.put("noSmoking", ride.getRideDetails().isLadiesOnly());
+            json.put("noSmoking", ride.getRideDetails().isNoSmoking());
             json.put("ac", ride.getRideDetails().getCarDetails().isConditioned());
             json.put("carModel", ride.getRideDetails().getCarDetails().getModel());
             json.put("caryear", ride.getRideDetails().getCarDetails().getYear());
@@ -246,6 +247,54 @@ public class RidesAPIController
                         Log.e("Game", "response" + resp.toString());
 
                         callback.fail(fuelError.getMessage());
+                    }
+                });
+    }
+
+    /**
+     * downloads the details of a ride
+     */
+    public void getRideDetails(String token, String rideId, final GetRideCallback callback)
+    {
+        String url = Constants.HOST + "ride/get_ride_details?rideId=" + rideId;
+        Ion.with(context)
+                .load("GET", url)
+                .setHeader("Authorization", "Bearer " + token)
+                .asString()
+                .setCallback(new FutureCallback<String>()
+                {
+                    @Override
+                    public void onCompleted(Exception e, String result)
+                    {
+                        // check failed
+                        if (e != null)
+                        {
+                            callback.fail(e.getMessage());
+                            return;
+                        }
+                        Log.e("Game", "get ride result = " + result);
+
+                        // parse the response
+                        try
+                        {
+                            // check status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
+
+                            // parse ride
+                            Ride ride = Ride.fromJson(response.getJSONObject("rideDetails"));
+                            callback.success(ride);
+                        } catch (Exception e2)
+                        {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
                     }
                 });
     }

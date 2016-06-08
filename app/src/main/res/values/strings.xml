@@ -83,6 +83,8 @@
     <string name="notes">Notes</string>
     <string name="details">Details</string>
     <string name="optional">Optional</string>
+    <string name="driver">Driver</string>
+    <string name="free_seat">Free Seat</string>
 
 
 </resources>

@@ -137,6 +137,19 @@ public class Ride
             });
             ride.setLocations(locations);
 
+            // extra details
+            if (!jsonObject.isNull("ladiesOnly"))
+                ride.getRideDetails().setLadiesOnly(jsonObject.getBoolean("ladiesOnly"));
+            if (!jsonObject.isNull("noSmoking"))
+                ride.getRideDetails().setNoSmoking(jsonObject.getBoolean("noSmoking"));
+            if (!jsonObject.isNull("numberOfFreeSeats"))
+                ride.getRideDetails().setNumberOfFreeSeats(jsonObject.getInt("numberOfFreeSeats"));
+
+            // car info
+            CarDetails carDetails = CarDetails.fromJson(jsonObject);
+            ride.getRideDetails().setCarDetails(carDetails);
+
+
         } catch (Exception e)
         {
             Log.e("Game", "parse ride exception " + e.getMessage());
