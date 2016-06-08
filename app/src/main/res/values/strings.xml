@@ -85,6 +85,13 @@
     <string name="optional">Optional</string>
     <string name="driver">Driver</string>
     <string name="free_seat">Free Seat</string>
+    <string name="request_to_join">Request TO Join</string>
+    <string name="title_search_result">Search Results</string>
+    <string name="message">Message To Driver</string>
+    <string name="request">SEND</string>
+    <string name="request_sent">Request Sent</string>
+    <string name="sending">Sending</string>
+    <string name="leave_message_for_driver">Leave a message for the driver</string>
 
 
 </resources>

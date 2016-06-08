@@ -10,6 +10,7 @@ import com.asu.pick_me_graduation_project.callback.GetRidesCallback;
 import com.asu.pick_me_graduation_project.model.Community;
 import com.asu.pick_me_graduation_project.model.Location;
 import com.asu.pick_me_graduation_project.model.Ride;
+import com.asu.pick_me_graduation_project.model.SearchRideParams;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.TimeUtils;
@@ -150,6 +151,8 @@ public class RidesAPIController
                     ride.setTime(Calendar.getInstance());
                     ride.setLocations(Arrays.asList(l1, l2));
 
+
+                    ride.setCanRequestToJoin(true);
                     rideList.add(ride);
                 }
                 callback.success(rideList);
@@ -297,5 +300,18 @@ public class RidesAPIController
                         }
                     }
                 });
+    }
+
+    public void requestToJoinRide(String tokken, SearchRideParams searchRideParams, String id, final GenericSuccessCallback callback)
+    {
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                callback.success();
+            }
+        }, 2000);
+
     }
 }

@@ -6,10 +6,12 @@ import com.asu.pick_me_graduation_project.utils.Constants;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by ahmed on 2/7/2016.
  */
-public class User
+public class User implements Serializable
 {
     /* fields */
     String userId;

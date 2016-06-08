@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.asu.pick_me_graduation_project.R;
+import com.asu.pick_me_graduation_project.activity.SearchRideResults;
 import com.asu.pick_me_graduation_project.model.Ride;
 
 import java.util.List;
@@ -22,13 +23,16 @@ public class RideListFragment extends Fragment
     /* fields */
     private RidesAdapter adapter;
     private RecyclerView recyclerView;
+    List<Ride> data;
+    RidesAdapter.Listener listener;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public RideListFragment()
     {
+    }
+
+    public RideListFragment(RidesAdapter.Listener listener)
+    {
+        this.listener = listener;
     }
 
     @Override
@@ -45,9 +49,12 @@ public class RideListFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_ride_list, container, false);
 
         // setup recycler view
+        adapter = new RidesAdapter(getContext(), getFragmentManager());
+        adapter.setListener(listener);
+        if (data != null)
+            adapter.setData(data);
         recyclerView = (RecyclerView) view;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new RidesAdapter(getContext(), getFragmentManager());
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -58,8 +65,16 @@ public class RideListFragment extends Fragment
      */
     public void setData(List<Ride> rides)
     {
-        adapter.setData(rides);
+        if (adapter!= null)
+            adapter.setData(rides);
+        else
+            this.data = rides;
     }
 
 
+
+    public void setCanRequestToJoin(String rideId, boolean can)
+    {
+        adapter.setCanRequestToJoin(rideId, can);
+    }
 }

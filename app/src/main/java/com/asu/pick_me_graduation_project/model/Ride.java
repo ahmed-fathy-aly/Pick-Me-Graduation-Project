@@ -7,6 +7,7 @@ import com.asu.pick_me_graduation_project.utils.TimeUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -17,7 +18,7 @@ import java.util.List;
 /**
  * Created by ahmed on 5/2/2016.
  */
-public class Ride
+public class Ride implements Serializable
 {
     /* fields */
     String id;
@@ -26,7 +27,8 @@ public class Ride
     Calendar time;
     List<Location> locations;
     RideDetails rideDetails;
-     String notes;
+    String notes;
+    boolean canRequestToJoin;
 
     /* constructor */
     public Ride()
@@ -104,6 +106,17 @@ public class Ride
     public String getNotes()
     {
         return notes;
+    }
+
+
+    public boolean isCanRequestToJoin()
+    {
+        return canRequestToJoin;
+    }
+
+    public void setCanRequestToJoin(boolean canRequestToJoin)
+    {
+        this.canRequestToJoin = canRequestToJoin;
     }
 
     public static Ride fromJson(JSONObject jsonObject)

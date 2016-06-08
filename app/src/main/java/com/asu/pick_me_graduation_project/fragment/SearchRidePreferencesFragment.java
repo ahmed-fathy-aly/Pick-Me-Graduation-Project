@@ -9,9 +9,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.asu.pick_me_graduation_project.R;
+import com.asu.pick_me_graduation_project.model.Community;
 import com.asu.pick_me_graduation_project.view.CarDetailsView;
 import com.asu.pick_me_graduation_project.view.CommunitiesChooserView;
 import com.asu.pick_me_graduation_project.view.TimeChooserView;
+
+import java.util.Calendar;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -57,4 +61,27 @@ public class SearchRidePreferencesFragment extends Fragment
     }
 
 
+    /**
+     * checks the data entered is valid
+     */
+    public boolean checkDataEntered()
+    {
+        boolean valid = true;
+
+        // time and date
+        if (!timeChooserView.checkDataEntered())
+            valid = false;
+
+        return valid;
+    }
+
+    public List<Community> getFilteredCommunities()
+    {
+        return communitiesChooserView.getCheckedCommunities();
+    }
+
+    public Calendar getChpsemTime()
+    {
+        return timeChooserView.getSelectedTime();
+    }
 }

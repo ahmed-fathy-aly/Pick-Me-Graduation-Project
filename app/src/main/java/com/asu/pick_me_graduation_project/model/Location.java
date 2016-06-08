@@ -4,10 +4,12 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by ahmed on 5/2/2016.
  */
-public class Location
+public class Location implements Serializable
 {
     /* fields */
     String id;
