@@ -11,6 +11,9 @@ import com.github.kittinunf.fuel.core.FuelError;
 import com.github.kittinunf.fuel.core.Handler;
 import com.github.kittinunf.fuel.core.Request;
 import com.github.kittinunf.fuel.core.Response;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 
 import org.json.JSONArray;
@@ -137,7 +140,7 @@ public class ChatAPIController
         String url="http://pickmeasu.azurewebsites.net/api/Message/get_a_conversation"+"?count=2"+"&userId=44";
         Ion.with(context)
                 .load("GET",url).
-                addHeader("Authorization","Bearer"+tokken)
+                addHeader("Authorization","Bearer "+tokken)
                 .asString().setCallback(new FutureCallback<String>() {
             @Override
             public void onCompleted(Exception e, String result) {
@@ -162,7 +165,7 @@ public class ChatAPIController
                     JSONArray messegesJson = response.getJSONArray("messages");
                     List<ChatMessage> messages3 = new ArrayList<ChatMessage>();
                     for (int i = 0; i < messegesJson.length(); i++) {
-                        JSONObject messageJson = messegesJson.getJSONObject(i).getJSONObject("message");
+                        JSONObject messageJson = messegesJson.getJSONObject(i);
                         ChatMessage message = ChatMessage.fromJson(messageJson);
                         messages3.add(message);
                     }
@@ -249,12 +252,15 @@ public class ChatAPIController
                 .responseString(new com.github.kittinunf.fuel.core.Handler<String>()
                 {
                     @Override
-                    public void success(Request request, Response r, String s) {
+                    public void success(Request request, Response r, String s)
+                    {
                         Log.e("Game", "success " + s);
-                        try {// check status
+                        try
+                        {// check status
                             JSONObject response = new JSONObject(s);
                             int status = response.getInt("status");
-                            if (status == 0) {
+                            if (status == 0)
+                            {
                                 String message = response.getString("message");
                                 callback.fail(message);
                                 return;
@@ -262,11 +268,13 @@ public class ChatAPIController
                             JSONObject contentJson = response.getJSONObject("content");
                             ChatMessage message = ChatMessage.fromJson(contentJson);
                             callback.success(message);
-                        } catch (Exception e2) {
+                        } catch (Exception e2)
+                        {
                             callback.fail(e2.getMessage());
                             return;
                         }
                     }
+
                     @Override
                     public void failure(Request request, Response resp, FuelError fuelError)
                     {

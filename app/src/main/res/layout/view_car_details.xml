@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/editTextCarModel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/model"
+        android:maxLength="14"
+        android:padding="10.0dip"/>
+
+    <EditText
+        android:id="@+id/editTextcarYear"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/car_year"
+        android:maxLength="14"
+        android:padding="10.0dip"/>
+
+    <EditText
+        android:id="@+id/editTextCarPlate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10.0dip"
+        android:hint="@string/plate_numer"
+        android:maxLength="14"
+        android:padding="10.0dip"/>
+
+
+    <CheckBox
+        android:id="@+id/checkBoxAirConditioned"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Air conditioned"
+        android:textSize="15.0sp"/>
+
+</LinearLayout>

@@ -4,10 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.asu.pick_me_graduation_project.activity.MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.asu.pick_me_graduation_project.activity.MainActivity">
 
     <include layout="@layout/layout_toolbar"/>
 
-
+    <Button
+        android:id="@+id/buttonPostRide"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/post_ride"
+        android:theme="@style/coloredButtonTheme"/>
+    <Button
+        android:id="@+id/buttonSearchRide"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/search_ride"
+        android:theme="@style/coloredButtonTheme"/>
 </LinearLayout>

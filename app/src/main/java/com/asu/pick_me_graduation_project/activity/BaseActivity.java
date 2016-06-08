@@ -115,6 +115,7 @@ public class BaseActivity extends AppCompatActivity
                 , new PrimaryDrawerItem().withIdentifier(3).withName("Find User").withIcon(R.drawable.ic_search_black_48dp)
                 , new PrimaryDrawerItem().withIdentifier(4).withName("Messages").withIcon(R.drawable.ic_chat_bubble_outline_black_48dp)
                 , new PrimaryDrawerItem().withIdentifier(5).withName("Communities").withIcon(R.drawable.ic_people_outline_black_48dp)
+                , new PrimaryDrawerItem().withIdentifier(6).withName("My Rides").withIcon(R.drawable.ic_people_outline_black_48dp)
                 , new DividerDrawerItem()
                 , new PrimaryDrawerItem().withIdentifier(10).withName("Log Out").withIcon(R.drawable.ic_exit_to_app_black_48dp));
 
@@ -146,9 +147,13 @@ public class BaseActivity extends AppCompatActivity
                     } else if (id == 5)
                     {
                         intent.setClass(activity, CommunitiesActivity.class);
+                    }else if (id == 6)
+                    {
+                        intent.setClass(activity, MyRidesActivity.class);
                     }
 
                     // launch the activity after some milliseconds to show the drawer close animation
+                    drawer.closeDrawer();
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable()
                     {

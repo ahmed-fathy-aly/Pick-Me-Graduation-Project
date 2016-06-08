@@ -1,0 +1,46 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".fragment.PostRidePreferencesFragment">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutParent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            app:cardElevation="4dp">
+
+            <com.asu.pick_me_graduation_project.view.TimeChooserView
+                android:id="@+id/timeChooserView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            app:cardElevation="4dp">
+
+            <com.asu.pick_me_graduation_project.view.CommunitiesChooserView
+                android:id="@+id/communitiesChooserView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </android.support.v7.widget.CardView>
+
+
+    </LinearLayout>
+
+</ScrollView>

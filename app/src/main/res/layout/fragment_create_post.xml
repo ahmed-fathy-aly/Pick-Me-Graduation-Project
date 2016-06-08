@@ -1,0 +1,18 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:id="@+id/content"
+             tools:context="com.asu.pick_me_graduation_project.fragment.CreatePostFragment">
+
+   <EditText
+       android:id="@+id/editTextContent"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_gravity="center_horizontal"
+       android:minLines="3"
+       android:ems="10"
+       android:hint="@string/write_a_post"
+       />
+
+</FrameLayout>
