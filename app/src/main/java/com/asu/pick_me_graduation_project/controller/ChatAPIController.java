@@ -7,11 +7,6 @@ import com.asu.pick_me_graduation_project.callback.GetMessagesCallback;
 import com.asu.pick_me_graduation_project.callback.SendMessageCallback;
 import com.asu.pick_me_graduation_project.model.ChatMessage;
 import com.asu.pick_me_graduation_project.model.User;
-import com.github.kittinunf.fuel.Fuel;
-import com.github.kittinunf.fuel.core.FuelError;
-import com.github.kittinunf.fuel.core.Handler;
-import com.github.kittinunf.fuel.core.Request;
-import com.github.kittinunf.fuel.core.Response;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -19,7 +14,6 @@ import com.koushikdutta.ion.Ion;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -94,22 +88,6 @@ public class ChatAPIController
 
             }
         });
-
-        Fuel.post("")
-                .responseString(new Handler<String>()
-                {
-                    @Override
-                    public void success(Request request, Response response, String s)
-                    {
-
-                    }
-
-                    @Override
-                    public void failure(Request request, Response response, FuelError fuelError)
-                    {
-
-                    }
-                });
 
         // make mock data
        /* List<ChatMessage> messages = new ArrayList<>();
