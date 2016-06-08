@@ -166,12 +166,7 @@ public class User
             user.setGender(json.getBoolean("gender") ? Constants.GENDER_MALE : Constants.GENDER_FEMALE_);
             user.setBio(json.getString("bio"));
             user.setPhoneNumber(json.getString("phoneNumber"));
-            CarDetails carDetails = new CarDetails();
-            carDetails.setPlateNumber(json.getString("carPlateNumber"));
-            carDetails.setModel(json.getString("carModel"));
-            carDetails.setYear(json.getString("carYear"));
-            if (!json.isNull("carAC"))
-                carDetails.setConditioned(json.getBoolean("carAC"));
+            CarDetails carDetails = CarDetails.fromJson(json);
             user.setCarDetails(carDetails);
 
         } catch (Exception e)
