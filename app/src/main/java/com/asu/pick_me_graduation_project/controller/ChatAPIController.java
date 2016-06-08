@@ -6,20 +6,23 @@ import android.util.Log;
 import com.asu.pick_me_graduation_project.callback.GetMessagesCallback;
 import com.asu.pick_me_graduation_project.callback.SendMessageCallback;
 import com.asu.pick_me_graduation_project.model.ChatMessage;
-import com.asu.pick_me_graduation_project.model.User;
-import com.google.gson.JsonObject;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
+import com.github.kittinunf.fuel.Fuel;
+import com.github.kittinunf.fuel.core.FuelError;
+import com.github.kittinunf.fuel.core.Handler;
+import com.github.kittinunf.fuel.core.Request;
+import com.github.kittinunf.fuel.core.Response;
+
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ahmed on 3/2/2016.
@@ -232,14 +235,54 @@ public class ChatAPIController
     }
     public void sendMessage(String content,String userId,String token,final SendMessageCallback callback)
     {
+        String url="http://pickmeasu.azurewebsites.net/api/Message/send_message";
         JsonObject json = new JsonObject();
         json.addProperty("content", content);
         json.addProperty("userId", userId);
+        String body = json.toString();
+        Log.e("Game", "body = " + body);
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization","Bearer"+token);
+        headers.put("Content-Type", "application/json");
+        Fuel.post(url).header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new Handler<String>()
+                {
+                    @Override
+                    public void success(Request request, Response r, String s) {
+                        Log.e("Game", "success " + s);
+                        try {// check status
+                            JSONObject response = new JSONObject(s);
+                            int status = response.getInt("status");
+                            if (status == 0) {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
+                            JSONObject contentJson = response.getJSONObject("content");
+                            ChatMessage message = ChatMessage.fromJson(contentJson);
+                            callback.success(message);
+                        } catch (Exception e2) {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+                    @Override
+                    public void failure(Request request, Response resp, FuelError fuelError)
+                    {
+                        Log.e("Game", "error " + fuelError.getMessage());
+                        Log.e("Game", "request " + request.toString());
+                        Log.e("Game", "response" + resp.toString());
+
+                        callback.fail(fuelError.getMessage());
+                    }
+                });
+
         // json.addProperty("Authorization", "Bearer"+token);
 
-        String url="http://pickmeasu.azurewebsites.net/api/Message/send_message";
 
-        Ion.with(context)
+
+       /* Ion.with(context)
                 .load(url)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization","Bearer"+token)
@@ -279,7 +322,7 @@ public class ChatAPIController
                                  }
                              }
 
-                );
+                );*/
 
     }
 }
