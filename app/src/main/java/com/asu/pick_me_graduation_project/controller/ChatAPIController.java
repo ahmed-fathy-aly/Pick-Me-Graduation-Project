@@ -246,7 +246,7 @@ public class ChatAPIController
         headers.put("Content-Type", "application/json");
         Fuel.post(url).header(headers)
                 .body(body, Charset.defaultCharset())
-                .responseString(new Handler<String>()
+                .responseString(new com.github.kittinunf.fuel.core.Handler<String>()
                 {
                     @Override
                     public void success(Request request, Response r, String s) {
