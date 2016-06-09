@@ -1,11 +1,12 @@
 package com.asu.pick_me_graduation_project.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by ahmed on 6/6/2016.
  */
-public class RideDetails
+public class RideDetails implements Serializable
 {
     /* fields */
     int numberOfFreeSeats;

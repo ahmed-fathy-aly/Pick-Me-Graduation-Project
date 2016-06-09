@@ -159,17 +159,21 @@ public class ChooseRouteFragment extends Fragment
      */
     public void fillRideInfo(Ride ride)
     {
-        Location source = new Location();
-        source.setLongitude(genericMapsView.getMarkerPosition("Source").longitude);
-        source.setLatitude(genericMapsView.getMarkerPosition("Source").latitude);
-
-
-        Location destination = new Location();
-        destination.setLongitude(genericMapsView.getMarkerPosition("Destination").longitude);
-        destination.setLatitude(genericMapsView.getMarkerPosition("Destination").latitude);
+        Location source = getLocation("Source");
+        Location destination = getLocation("Destination");
 
         List<Location> locationList = Arrays.asList(source, destination
         );
         ride.setLocations(locationList);
+    }
+
+    public Location getLocation(String id)
+    {
+        Location location = new Location();
+
+        location.setLongitude(genericMapsView.getMarkerPosition(id).longitude);
+        location.setLatitude(genericMapsView.getMarkerPosition(id).latitude);
+
+        return location;
     }
 }

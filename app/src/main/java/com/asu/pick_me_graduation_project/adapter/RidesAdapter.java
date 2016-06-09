@@ -1,12 +1,14 @@
-package com.asu.pick_me_graduation_project.fragment;
+package com.asu.pick_me_graduation_project.adapter;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.asu.pick_me_graduation_project.R;
@@ -25,6 +27,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.internal.DebouncingOnClickListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -36,6 +39,8 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
     private List<Ride> data;
     FragmentManager fragmentManager;
     private Context context;
+    Listener listener;
+    private boolean requestToJoinVisibility;
 
     public RidesAdapter(Context context, FragmentManager fragmentManager)
     {
@@ -54,6 +59,19 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
         this.data.clear();
         this.data.addAll(newData);
         notifyDataSetChanged();
+    }
+
+    public void setRequestToJoinButtonShown(boolean shown)
+    {
+        this.requestToJoinVisibility = shown;
+    }
+
+    /**
+     * registers to be invoked with callbacks
+     */
+    public void setListener(Listener listener)
+    {
+        this.listener = listener;
     }
 
     @Override
@@ -107,6 +125,8 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
             latLngs.add(new LatLng(location.getLatitude(), location.getLongitude()));
         holder.mapsView.drawRoute(latLngs, 0xFF00BCD4);
 
+        // show or hide request to join
+        holder.requestToJoinFrame.setVisibility(ride.isCanRequestToJoin() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -127,14 +147,63 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
         TextView textViewDescription;
         @Bind(R.id.textViewTime)
         TextView textViewTime;
+        @Bind(R.id.buttonRequestToJoin)
+        Button buttonRequestToJoin;
+        @Bind(R.id.requestToJoinFrame)
+        View requestToJoinFrame;
+        @Bind(R.id.layoutCard)
+        View layoutCard;
+        @Bind(R.id.cardView)
+        CardView cardView;
 
         public ViewHolder(View view)
         {
             super(view);
             ButterKnife.bind(this, view);
-
             mapsView.setCenterMarkerShown(false);
+
+
+            buttonRequestToJoin.setOnClickListener(new DebouncingOnClickListener()
+            {
+                @Override
+                public void doClick(View v)
+                {
+                    if (listener != null)
+                        listener.onRequestToJoin(getAdapterPosition(), data.get(getAdapterPosition()));
+                }
+            });
+
+            cardView.setOnClickListener(new DebouncingOnClickListener()
+            {
+                @Override
+                public void doClick(View v)
+                {
+                    if (listener!=null)
+                        listener.onRideClicked(getAdapterPosition(), data.get(getAdapterPosition()));
+
+                }
+            });
         }
 
+    }
+
+
+    /**
+     * changes whethere the request to join button for a ride is visible or not
+     */
+    public void setCanRequestToJoin(String id, boolean can)
+    {
+        for (int i = 0; i < data.size(); i++)
+            if (data.get(i).getId().equals(id))
+            {
+                data.get(i).setCanRequestToJoin(can);
+                notifyItemChanged(i);
+            }
+    }
+
+    public interface Listener
+    {
+        public void onRequestToJoin(int position, Ride ride);
+        public void onRideClicked(int position, Ride ride);
     }
 }

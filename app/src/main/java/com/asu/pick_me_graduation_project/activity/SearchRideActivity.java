@@ -1,11 +1,13 @@
 package com.asu.pick_me_graduation_project.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -15,9 +17,13 @@ import com.asu.pick_me_graduation_project.adapter.SearchRidePagerAdapter;
 import com.asu.pick_me_graduation_project.callback.GetRidesCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.RidesAPIController;
+import com.asu.pick_me_graduation_project.model.Location;
 import com.asu.pick_me_graduation_project.model.Ride;
+import com.asu.pick_me_graduation_project.model.SearchRideParams;
+import com.asu.pick_me_graduation_project.utils.Constants;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
 
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.Bind;
@@ -70,7 +76,7 @@ public class SearchRideActivity extends AppCompatActivity
             @Override
             public void onPageSelected(int position)
             {
-                buttonNextOrSubmit.setText(getString(position == 0 ? R.string.next :  R.string.submit));
+                buttonNextOrSubmit.setText(getString(position == 0 ? R.string.next : R.string.submit));
             }
 
             @Override
@@ -90,11 +96,18 @@ public class SearchRideActivity extends AppCompatActivity
             buttonNextOrSubmit.setText(getString(R.string.submit));
         } else
         {
-            // TODO validate data entered
+            if (!validateData())
+                return;
 
+            // collect data
+            final SearchRideParams searchRideParams = new SearchRideParams();
+            searchRideParams.setSource(searchRidePagerAdapter.getChooseRouteFragment().getLocation("Source"));
+            searchRideParams.setDestination(searchRidePagerAdapter.getChooseRouteFragment().getLocation("Destination"));
+            searchRideParams.setFilteredCommunities(searchRidePagerAdapter.getSearchRidePreferencesFragment().getFilteredCommunities());
+            searchRideParams.setTime(searchRidePagerAdapter.getSearchRidePreferencesFragment().getChpsemTime());
 
             // search rides
-            final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.searching), "");
+            final ProgressDialog progressDialog = ProgressDialog.show(this, "", getString(R.string.searching));
             RidesAPIController controller = new RidesAPIController(this);
             controller.searchRides(new AuthenticationAPIController(this).getTokken()
                     , new GetRidesCallback()
@@ -104,7 +117,13 @@ public class SearchRideActivity extends AppCompatActivity
                 {
                     progressDialog.dismiss();
 
+                    searchRideParams.setResult(rides);
+
                     // open search result list activity
+                    Intent intent = new Intent(SearchRideActivity.this, SearchRideResults.class);
+                    intent.putExtra(Constants.SEARCH_RIDE_PARAMS, searchRideParams);
+                    startActivity(intent);
+
                 }
 
                 @Override
@@ -116,4 +135,28 @@ public class SearchRideActivity extends AppCompatActivity
             });
         }
     }
+
+    /**
+     * checks all required data are entered
+     */
+    private boolean validateData()
+    {
+        boolean valid = true;
+
+        // source and destination
+        if (!searchRidePagerAdapter.getChooseRouteFragment().checkDataEntered())
+        {
+            viewPager.setCurrentItem(0, true);
+            valid = false;
+        }
+
+        // time, communities, car details
+        if (!searchRidePagerAdapter.getSearchRidePreferencesFragment().checkDataEntered())
+        {
+            valid = false;
+        }
+
+        return valid;
+    }
+
 }

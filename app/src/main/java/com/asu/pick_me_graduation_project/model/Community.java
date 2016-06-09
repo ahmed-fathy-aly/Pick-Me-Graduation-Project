@@ -4,10 +4,12 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by ahmed on 3/3/2016.
  */
-public class Community
+public class Community implements Serializable
 {
     /* fields */
     String id;

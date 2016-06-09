@@ -5,7 +5,6 @@ package com.asu.pick_me_graduation_project.utils;
  */
 public class Constants
 {
-
     /* API constants */
     public static String HOST = "http://pickmeasu.azurewebsites.net/api/";
 
@@ -23,5 +22,7 @@ public class Constants
 
     /* ride constants */
     public static final String RIDE_ID = "rideId";
+    public static final String SEARCH_RIDE_PARAMS = "searchRideParams";
+    public static final String RIDES_LIST = "ridesList";
 
 }

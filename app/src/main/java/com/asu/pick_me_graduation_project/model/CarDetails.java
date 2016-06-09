@@ -2,10 +2,12 @@ package com.asu.pick_me_graduation_project.model;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by ahmed on 2/16/2016.
  */
-public class CarDetails
+public class CarDetails implements Serializable
 {
     String model;
     String year;
