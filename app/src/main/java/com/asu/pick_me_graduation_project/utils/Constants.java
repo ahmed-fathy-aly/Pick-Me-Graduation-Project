@@ -6,7 +6,7 @@ package com.asu.pick_me_graduation_project.utils;
 public class Constants
 {
     /* API constants */
-    public static String HOST = "http://pickmeasu.azurewebsites.net/api/";
+    public static String HOST = "http://pickmetest.azurewebsites.net/api/";
 
     /* user constants */
     public static final String GENDER_MALE = "Male";
