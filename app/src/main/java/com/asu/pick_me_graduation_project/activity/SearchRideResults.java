@@ -18,7 +18,7 @@ import com.asu.pick_me_graduation_project.callback.GenericSuccessCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.RidesAPIController;
 import com.asu.pick_me_graduation_project.fragment.RideListFragment;
-import com.asu.pick_me_graduation_project.fragment.RidesAdapter;
+import com.asu.pick_me_graduation_project.adapter.RidesAdapter;
 import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.model.SearchRideParams;
 import com.asu.pick_me_graduation_project.utils.Constants;
@@ -26,7 +26,7 @@ import com.asu.pick_me_graduation_project.utils.Constants;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class SearchRideResults extends AppCompatActivity implements RidesAdapter.Listener
+public class SearchRideResults extends AppCompatActivity implements RideListFragment.Listener
 {
 
     /* UI */

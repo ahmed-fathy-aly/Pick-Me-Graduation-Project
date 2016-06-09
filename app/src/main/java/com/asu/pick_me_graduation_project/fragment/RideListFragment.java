@@ -1,39 +1,45 @@
 package com.asu.pick_me_graduation_project.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.asu.pick_me_graduation_project.R;
-import com.asu.pick_me_graduation_project.activity.SearchRideResults;
+import com.asu.pick_me_graduation_project.activity.RideDetailsActivity;
+import com.asu.pick_me_graduation_project.adapter.RidesAdapter;
 import com.asu.pick_me_graduation_project.model.Ride;
+import com.asu.pick_me_graduation_project.model.RideDetails;
+import com.asu.pick_me_graduation_project.utils.Constants;
 
 import java.util.List;
 
 /**
  */
-public class RideListFragment extends Fragment
-{
+public class RideListFragment extends Fragment implements RidesAdapter.Listener
+{;
     /* UI */
 
     /* fields */
     private RidesAdapter adapter;
     private RecyclerView recyclerView;
     List<Ride> data;
-    RidesAdapter.Listener listener;
+    private Listener listener;
 
     public RideListFragment()
     {
     }
 
-    public RideListFragment(RidesAdapter.Listener listener)
+    public RideListFragment(RideListFragment.Listener listener)
     {
         this.listener = listener;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -50,7 +56,7 @@ public class RideListFragment extends Fragment
 
         // setup recycler view
         adapter = new RidesAdapter(getContext(), getFragmentManager());
-        adapter.setListener(listener);
+        adapter.setListener(this);
         if (data != null)
             adapter.setData(data);
         recyclerView = (RecyclerView) view;
@@ -76,5 +82,25 @@ public class RideListFragment extends Fragment
     public void setCanRequestToJoin(String rideId, boolean can)
     {
         adapter.setCanRequestToJoin(rideId, can);
+    }
+
+    @Override
+    public void onRequestToJoin(int position, Ride ride)
+    {
+        if (listener != null)
+            listener.onRequestToJoin(position, ride);
+    }
+
+    @Override
+    public void onRideClicked(int position, Ride ride)
+    {
+        Intent intent = new Intent(getContext(), RideDetailsActivity.class);
+        intent.putExtra(Constants.RIDE_ID, ride.getId());
+        startActivity(intent);
+    }
+
+    public interface Listener
+    {
+        public void onRequestToJoin(int position, Ride ride);
     }
 }

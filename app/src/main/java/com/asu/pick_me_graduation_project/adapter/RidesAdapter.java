@@ -1,7 +1,8 @@
-package com.asu.pick_me_graduation_project.fragment;
+package com.asu.pick_me_graduation_project.adapter;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -150,6 +151,10 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
         Button buttonRequestToJoin;
         @Bind(R.id.requestToJoinFrame)
         View requestToJoinFrame;
+        @Bind(R.id.layoutCard)
+        View layoutCard;
+        @Bind(R.id.cardView)
+        CardView cardView;
 
         public ViewHolder(View view)
         {
@@ -165,6 +170,17 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
                 {
                     if (listener != null)
                         listener.onRequestToJoin(getAdapterPosition(), data.get(getAdapterPosition()));
+                }
+            });
+
+            cardView.setOnClickListener(new DebouncingOnClickListener()
+            {
+                @Override
+                public void doClick(View v)
+                {
+                    if (listener!=null)
+                        listener.onRideClicked(getAdapterPosition(), data.get(getAdapterPosition()));
+
                 }
             });
         }
@@ -188,5 +204,6 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
     public interface Listener
     {
         public void onRequestToJoin(int position, Ride ride);
+        public void onRideClicked(int position, Ride ride);
     }
 }
