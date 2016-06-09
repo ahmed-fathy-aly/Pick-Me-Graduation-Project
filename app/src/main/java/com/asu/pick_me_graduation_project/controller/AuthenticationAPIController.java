@@ -44,6 +44,7 @@ public class AuthenticationAPIController
 
         // make a post request
         String url = Constants.HOST
+                + "/login"
                 + "?email=" + mail
                 + "&password=" + password;
         Ion.with(context)

@@ -441,4 +441,108 @@ public class CommunityAPIController {
                     }
                 });
     }
+
+    public void getCommunityRequests(String tokken, String userId, String communityId, final GetUsersCallback callback) {
+        String url = "http://pickmetest.azurewebsites.net/api/get_join_requests?communityId=" + communityId;
+        Ion.with(context)
+                .load("GET", url)
+                .setHeader("Content-Type", "application/json")
+                .setHeader("Authorization", "Bearer " + tokken)
+                .asString()
+                .setCallback(new FutureCallback<String>() {
+                    @Override
+                    public void onCompleted(Exception e, String result) {
+                        // check failed
+                        if (e != null) {
+                            callback.fail(e.getMessage());
+                            return;
+                        }
+                        Log.e("Game", "get community members result = " + result);
+
+                        // parse the response
+                        try {
+                            // check status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0) {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
+
+                            // parse user
+                            JSONArray usersJson = response.getJSONArray("users");
+                            List<User> usersList = new ArrayList<User>();
+                            for (int i = 0; i < usersJson.length(); i++) {
+                                JSONObject userJson = usersJson.getJSONObject(i);
+                                JSONObject userJson1 = userJson.getJSONObject("user");
+                                User user = User.fromJson(userJson1);
+                                usersList.add(user);
+
+                            }
+
+                            // invoke callback
+                            callback.success(usersList);
+                        } catch (Exception e2) {
+                            callback.fail(e2.getMessage());
+                            Log.e("Game", "get members error " + e2.getMessage());
+                            return;
+                        }
+                    }
+                });
+    }
+
+
+    public void answerCommunityRequests(String token, final String userId, final String communityId, final GenericSuccessCallback callback) {
+
+        String url = Constants.HOST + "/answer_join_request";
+
+        JsonObject json = new JsonObject();
+        json.addProperty("userId", userId);
+        json.addProperty("communityId", communityId);
+        json.addProperty("approval", "true");
+        String body = json.toString();
+        Log.e("Game", "body = " + body);
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + token);
+        headers.put("Content-Type", "application/json");
+
+        Fuel.post(url)
+                .header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new com.github.kittinunf.fuel.core.Handler<String>() {
+                    @Override
+                    public void success(Request request, Response r, String s) {
+                        Log.e("Game", "success " + s);
+                        try {
+                            // check status
+                            JSONObject response = new JSONObject(s);
+                            int status = response.getInt("status");
+                            if (status == 0) {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
+
+
+                            callback.success();
+                        } catch (Exception e2) {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+
+                    @Override
+                    public void failure(Request request, Response resp, FuelError fuelError) {
+                        Log.e("Game", "error " + fuelError.getMessage());
+                        Log.e("Game", "request " + request.toString());
+                        Log.e("Game", "response" + resp.toString());
+
+                        callback.fail(fuelError.getMessage());
+                    }
+                });
+
+
+    }
+
 }
