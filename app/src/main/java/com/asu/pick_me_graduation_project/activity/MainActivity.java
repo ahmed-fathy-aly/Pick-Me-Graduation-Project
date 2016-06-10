@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 
 import com.asu.pick_me_graduation_project.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -19,6 +21,8 @@ public class MainActivity extends BaseActivity
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    @Bind(R.id.adView)
+    AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,6 +37,7 @@ public class MainActivity extends BaseActivity
         setupNavigationBar(this, toolbar);
         toolbar.setTitle("Dashboard");
 
+        // open drawer
         new Handler().postDelayed(new Runnable()
         {
             @Override
@@ -41,6 +46,16 @@ public class MainActivity extends BaseActivity
                 drawer.openDrawer();
             }
         }, 700);
+
+        // load ads
+        loadAd();
+    }
+
+    private void loadAd()
+    {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
     }
 
     @OnClick(R.id.buttonPostRide)

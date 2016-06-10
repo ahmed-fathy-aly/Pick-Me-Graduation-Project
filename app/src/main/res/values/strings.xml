@@ -57,6 +57,7 @@
     <string name="sent">Sent</string>
 
     <string name="maps_api_key">AIzaSyA9AA9f8sSClTlBMyzAU0KFlb1GpLCWibE</string>
+    <string name="ads_id">ca-app-pub-3940256099942544/6300978111</string>
 
     <string name="maps_api_key_debug">AIzaSyCrvcZp-42PWT2tLq1CY5kP9jCaWKy9qyA</string>
     <string name="post_ride">Post a Ride</string>
