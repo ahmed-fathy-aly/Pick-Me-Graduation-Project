@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.asu.pick_me_graduation_project.BuildConfig;
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.callback.GenericSuccessCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
@@ -22,6 +23,9 @@ import com.asu.pick_me_graduation_project.adapter.RidesAdapter;
 import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.model.SearchRideParams;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -69,7 +73,12 @@ public class SearchRideResults extends AppCompatActivity implements RideListFrag
 
         // set data
         rideListFragment.setData(searchRideParams.getResult());
+
+        // load interstitial ad (currently disabled)
+        if (false)
+            loadAd();
     }
+
 
     @Override
     public void onRequestToJoin(int position, final Ride ride)
@@ -133,5 +142,31 @@ public class SearchRideResults extends AppCompatActivity implements RideListFrag
                         Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+
+    /**
+     * loads an interstitial ad
+     */
+    private void loadAd()
+    {
+        // setup interstitial ad
+        final InterstitialAd interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId(getString(R.string.interstitial_ads_id));
+        interstitialAd.setAdListener(new AdListener()
+        {
+            @Override
+            public void onAdLoaded()
+            {
+                super.onAdLoaded();
+                if (interstitialAd.isLoaded())
+                    interstitialAd.show();
+            }
+        });
+
+        // load the ad
+        AdRequest adRequest = new AdRequest.Builder().build();
+        interstitialAd.loadAd(adRequest);
+
     }
 }
