@@ -213,7 +213,7 @@ public class CommunityAPIController {
      * gets the members who are in this community
      */
     public void getCommunityMembers(String tokken, String userId, String communityId, final GetUsersCallback callback) {
-        String url = "http://pickmeasu.azurewebsites.net/api/get_community_members?communityID=" + communityId;
+        String url = Constants.HOST + "/get_community_members?communityID=" + communityId;
         Ion.with(context)
                 .load("GET", url)
                 .setHeader("Content-Type", "application/json")
@@ -351,38 +351,39 @@ public class CommunityAPIController {
     /**
      * creates a new post to a community
      *
-     * @param tokken
+     * @param token
      * @param conentText
      */
-    public void createPost(String tokken, String communityId, String conentText, final CreatePostCallback callback) {
+    public void createPost(String token, String communityId, String conentText, final CreatePostCallback callback) {
+
         String url = Constants.HOST + "make_community_post";
+
         JsonObject json = new JsonObject();
         json.addProperty("communityId", communityId);
         json.addProperty("content", conentText);
+        String body = json.toString();
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + token);
+        headers.put("Content-Type", "application/json");
 
 
-        Ion.with(context)
-                .load("http://pickmeasu.azurewebsites.net/api/Create_Community")
-                .addHeader("Authorization", "Bearer " + tokken)
-                .addHeader("Content-Type", "application/json")
-                .setJsonObjectBody(json)
-                .asString()
-                .setCallback(new FutureCallback<String>() {
+        Fuel.post(url)
+                .header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new com.github.kittinunf.fuel.core.Handler<String>()
+                {
                     @Override
-                    public void onCompleted(Exception e, String result) {
-                        // check failed
-                        if (e != null) {
-                            callback.fail(e.getMessage());
-                            return;
-                        }
-                        Log.e("Game", "create post result = " + result);
-
-                        // parse the response
-                        try {
+                    public void success(Request request, Response r, String s)
+                    {
+                        Log.e("Game", "new post " + s);
+                        try
+                        {
                             // check status
-                            JSONObject response = new JSONObject(result);
+                            JSONObject response = new JSONObject(s);
                             int status = response.getInt("status");
-                            if (status == 0) {
+                            if (status == 0)
+                            {
                                 String message = response.getString("message");
                                 callback.fail(message);
                                 return;
@@ -391,13 +392,20 @@ public class CommunityAPIController {
                             // parse the post
                             JSONObject postJson = response.getJSONObject("newPost");
                             CommunityPost post = CommunityPost.parseFromJson(postJson);
-                            callback.success(post);
-                        } catch (Exception e2) {
+                            callback.success(post);                        } catch (Exception e2)
+                        {
                             callback.fail(e2.getMessage());
                             return;
                         }
                     }
+
+                    @Override
+                    public void failure(Request request, Response resp, FuelError fuelError)
+                    {
+                        callback.fail(fuelError.getMessage());
+                    }
                 });
+
     }
 
     public void requestToJoinCommunity(String tokken, String communityId, final GenericSuccessCallback callback) {
