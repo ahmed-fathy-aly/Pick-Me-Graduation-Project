@@ -404,50 +404,56 @@ public class CommunityAPIController {
 
     }
 
-    public void requestToJoinCommunity(String tokken, String communityId, final GenericSuccessCallback callback) {
+    public void requestToJoinCommunity(String token, String communityId, final GenericSuccessCallback callback) {
         String url = Constants.HOST + "join_community";
+
         JsonObject json = new JsonObject();
         json.addProperty("communityId", communityId);
+        String body = json.toString();
 
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + token);
+        headers.put("Content-Type", "application/json");
 
-        Ion.with(context)
-                .load("http://pickmeasu.azurewebsites.net/api/Create_Community")
-                .addHeader("Authorization", "Bearer " + tokken)
-                .addHeader("Content-Type", "application/json")
-                .setJsonObjectBody(json)
-                .asString()
-                .setCallback(new FutureCallback<String>() {
+        Fuel.post(url)
+                .header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new com.github.kittinunf.fuel.core.Handler<String>()
+                {
                     @Override
-                    public void onCompleted(Exception e, String result) {
-                        // check failed
-                        if (e != null) {
-                            callback.fail(e.getMessage());
-                            return;
-                        }
-                        Log.e("Game", "join community result = " + result);
-
-                        // parse the response
-                        try {
+                    public void success(Request request, Response r, String s)
+                    {
+                        try
+                        {
                             // check status
-                            JSONObject response = new JSONObject(result);
+                            JSONObject response = new JSONObject(s);
                             int status = response.getInt("status");
-                            if (status == 0) {
+                            if (status == 0)
+                            {
                                 String message = response.getString("message");
                                 callback.fail(message);
                                 return;
                             }
 
+                            // invoke callback
                             callback.success();
-                        } catch (Exception e2) {
+                        } catch (Exception e2)
+                        {
                             callback.fail(e2.getMessage());
                             return;
                         }
+                    }
+
+                    @Override
+                    public void failure(Request request, Response resp, FuelError fuelError)
+                    {
+                        callback.fail(fuelError.getMessage());
                     }
                 });
     }
 
     public void getCommunityRequests(String tokken, String userId, String communityId, final GetUsersCallback callback) {
-        String url =  Constants.HOST + "/api/get_join_requests?communityId=" + communityId;
+        String url =  Constants.HOST + "/get_join_requests?communityId=" + communityId;
         Ion.with(context)
                 .load("GET", url)
                 .setHeader("Content-Type", "application/json")
@@ -461,7 +467,7 @@ public class CommunityAPIController {
                             callback.fail(e.getMessage());
                             return;
                         }
-                        Log.e("Game", "get community members result = " + result);
+                        Log.e("Game", "get community requests result = " + result);
 
                         // parse the response
                         try {
