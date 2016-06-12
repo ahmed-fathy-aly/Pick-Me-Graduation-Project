@@ -3,6 +3,7 @@ package com.asu.pick_me_graduation_project.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,10 @@ import android.widget.ListView;
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.activity.UserProfileActivity;
 import com.asu.pick_me_graduation_project.adapter.UsersAdapter;
+import com.asu.pick_me_graduation_project.adapter.UsersAdminAdapter;
+import com.asu.pick_me_graduation_project.callback.GenericSuccessCallback;
+import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
+import com.asu.pick_me_graduation_project.controller.CommunityAPIController;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 
@@ -25,17 +30,20 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MembersListFragment extends Fragment implements UsersAdapter.Listener
+public class MembersAdminsListFragment extends Fragment implements UsersAdminAdapter.Listener
 {
 
     /* fields */
-    private UsersAdapter adapterUsers;
+    private UsersAdminAdapter adapterUsers;
 
     /* UI */
     @Bind(R.id.listViewUsers)
     ListView listViewUsers;
+    @Bind(R.id.content)
+    View content;
+    private String communityId;
 
-    public MembersListFragment()
+    public MembersAdminsListFragment()
     {
     }
 
@@ -48,8 +56,12 @@ public class MembersListFragment extends Fragment implements UsersAdapter.Listen
         View view = inflater.inflate(R.layout.fragment_members_list, container, false);
         ButterKnife.bind(this, view);
 
+        // get arguments
+        communityId = getArguments().getString(Constants.COMMUNITY_ID);
+        boolean isAdmin = getArguments().getBoolean(Constants.IS_COMMUNITY_ADMIN);
+
         // setup users list
-        adapterUsers = new UsersAdapter(getContext());
+        adapterUsers = new UsersAdminAdapter(getContext(), isAdmin);
         adapterUsers.setListener(this);
         listViewUsers.setAdapter(adapterUsers);
 
@@ -74,6 +86,32 @@ public class MembersListFragment extends Fragment implements UsersAdapter.Listen
                         android.support.v4.util.Pair.create(v, getString(R.string.transition_user_list_to_profile))
                 );
         ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+    }
+
+    @Override
+    public void onMakeAdmin(final User user)
+    {
+        // make a request
+        adapterUsers.setProgress(user.getUserId());
+        CommunityAPIController controller = new CommunityAPIController(getContext());
+        controller.makeUserAdmin(new AuthenticationAPIController(getContext()).getTokken()
+                , communityId
+                , user.getUserId()
+                , new GenericSuccessCallback()
+        {
+
+            @Override
+            public void success()
+            {
+                adapterUsers.setAdmin(user.getUserId());
+            }
+
+            @Override
+            public void fail(String message)
+            {
+                Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
