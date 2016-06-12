@@ -109,22 +109,27 @@ public class CommunityAPIController {
                 .load("GET", Constants.HOST + "get_my_communities")
                 .setHeader("Authorization", "Bearer " + token)
                 .asString()
-                .setCallback(new FutureCallback<String>() {
+                .setCallback(new FutureCallback<String>()
+                {
                     @Override
-                    public void onCompleted(Exception e, String result) {
+                    public void onCompleted(Exception e, String result)
+                    {
 
                         // check failed
-                        if (e != null) {
+                        if (e != null)
+                        {
                             callback.fail(e.getMessage());
                             return;
                         }
                         Log.e("Game", "my communities result = " + result);
                         // parse the response
-                        try {
+                        try
+                        {
                             // check status
                             JSONObject response = new JSONObject(result);
                             int status = response.getInt("status");
-                            if (status == 0) {
+                            if (status == 0)
+                            {
                                 String message = response.getString("message");
                                 callback.fail(message);
                                 return;
@@ -133,7 +138,8 @@ public class CommunityAPIController {
                             // parse communities
                             JSONArray usersJson = response.getJSONArray("communities");
                             List<Community> communityList = new ArrayList<Community>();
-                            for (int i = 0; i < usersJson.length(); i++) {
+                            for (int i = 0; i < usersJson.length(); i++)
+                            {
                                 JSONObject communityJson = usersJson.getJSONObject(i);
                                 Community community = Community.fromJson(communityJson);
                                 community.setIsMember(true);
@@ -142,7 +148,8 @@ public class CommunityAPIController {
 
                             // invoke callback
                             callback.success(communityList);
-                        } catch (Exception e2) {
+                        } catch (Exception e2)
+                        {
                             callback.fail(e2.getMessage());
                             return;
                         }
@@ -162,12 +169,15 @@ public class CommunityAPIController {
                 .setHeader("Authorization", "Bearer " + token)
                 .asString();
         searchCommunitiesRequest
-                .setCallback(new FutureCallback<String>() {
+                .setCallback(new FutureCallback<String>()
+                {
                     @Override
-                    public void onCompleted(Exception e, String result) {
+                    public void onCompleted(Exception e, String result)
+                    {
 
                         // check failed
-                        if (e != null) {
+                        if (e != null)
+                        {
                             if (!searchCommunitiesRequest.isCancelled())
                                 callback.fail(e.getMessage());
                             return;
@@ -175,11 +185,13 @@ public class CommunityAPIController {
                         Log.e("Game", "search communities result = " + result);
 
                         // parse the response
-                        try {
+                        try
+                        {
                             // check status
                             JSONObject response = new JSONObject(result);
                             int status = response.getInt("status");
-                            if (status == 0) {
+                            if (status == 0)
+                            {
                                 String message = response.getString("message");
                                 callback.fail(message);
                                 return;
@@ -188,7 +200,8 @@ public class CommunityAPIController {
                             // parse communities
                             JSONArray communities = response.getJSONArray("communities");
                             List<Community> communityList = new ArrayList<Community>();
-                            for (int i = 0; i < communities.length(); i++) {
+                            for (int i = 0; i < communities.length(); i++)
+                            {
                                 JSONObject communityJson = communities.getJSONObject(i);
                                 Community community = Community.fromJson(communityJson);
                                 communityList.add(community);
@@ -196,7 +209,8 @@ public class CommunityAPIController {
 
                             // invoke callback
                             callback.success(communityList);
-                        } catch (Exception e2) {
+                        } catch (Exception e2)
+                        {
                             callback.fail(e2.getMessage());
                             return;
                         }
@@ -215,22 +229,27 @@ public class CommunityAPIController {
                 .setHeader("Content-Type", "application/json")
                 .setHeader("Authorization", "Bearer " + tokken)
                 .asString()
-                .setCallback(new FutureCallback<String>() {
+                .setCallback(new FutureCallback<String>()
+                {
                     @Override
-                    public void onCompleted(Exception e, String result) {
+                    public void onCompleted(Exception e, String result)
+                    {
                         // check failed
-                        if (e != null) {
+                        if (e != null)
+                        {
                             callback.fail(e.getMessage());
                             return;
                         }
                         Log.e("Game", "get community members result = " + result);
 
                         // parse the response
-                        try {
+                        try
+                        {
                             // check status
                             JSONObject response = new JSONObject(result);
                             int status = response.getInt("status");
-                            if (status == 0) {
+                            if (status == 0)
+                            {
                                 String message = response.getString("message");
                                 callback.fail(message);
                                 return;
@@ -239,7 +258,8 @@ public class CommunityAPIController {
                             // parse user
                             JSONArray usersJson = response.getJSONArray("members");
                             List<User> usersList = new ArrayList<User>();
-                            for (int i = 0; i < usersJson.length(); i++) {
+                            for (int i = 0; i < usersJson.length(); i++)
+                            {
                                 JSONObject userJson = usersJson.getJSONObject(i);
                                 User user = User.fromJson(userJson);
                                 usersList.add(user);
@@ -248,7 +268,8 @@ public class CommunityAPIController {
 
                             // invoke callback
                             callback.success(usersList);
-                        } catch (Exception e2) {
+                        } catch (Exception e2)
+                        {
                             callback.fail(e2.getMessage());
                             Log.e("Game", "get members error " + e2.getMessage());
                             return;
@@ -388,7 +409,8 @@ public class CommunityAPIController {
                             // parse the post
                             JSONObject postJson = response.getJSONObject("newPost");
                             CommunityPost post = CommunityPost.parseFromJson(postJson);
-                            callback.success(post);                        } catch (Exception e2)
+                            callback.success(post);
+                        } catch (Exception e2)
                         {
                             callback.fail(e2.getMessage());
                             return;
@@ -435,7 +457,7 @@ public class CommunityAPIController {
                                 return;
                             }
 
-                            // invoke callback
+                            // parse community
                             callback.success();
                         } catch (Exception e2)
                         {
@@ -453,28 +475,33 @@ public class CommunityAPIController {
     }
 
     public void getCommunityRequests(String tokken, String userId, String communityId, final GetUsersCallback callback) {
-        String url =  Constants.HOST + "/get_join_requests?communityId=" + communityId;
+        String url =  Constants.HOST + "/api/get_join_requests?communityId=" + communityId;
         Ion.with(context)
                 .load("GET", url)
                 .setHeader("Content-Type", "application/json")
                 .setHeader("Authorization", "Bearer " + tokken)
                 .asString()
-                .setCallback(new FutureCallback<String>() {
+                .setCallback(new FutureCallback<String>()
+                {
                     @Override
-                    public void onCompleted(Exception e, String result) {
+                    public void onCompleted(Exception e, String result)
+                    {
                         // check failed
-                        if (e != null) {
+                        if (e != null)
+                        {
                             callback.fail(e.getMessage());
                             return;
                         }
-                        Log.e("Game", "get community requests result = " + result);
+                        Log.e("Game", "get community members result = " + result);
 
                         // parse the response
-                        try {
+                        try
+                        {
                             // check status
                             JSONObject response = new JSONObject(result);
                             int status = response.getInt("status");
-                            if (status == 0) {
+                            if (status == 0)
+                            {
                                 String message = response.getString("message");
                                 callback.fail(message);
                                 return;
@@ -483,7 +510,8 @@ public class CommunityAPIController {
                             // parse user
                             JSONArray usersJson = response.getJSONArray("users");
                             List<User> usersList = new ArrayList<User>();
-                            for (int i = 0; i < usersJson.length(); i++) {
+                            for (int i = 0; i < usersJson.length(); i++)
+                            {
                                 JSONObject userJson = usersJson.getJSONObject(i);
                                 JSONObject userJson1 = userJson.getJSONObject("user");
                                 User user = User.fromJson(userJson1);
@@ -493,7 +521,8 @@ public class CommunityAPIController {
 
                             // invoke callback
                             callback.success(usersList);
-                        } catch (Exception e2) {
+                        } catch (Exception e2)
+                        {
                             callback.fail(e2.getMessage());
                             Log.e("Game", "get members error " + e2.getMessage());
                             return;
@@ -520,15 +549,19 @@ public class CommunityAPIController {
         Fuel.post(url)
                 .header(headers)
                 .body(body, Charset.defaultCharset())
-                .responseString(new com.github.kittinunf.fuel.core.Handler<String>() {
+                .responseString(new com.github.kittinunf.fuel.core.Handler<String>()
+                {
                     @Override
-                    public void success(Request request, Response r, String s) {
+                    public void success(Request request, Response r, String s)
+                    {
                         Log.e("Game", "success " + s);
-                        try {
+                        try
+                        {
                             // check status
                             JSONObject response = new JSONObject(s);
                             int status = response.getInt("status");
-                            if (status == 0) {
+                            if (status == 0)
+                            {
                                 String message = response.getString("message");
                                 callback.fail(message);
                                 return;
@@ -536,14 +569,16 @@ public class CommunityAPIController {
 
 
                             callback.success();
-                        } catch (Exception e2) {
+                        } catch (Exception e2)
+                        {
                             callback.fail(e2.getMessage());
                             return;
                         }
                     }
 
                     @Override
-                    public void failure(Request request, Response resp, FuelError fuelError) {
+                    public void failure(Request request, Response resp, FuelError fuelError)
+                    {
                         Log.e("Game", "error " + fuelError.getMessage());
                         Log.e("Game", "request " + request.toString());
                         Log.e("Game", "response" + resp.toString());
@@ -555,4 +590,55 @@ public class CommunityAPIController {
 
     }
 
+    /**
+     * sets a community user to be an admin
+     */
+    public void makeUserAdmin(String token, String communityId, String userId, final GenericSuccessCallback callback)
+    {
+        String url = Constants.HOST + "/make_user_admin";
+
+        JsonObject json = new JsonObject();
+        json.addProperty("communityId", communityId);
+        json.addProperty("userId", userId);
+        String body = json.toString();
+        Log.e("Game", "make admin body " + body);
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + token);
+        headers.put("Content-Type", "application/json");
+
+        Fuel.post(url)
+                .header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new com.github.kittinunf.fuel.core.Handler<String>()
+                {
+                    @Override
+                    public void success(Request request, Response r, String s)
+                    {
+                        Log.e("Game", "make admin result " + s);
+                        try {
+                            // check status
+                            JSONObject response = new JSONObject(s);
+                            int status = response.getInt("status");
+                            if (status == 0) {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
+
+                            // invoke callback
+                            callback.success();
+                        } catch (Exception e2) {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+
+                    @Override
+                    public void failure(Request request, Response resp, FuelError fuelError)
+                    {
+                        callback.fail(fuelError.getMessage());
+                    }
+                });
+    }
 }

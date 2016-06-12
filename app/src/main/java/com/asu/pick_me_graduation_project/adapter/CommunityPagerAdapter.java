@@ -11,6 +11,7 @@ import com.asu.pick_me_graduation_project.fragment.CommunitiesListFragment;
 import com.asu.pick_me_graduation_project.fragment.CommunityInfoFragment;
 import com.asu.pick_me_graduation_project.fragment.CommunityJoinRequestsFragment;
 import com.asu.pick_me_graduation_project.fragment.CommunityPostsFragment;
+import com.asu.pick_me_graduation_project.fragment.MembersAdminsListFragment;
 import com.asu.pick_me_graduation_project.fragment.MembersListFragment;
 import com.asu.pick_me_graduation_project.model.Community;
 import com.asu.pick_me_graduation_project.utils.Constants;
@@ -27,29 +28,39 @@ public class CommunityPagerAdapter extends FragmentPagerAdapter
 {
 
     CommunityInfoFragment communityInfoFragment;
-    MembersListFragment membersListFragment;
+    MembersAdminsListFragment membersListFragment;
     CommunityPostsFragment communityPostsFragment;
     CommunityJoinRequestsFragment communityJoinRequestsFragment;
     private List<String> mFragmentTitleList = Arrays.asList("Info", "Posts", "Members", "Requests");
     private List<Fragment> mFragmentList = new ArrayList<>();
 
-    public CommunityPagerAdapter(FragmentManager fm, String communityId)
+    public CommunityPagerAdapter(FragmentManager fm, String communityId, boolean isAdmin)
     {
         super(fm);
 
         // the arguments bundle
         Bundle arguments = new Bundle();
         arguments.putString(Constants.COMMUNITY_ID, communityId);
+        arguments.putBoolean(Constants.IS_COMMUNITY_ADMIN, isAdmin);
 
         communityInfoFragment = new CommunityInfoFragment();
         communityInfoFragment.setArguments(arguments);
+
         communityPostsFragment = new CommunityPostsFragment();
         communityPostsFragment.setArguments(arguments);
-        membersListFragment = new MembersListFragment();
+
+        membersListFragment = new MembersAdminsListFragment();
         membersListFragment.setArguments(arguments);
-        communityJoinRequestsFragment = new CommunityJoinRequestsFragment();
-        communityJoinRequestsFragment.setArguments(arguments);
-        mFragmentList = Arrays.asList(communityInfoFragment, communityPostsFragment, membersListFragment, communityJoinRequestsFragment);
+
+        mFragmentList = new ArrayList<>();
+        mFragmentList.addAll(Arrays.asList(communityInfoFragment, communityPostsFragment, membersListFragment));
+        if (isAdmin)
+        {
+            communityJoinRequestsFragment = new CommunityJoinRequestsFragment();
+            communityJoinRequestsFragment.setArguments(arguments);
+            mFragmentList.add(communityJoinRequestsFragment);
+        }
+
     }
 
     @Override
@@ -70,7 +81,7 @@ public class CommunityPagerAdapter extends FragmentPagerAdapter
         return mFragmentList.size();
     }
 
-    public MembersListFragment getMembersListFragment()
+    public MembersAdminsListFragment getMembersListFragment()
     {
         return membersListFragment;
     }

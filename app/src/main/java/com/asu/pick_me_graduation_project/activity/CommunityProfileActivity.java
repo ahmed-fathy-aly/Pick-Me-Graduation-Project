@@ -16,6 +16,7 @@ import com.asu.pick_me_graduation_project.callback.GetCommunityCallback;
 import com.asu.pick_me_graduation_project.callback.GetUsersCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.CommunityAPIController;
+import com.asu.pick_me_graduation_project.fragment.MembersListFragment;
 import com.asu.pick_me_graduation_project.model.Community;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
@@ -27,7 +28,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CommunityProfileActivity extends BaseActivity {
+public class CommunityProfileActivity extends BaseActivity
+{
 
     /* UI */
     @Bind(R.id.toolbar)
@@ -49,6 +51,7 @@ public class CommunityProfileActivity extends BaseActivity {
     private String communityId;
     private CommunityAPIController contoller;
     private CommunityPagerAdapter communityPagerAdapter;
+    private boolean isAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,7 @@ public class CommunityProfileActivity extends BaseActivity {
 
         // get community  id
         communityId = getIntent().getExtras().getString(Constants.COMMUNITY_ID);
+        isAdmin = getIntent().getExtras().getBoolean(Constants.IS_COMMUNITY_ADMIN, false);
 
         // reference views
         ButterKnife.bind(this);
@@ -68,7 +72,7 @@ public class CommunityProfileActivity extends BaseActivity {
         contoller = new CommunityAPIController(this);
 
         // setup view pager
-        communityPagerAdapter = new CommunityPagerAdapter(getSupportFragmentManager(), communityId);
+        communityPagerAdapter = new CommunityPagerAdapter(getSupportFragmentManager(), communityId, isAdmin);
         viewPager.setAdapter(communityPagerAdapter);
         viewPager.setOffscreenPageLimit(4);
         tabLayout.setupWithViewPager(viewPager);
@@ -135,5 +139,6 @@ public class CommunityProfileActivity extends BaseActivity {
                     }
                 });
     }
+
 
 }

@@ -42,7 +42,7 @@ public class UserApiController
      */
     public void getProfile(String userId, final GetProfileCallback callback)
     {
-        String url = Constants.HOST +  "/api/get_profile"
+        String url = Constants.HOST +  "get_profile"
                 + "?userId=" + userId;
         Ion.with(context)
                 .load("GET", url)
@@ -97,7 +97,7 @@ public class UserApiController
      */
     public void editProfile(final User user, String token, final EditProfileCallback callback)
     {
-        String url = Constants.HOST + "/api/EditProfile";
+        String url = Constants.HOST + "EditProfile";
         JsonObject json = new JsonObject();
         json.addProperty("bio", user.getBio());
 
@@ -135,7 +135,7 @@ public class UserApiController
         if (searchUsersRequest != null)
             searchUsersRequest.cancel();
 
-        String url = Constants.HOST + "/search_for_user"
+        String url = Constants.HOST + "search_for_user"
                 + "?searchString=" + searchString
                 + "&count=-1";
         Log.e("Game", "searching for " + url);
@@ -175,7 +175,7 @@ public class UserApiController
                     List<User> usersList = new ArrayList<User>();
                     for (int i = 0; i < usersJson.length(); i++)
                     {
-                        JSONObject userJson = usersJson.getJSONObject(i).getJSONObject("user");
+                        JSONObject userJson = usersJson.getJSONObject(i);
                         User user = User.fromJson(userJson);
                         usersList.add(user);
 

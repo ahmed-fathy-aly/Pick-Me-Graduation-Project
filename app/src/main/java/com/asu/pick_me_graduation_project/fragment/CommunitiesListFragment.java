@@ -113,6 +113,7 @@ public class CommunitiesListFragment extends android.support.v4.app.Fragment imp
         {
             Intent intent = new Intent(getContext(), CommunityProfileActivity.class);
             intent.putExtra(Constants.COMMUNITY_ID, community.getId());
+            intent.putExtra(Constants.IS_COMMUNITY_ADMIN, community.isAdmin());
             startActivity(intent);
         }
     }

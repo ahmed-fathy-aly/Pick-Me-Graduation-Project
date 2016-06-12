@@ -5,6 +5,7 @@ package com.asu.pick_me_graduation_project.utils;
  */
 public class Constants
 {
+
     /* API constants */
     public static String HOST = "http://pickmetest.azurewebsites.net/api/";
 
@@ -19,6 +20,7 @@ public class Constants
     /* community constants */
     public static final java.lang.String COMMUNITY_ID = "communityId";
     public static final java.lang.String COMMUNITY_NAME = "communityName";
+    public static final java.lang.String IS_COMMUNITY_ADMIN = "isCommunityAdmin";
 
     /* ride constants */
     public static final String RIDE_ID = "rideId";
