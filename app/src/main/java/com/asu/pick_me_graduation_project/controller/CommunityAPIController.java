@@ -447,7 +447,7 @@ public class CommunityAPIController {
     }
 
     public void getCommunityRequests(String tokken, String userId, String communityId, final GetUsersCallback callback) {
-        String url = "http://pickmetest.azurewebsites.net/api/get_join_requests?communityId=" + communityId;
+        String url =  Constants.HOST + "/api/get_join_requests?communityId=" + communityId;
         Ion.with(context)
                 .load("GET", url)
                 .setHeader("Content-Type", "application/json")

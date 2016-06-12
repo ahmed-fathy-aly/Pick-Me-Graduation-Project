@@ -7,6 +7,7 @@ import com.asu.pick_me_graduation_project.callback.EditProfileCallback;
 import com.asu.pick_me_graduation_project.callback.GetProfileCallback;
 import com.asu.pick_me_graduation_project.callback.GetUsersCallback;
 import com.asu.pick_me_graduation_project.model.User;
+import com.asu.pick_me_graduation_project.utils.Constants;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -41,7 +42,7 @@ public class UserApiController
      */
     public void getProfile(String userId, final GetProfileCallback callback)
     {
-        String url = "http://pickmeasu.azurewebsites.net/api/get_profile"
+        String url = Constants.HOST +  "/api/get_profile"
                 + "?userId=" + userId;
         Ion.with(context)
                 .load("GET", url)
@@ -96,32 +97,33 @@ public class UserApiController
      */
     public void editProfile(final User user, String token, final EditProfileCallback callback)
     {
+        String url = Constants.HOST + "/api/EditProfile";
         JsonObject json = new JsonObject();
         json.addProperty("bio", user.getBio());
 
         Ion.with(context)
-                .load("PUT", "http://pickmeasu.azurewebsites.net/api/EditProfile")
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Authorization", "Bearer " + token)
-                .setJsonObjectBody(json)
-                .asString()
-                .setCallback(new FutureCallback<String>()
-                {
-                    @Override
-                    public void onCompleted(Exception e, String result)
-                    {
-                        // check failed
-                        if (e != null)
+                .load("PUT", url)
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Authorization", "Bearer " + token)
+                        .setJsonObjectBody(json)
+                        .asString()
+                        .setCallback(new FutureCallback<String>()
                         {
-                            Log.e("Game", "error " + e.getMessage());
-                            callback.fail(e.getMessage());
-                            return;
-                        }
+                            @Override
+                            public void onCompleted(Exception e, String result)
+                            {
+                                // check failed
+                                if (e != null)
+                                {
+                                    Log.e("Game", "error " + e.getMessage());
+                                    callback.fail(e.getMessage());
+                                    return;
+                                }
 
-                        callback.success(user);
-                        Log.e("Game", "result = " + result);
-                    }
-                });
+                                callback.success(user);
+                                Log.e("Game", "result = " + result);
+                            }
+                        });
     }
 
     /**
@@ -133,7 +135,7 @@ public class UserApiController
         if (searchUsersRequest != null)
             searchUsersRequest.cancel();
 
-        String url = "http://pickmeasu.azurewebsites.net/api/search_for_user"
+        String url = Constants.HOST + "/search_for_user"
                 + "?searchString=" + searchString
                 + "&count=-1";
         Log.e("Game", "searching for " + url);
