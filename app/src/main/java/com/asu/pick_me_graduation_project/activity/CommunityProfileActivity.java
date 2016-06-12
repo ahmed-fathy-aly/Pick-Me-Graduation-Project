@@ -102,6 +102,8 @@ public class CommunityProfileActivity extends BaseActivity {
                                     .placeholder(R.drawable.ic_user_small)
                                     .into(imageViewCommunityPP);
 
+                        // populate the info fragment
+                        communityPagerAdapter.getInfoFragment().setDetails(ValidationUtils.correct(community.getDescription()));
                     }
 
                     @Override

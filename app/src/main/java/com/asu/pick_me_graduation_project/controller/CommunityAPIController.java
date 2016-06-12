@@ -56,8 +56,9 @@ public class CommunityAPIController {
 
         JsonObject json = new JsonObject();
         json.addProperty("communityName", name);
+        json.addProperty("description", description);
         String body = json.toString();
-        Log.e("Game", "body = " + body);
+
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + token);
         headers.put("Content-Type", "application/json");
@@ -70,7 +71,6 @@ public class CommunityAPIController {
                     @Override
                     public void success(Request request, Response r, String s)
                     {
-                        Log.e("Game", "success " + s);
                         try {
                             // check status
                             JSONObject response = new JSONObject(s);
@@ -97,10 +97,6 @@ public class CommunityAPIController {
                     @Override
                     public void failure(Request request, Response resp, FuelError fuelError)
                     {
-                        Log.e("Game", "error " + fuelError.getMessage());
-                        Log.e("Game", "request " + request.toString());
-                        Log.e("Game", "response" + resp.toString());
-
                         callback.fail(fuelError.getMessage());
                     }
                 });

@@ -94,6 +94,8 @@ public class Community implements Serializable
             else
                 community.setId(jsonObject.getString("communityId"));
             community.setName(jsonObject.getString("name"));
+            if (!jsonObject.isNull("description"))
+                community.setDescription(jsonObject.getString("description"));
             community.setProfilePictureUrl(jsonObject.getString("profilePicture"));
             if (!jsonObject.isNull("isAdmin"))
                 community.setIsAdmin(jsonObject.getBoolean("isAdmin"));

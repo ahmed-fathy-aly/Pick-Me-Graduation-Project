@@ -74,4 +74,9 @@ public class CommunityPagerAdapter extends FragmentPagerAdapter
     {
         return membersListFragment;
     }
+
+    public CommunityInfoFragment getInfoFragment()
+    {
+        return communityInfoFragment;
+    }
 }
