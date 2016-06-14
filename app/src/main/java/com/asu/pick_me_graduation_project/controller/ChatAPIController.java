@@ -236,7 +236,7 @@ public class ChatAPIController
 
         callback.success(messages);*/
     }
-    public void sendMessage( String content,String userId,String token,final SendMessageCallback callback)
+    public void sendMessage(String content,String userId,String token,final SendMessageCallback callback)
     {
         String url="http://pickmetest.azurewebsites.net/api/Message/send_message";
         JsonObject json = new JsonObject();

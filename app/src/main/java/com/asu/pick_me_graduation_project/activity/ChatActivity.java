@@ -152,7 +152,7 @@ public class ChatActivity extends BaseActivity
     @OnClick(R.id.fabSend)
     public void onClick()
     {
-        final String contentt = MessageEditor.getText().toString();
+        final String contentt= MessageEditor.getText().toString();
         controller.sendMessage(contentt, userId, new AuthenticationAPIController(this).getTokken(), new SendMessageCallback() {
             @Override
             public void success(ChatMessage chatMessage2) {
@@ -160,7 +160,7 @@ public class ChatActivity extends BaseActivity
                 progressBar.setVisibility(View.INVISIBLE);
                 adapter.add(chatMessage2);
                 MessageEditor.setText("");
-               // chatMessage2.setContent(contentt);
+
 
 
 
