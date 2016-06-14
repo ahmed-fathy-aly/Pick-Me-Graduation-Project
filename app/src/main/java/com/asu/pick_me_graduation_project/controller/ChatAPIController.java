@@ -45,7 +45,7 @@ public class ChatAPIController
     public void getRecentChats(String token, String userId, final GetMessagesCallback callback)
     {
         // TODO - get them from back end instead of mock data later
-        String url="http://pickmetest.azurewebsites.net/api/Message/get_recent_chats"+"?count=-1";
+        String url="http://pickmeasu.azurewebsites.net/api/Message/get_recent_chats"+"?count=-1";
         Ion.with(context)
                 .load("GET",url)
                 .addHeader("Authorization", "Bearer " + token)
@@ -137,7 +137,7 @@ public class ChatAPIController
     public void getChatMessages(String tokken, String myUserId, String otherUserId, final GetMessagesCallback callback)
     {
         //from backend
-        String url="http://pickmetest.azurewebsites.net/api/Message/get_a_conversation"+"?count=2"+"&userId=44";
+        String url="http://pickmeasu.azurewebsites.net/api/Message/get_a_conversation"+"?count=2"+"&userId=44";
         Ion.with(context)
                 .load("GET",url).
                 addHeader("Authorization","Bearer "+tokken)
@@ -238,7 +238,7 @@ public class ChatAPIController
     }
     public void sendMessage(String content,String userId,String token,final SendMessageCallback callback)
     {
-        String url="http://pickmetest.azurewebsites.net/api/Message/send_message";
+        String url="http://pickmeasu.azurewebsites.net/api/Message/send_message";
         JsonObject json = new JsonObject();
         json.addProperty("content", content);
         json.addProperty("userId", userId);
