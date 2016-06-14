@@ -127,6 +127,8 @@ public class LoginActivity extends BaseActivity
         // init google client
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.server_client_id))
+                .requestEmail()
+                .requestProfile()
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener()
@@ -149,7 +151,6 @@ public class LoginActivity extends BaseActivity
         {
             // google login
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            Log.e("Game", "google result " + result.getStatus().toString());
             if (result.isSuccess())
             {
                 GoogleSignInAccount acct = result.getSignInAccount();
@@ -197,7 +198,6 @@ public class LoginActivity extends BaseActivity
 
                 // open the main activity
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(LoginActivity.this);
                 ActivityCompat.startActivity(LoginActivity.this, intent, options.toBundle());
                 new Handler().postDelayed(new Runnable()
