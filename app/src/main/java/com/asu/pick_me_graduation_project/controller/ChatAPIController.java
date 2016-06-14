@@ -14,6 +14,8 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -234,7 +236,7 @@ public class ChatAPIController
 
         callback.success(messages);*/
     }
-    public void sendMessage(final String content,String userId,String token,final SendMessageCallback callback)
+    public void sendMessage( String content,String userId,String token,final SendMessageCallback callback)
     {
         String url="http://pickmetest.azurewebsites.net/api/Message/send_message";
         JsonObject json = new JsonObject();
@@ -264,7 +266,6 @@ public class ChatAPIController
                                 return;
                             }
                             JSONObject contentJson = response.getJSONObject("newMessage");
-
                             ChatMessage message = ChatMessage.fromJson(contentJson);
                             callback.success(message);
                         } catch (Exception e2)

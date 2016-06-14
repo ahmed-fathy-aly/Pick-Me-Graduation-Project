@@ -23,6 +23,7 @@ import com.asu.pick_me_graduation_project.controller.ChatAPIController;
 import com.asu.pick_me_graduation_project.controller.UserApiController;
 import com.asu.pick_me_graduation_project.model.ChatMessage;
 import com.asu.pick_me_graduation_project.model.User;
+import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.GenericMapsView;
 import com.google.android.gms.maps.model.LatLng;
@@ -56,15 +57,16 @@ public class ChatActivity extends BaseActivity {
     ImageView image;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
         // reference views
         ButterKnife.bind(this);
-        name = (TextView) findViewById(R.id.receiverName);
-        image = (ImageView) findViewById(R.id.receiverPP);
-        User u = new User();
+        name= (TextView) findViewById(R.id.receiverName);
+        image= (ImageView) findViewById(R.id.receiverPP);
+        User u=new User();
         // u.setFirstName();
         // setup common views
         setSupportActionBar(toolbar);
@@ -73,15 +75,15 @@ public class ChatActivity extends BaseActivity {
         //name.setText();
 
         // get extras
-       // userId = getIntent().getStringExtra(Constants.USER_ID);
-        userId= "12";
+       userId = getIntent().getStringExtra(Constants.USER_ID);
+
 
         // setup fields
         controller = new ChatAPIController(this);
 
 
         // TODO - setup list view and its adapter
-        adapter = new ChatMessagesAdapter(this, new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId());
+        adapter=new ChatMessagesAdapter(this,new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId());
         ListViewChat.setAdapter(adapter);
 
 
@@ -102,13 +104,16 @@ public class ChatActivity extends BaseActivity {
                     Picasso.with(getApplicationContext()).
                             load(user.getProfilePictureUrl())
                             .placeholder(R.drawable.ic_user_small)
-                            .into(image, new Callback() {
+                            .into(image, new Callback()
+                            {
                                 @Override
-                                public void onSuccess() {
+                                public void onSuccess()
+                                {
                                 }
 
                                 @Override
-                                public void onError() {
+                                public void onError()
+                                {
 
                                 }
                             });
@@ -144,7 +149,8 @@ public class ChatActivity extends BaseActivity {
     }
 
     @OnClick(R.id.fabSend)
-    public void onClick() {
+    public void onClick()
+    {
         final String contentt = MessageEditor.getText().toString();
         controller.sendMessage(contentt, userId, new AuthenticationAPIController(this).getTokken(), new SendMessageCallback() {
             @Override
