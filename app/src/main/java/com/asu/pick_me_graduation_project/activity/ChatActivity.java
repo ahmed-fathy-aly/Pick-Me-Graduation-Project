@@ -36,7 +36,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ChatActivity extends BaseActivity {
+public class ChatActivity extends BaseActivity
+{
     /* UI */
     @Bind(R.id.progressBar)
     ProgressBar progressBar;
@@ -75,7 +76,7 @@ public class ChatActivity extends BaseActivity {
         //name.setText();
 
         // get extras
-       userId = getIntent().getStringExtra(Constants.USER_ID);
+        userId = getIntent().getStringExtra(Constants.USER_ID);
 
 
         // setup fields
