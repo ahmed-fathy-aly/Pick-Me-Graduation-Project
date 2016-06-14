@@ -70,11 +70,27 @@
 
         <item name="borderWidth">0dp</item>
         <item name="elevation">3dp</item>
-        <item name="android:color">@color/accent</item>
+        <item name="android:color">@color/primary</item>
+        <item name="android:background">@color/primary</item>
         <item name="pressedTranslationZ">1dp</item>
         <item name="rippleColor">@android:color/white</item>
 
     </style>
+    <style name="fab3">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="borderWidth">0dp</item>
+        <item name="elevation">6dp</item>
+        <item name="android:color">@color/primary</item>
+        <item name="pressedTranslationZ">12dp</item>
+        <item name="rippleColor">@android:color/white</item>
+
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
 </resources>

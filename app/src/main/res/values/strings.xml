@@ -90,6 +90,7 @@
     <string name="optional">Optional</string>
     <string name="driver">Driver</string>
     <string name="free_seat">Free Seat</string>
+<<<<<<< HEAD
     <string name="request_to_join">Request TO Join</string>
     <string name="title_search_result">Search Results</string>
     <string name="message">Message To Driver</string>
@@ -106,6 +107,16 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_facebook">Sign In with Facebook</string>
     <string name="sign_google">SIgn In with Google</string>
+=======
+    <string name="title_activity_send_location_fragment">SendLocationFragment</string>
+    <string name="rateTheCar">Rate The Car</string>
+    <string name="what_difference">what was different</string>
+    <string name="if_no">If No...</string>
+    <string name="was_it_the_same">was it the same as described in the ride details ?</string>
+    <string name="driving">Rate the driving</string>
+    <string name="passenger">Rate this passenger</string>
+    <string name="writeComment">Write a comment</string>
+>>>>>>> raafat-chat
 
 
 </resources>
