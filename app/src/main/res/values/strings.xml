@@ -59,6 +59,7 @@
     <string name="maps_api_key">AIzaSyA9AA9f8sSClTlBMyzAU0KFlb1GpLCWibE</string>
     <string name="banner_ads_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="interstitial_ads_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="facebook_app_id">266817077006271</string>
 
     <string name="maps_api_key_debug">AIzaSyCrvcZp-42PWT2tLq1CY5kP9jCaWKy9qyA</string>
     <string name="post_ride">Post a Ride</string>
@@ -99,6 +100,7 @@
     <string name="no_description_added">No Description Added</string>
     <string name="make_admin">MAKE ADMIN</string>
     <string name="admin">Admin</string>
+    <string name="or">OR</string>
 
 
 </resources>

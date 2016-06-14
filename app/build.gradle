@@ -40,6 +40,9 @@ dependencies {
     compile 'com.github.kittinunf.fuel:fuel-android:1.2.1'
     //for Android
     compile 'com.google.android.gms:play-services-ads:8.4.0'
+
+    compile 'com.facebook.android:facebook-android-sdk:4.12.1'
+
 }
 
 // can you see me ? you sohuldn't...tb now? tb now?
