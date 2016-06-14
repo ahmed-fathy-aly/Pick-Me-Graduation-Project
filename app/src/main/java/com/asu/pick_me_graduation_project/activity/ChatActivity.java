@@ -137,11 +137,13 @@ public class ChatActivity extends BaseActivity
 
                     @Override
                     public void success(List<ChatMessage> messages) {
+                        progressBar.setVisibility(View.INVISIBLE);
                         adapter.addAll(messages);
                     }
 
                     @Override
                     public void fail(String error) {
+                        progressBar.setVisibility(View.INVISIBLE);
 
                     }
                 }
@@ -169,6 +171,8 @@ public class ChatActivity extends BaseActivity
 
             @Override
             public void fail(String message) {
+                progressBar.setVisibility(View.INVISIBLE);
+
                 Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
 
             }
@@ -182,12 +186,13 @@ public class ChatActivity extends BaseActivity
         builder.setTitle("Pick your Location");
         final GenericMapsView yourMap = new GenericMapsView(this);
         builder.setView(yourMap);
-        final LatLng yourLocation = yourMap.getCurrentLatlng();
 
         builder.setPositiveButton(getString(R.string.send), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                controller.sendMessage(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getFirstName() + " " + " sent you a location" + yourLocation,
+                final LatLng yourLocation = yourMap.getCurrentLatlng();
+                String locationStr = yourLocation.latitude + "," + yourLocation.longitude;
+                controller.sendMessage(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getFirstName() + " " + " sent  a location" + locationStr,
                         userId, new AuthenticationAPIController(ChatActivity.this).getTokken(), new SendMessageCallback() {
                             @Override
                             public void success(ChatMessage chatMessage3) {
@@ -202,6 +207,8 @@ public class ChatActivity extends BaseActivity
 
                             @Override
                             public void fail(String message) {
+                                progressBar.setVisibility(View.INVISIBLE);
+
                                 Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
 
                             }
