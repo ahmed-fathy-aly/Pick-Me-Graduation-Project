@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * Created by ahmed on 4/10/2016.
@@ -23,6 +24,7 @@ public class TimeUtils {
 
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
             Date date = dateFormat.parse(dateStr);
             Calendar c = new GregorianCalendar();
             c.setTime(date);

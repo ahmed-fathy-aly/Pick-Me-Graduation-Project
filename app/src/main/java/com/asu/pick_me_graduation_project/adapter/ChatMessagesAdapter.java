@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.model.ChatMessage;
 import com.asu.pick_me_graduation_project.model.User;
+import com.asu.pick_me_graduation_project.utils.TimeUtils;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -49,7 +50,6 @@ public class ChatMessagesAdapter extends ArrayAdapter<ChatMessage>
             // TODO - set data
             msgSender.setText(message.getContent());
             messageDate2.setText(DateUtils.getRelativeTimeSpanString(getContext(), message.getDate().getTimeInMillis()));
-
 
 
         }

@@ -190,7 +190,6 @@ public class User implements Serializable
 
         } catch (Exception e)
         {
-            Log.e("Game", "error parsing user" + e.getMessage());
         }
         return user;
     }

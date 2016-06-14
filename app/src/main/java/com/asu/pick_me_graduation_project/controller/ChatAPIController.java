@@ -137,7 +137,7 @@ public class ChatAPIController
     public void getChatMessages(String tokken, String myUserId, String otherUserId, final GetMessagesCallback callback)
     {
         //from backend
-        String url="http://pickmetest.azurewebsites.net/api/Message/get_a_conversation"+"?count=2"+"&userId=44";
+        String url="http://pickmetest.azurewebsites.net/api/Message/get_a_conversation"+"?count=-1"+"&userId=" + otherUserId;
         Ion.with(context)
                 .load("GET",url).
                 addHeader("Authorization","Bearer "+tokken)
@@ -254,7 +254,7 @@ public class ChatAPIController
                     @Override
                     public void success(Request request, Response r, String s)
                     {
-                        Log.e("Game", "success " + s);
+                        Log.e("Game", "send message  " + s);
                         try
                         {// check status
                             JSONObject response = new JSONObject(s);
