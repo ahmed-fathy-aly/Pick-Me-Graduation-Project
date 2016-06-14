@@ -1,12 +1,10 @@
 package com.asu.pick_me_graduation_project.controller;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 
 import com.asu.pick_me_graduation_project.callback.LoginCallback;
 import com.asu.pick_me_graduation_project.callback.SignUpCallback;
-import com.asu.pick_me_graduation_project.model.CarDetails;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.PreferencesUtils;
@@ -14,7 +12,6 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**

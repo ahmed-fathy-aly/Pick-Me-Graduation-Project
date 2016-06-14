@@ -49,7 +49,7 @@ public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
         TextView LastMSg = (TextView) view.findViewById(R.id.LastMsg);
         final ImageView imageViewPPChat = (ImageView) view.findViewById(R.id.imageViewPPChat);
         final ChatMessage message = getItem(position);
-        User user = message.getFrom();
+        User user = message.getTo();
 
         // TODO - add listener
         final View finalView = view;

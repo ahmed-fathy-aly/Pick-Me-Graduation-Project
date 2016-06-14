@@ -7,4 +7,7 @@ import  com.asu.pick_me_graduation_project.model.ChatMessage;
 public interface SendMessageCallback {
     void success (ChatMessage chatMessage);
     void fail (String message);
+
+
+
 }

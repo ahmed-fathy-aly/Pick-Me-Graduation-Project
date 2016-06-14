@@ -8,13 +8,11 @@ import com.asu.pick_me_graduation_project.callback.SendMessageCallback;
 import com.asu.pick_me_graduation_project.model.ChatMessage;
 import com.github.kittinunf.fuel.Fuel;
 import com.github.kittinunf.fuel.core.FuelError;
-import com.github.kittinunf.fuel.core.Handler;
 import com.github.kittinunf.fuel.core.Request;
 import com.github.kittinunf.fuel.core.Response;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,7 +43,7 @@ public class ChatAPIController
     public void getRecentChats(String token, String userId, final GetMessagesCallback callback)
     {
         // TODO - get them from back end instead of mock data later
-        String url="http://pickmeasu.azurewebsites.net/api/Message/get_recent_chats"+"?count=-1";
+        String url="http://pickmetest.azurewebsites.net/api/Message/get_recent_chats"+"?count=-1";
         Ion.with(context)
                 .load("GET",url)
                 .addHeader("Authorization", "Bearer " + token)
@@ -137,7 +135,7 @@ public class ChatAPIController
     public void getChatMessages(String tokken, String myUserId, String otherUserId, final GetMessagesCallback callback)
     {
         //from backend
-        String url="http://pickmeasu.azurewebsites.net/api/Message/get_a_conversation"+"?count=2"+"&userId=44";
+        String url="http://pickmetest.azurewebsites.net/api/Message/get_a_conversation"+"?count=2"+"&userId=44";
         Ion.with(context)
                 .load("GET",url).
                 addHeader("Authorization","Bearer "+tokken)
@@ -236,16 +234,16 @@ public class ChatAPIController
 
         callback.success(messages);*/
     }
-    public void sendMessage(String content,String userId,String token,final SendMessageCallback callback)
+    public void sendMessage(final String content,String userId,String token,final SendMessageCallback callback)
     {
-        String url="http://pickmeasu.azurewebsites.net/api/Message/send_message";
+        String url="http://pickmetest.azurewebsites.net/api/Message/send_message";
         JsonObject json = new JsonObject();
         json.addProperty("content", content);
         json.addProperty("userId", userId);
         String body = json.toString();
         Log.e("Game", "body = " + body);
         Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization","Bearer"+token);
+        headers.put("Authorization","Bearer "+token);
         headers.put("Content-Type", "application/json");
         Fuel.post(url).header(headers)
                 .body(body, Charset.defaultCharset())
@@ -265,7 +263,8 @@ public class ChatAPIController
                                 callback.fail(message);
                                 return;
                             }
-                            JSONObject contentJson = response.getJSONObject("content");
+                            JSONObject contentJson = response.getJSONObject("newMessage");
+
                             ChatMessage message = ChatMessage.fromJson(contentJson);
                             callback.success(message);
                         } catch (Exception e2)
