@@ -114,6 +114,7 @@
     <string name="driving">Rate the driving</string>
     <string name="passenger">Rate this passenger</string>
     <string name="writeComment">Write a comment</string>
+    <string name="feedback">Feedback</string>
 
 
 </resources>
