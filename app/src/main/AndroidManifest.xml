@@ -83,4 +83,5 @@
         </activity>
         <activity android:name=".activity.feedBack"></activity>
     </application>
+
 </manifest>
