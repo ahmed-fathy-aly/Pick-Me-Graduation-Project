@@ -98,7 +98,13 @@
         </activity>
         <activity android:name=".activity.SearchRideResults">
         </activity>
-        <activity android:name=".activity.feedBack"></activity>
+        <activity android:name=".activity.FeedBackActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
