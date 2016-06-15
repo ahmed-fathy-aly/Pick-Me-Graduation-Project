@@ -85,4 +85,7 @@ public class MembersListFragment extends Fragment implements UsersAdapter.Listen
         adapterUsers.clear();
         adapterUsers.addAll(users);
     }
+
+
+
 }

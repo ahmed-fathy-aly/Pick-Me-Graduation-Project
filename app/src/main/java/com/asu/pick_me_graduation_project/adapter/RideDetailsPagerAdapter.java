@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.asu.pick_me_graduation_project.fragment.CommunityInfoFragment;
 import com.asu.pick_me_graduation_project.fragment.CommunityJoinRequestsFragment;
 import com.asu.pick_me_graduation_project.fragment.CommunityPostsFragment;
+import com.asu.pick_me_graduation_project.fragment.JoinRideRequestsFragment;
 import com.asu.pick_me_graduation_project.fragment.MembersListFragment;
 import com.asu.pick_me_graduation_project.fragment.RideDetailsFragment;
 import com.asu.pick_me_graduation_project.utils.Constants;
@@ -66,4 +67,18 @@ public class RideDetailsPagerAdapter extends FragmentPagerAdapter
     }
 
     public RideDetailsFragment getRideDetailsFragment(){ return rideDetailsFragment;}
+
+    public void addRideJoinRequestsFragment(String rideId)
+    {
+        // make the fragment
+        JoinRideRequestsFragment joinRideRequestsFragment = new JoinRideRequestsFragment();
+        Bundle arguments = new Bundle();
+        arguments.putString(Constants.RIDE_ID, rideId);
+        joinRideRequestsFragment.setArguments(arguments);
+
+        // add it to the list
+        mFragmentTitleList = Arrays.asList("Details", "Members", "Requests");
+        mFragmentList = Arrays.asList(rideDetailsFragment, membersListFragment, joinRideRequestsFragment);
+        notifyDataSetChanged();
+    }
 }

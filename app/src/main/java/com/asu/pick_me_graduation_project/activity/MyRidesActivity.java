@@ -71,7 +71,7 @@ public class MyRidesActivity extends BaseActivity
     {
         progressBar.setVisibility(View.VISIBLE);
         controller.getMyRides(new AuthenticationAPIController(this).getTokken()
-                ,new AuthenticationAPIController(this).getCurrentUser().getUserId()
+                , new AuthenticationAPIController(this).getCurrentUser().getUserId()
                 , new GetRidesCallback()
         {
             @Override
@@ -81,7 +81,10 @@ public class MyRidesActivity extends BaseActivity
 
                 // TODO set the user to the rides
                 for (Ride ride : rides)
+                {
                     ride.setRider(new AuthenticationAPIController(getApplicationContext()).getCurrentUser());
+                    ride.setCanRequestToJoin(false);
+                }
                 rideListFragment.setData(rides);
             }
 

@@ -68,7 +68,6 @@ public class RecentChatsActivity extends BaseActivity implements RecentMessagesA
         ListViewChat.setAdapter(adapter);
 
 
-
         // load data
         loadMessages();
 

@@ -23,6 +23,32 @@
 
     </style>
 
+
+    <style name="facebookButtonTheme">
+
+        <item name="android:textColor">@color/white</item>
+        <item name="colorButtonNormal">@color/facebook</item>
+        <item name="android:minWidth">88dp</item>
+        <item name="android:height">48dp</item>
+        <item name="android:drawableLeft">@drawable/logo_facebook</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:paddingLeft">16dp</item>
+
+    </style>
+
+    <style name="googleButtonTheme">
+
+        <item name="android:textColor">@color/white</item>
+        <item name="colorButtonNormal">@color/googleplus</item>
+        <item name="android:minWidth">88dp</item>
+        <item name="android:height">48dp</item>
+        <item name="android:drawableLeft">@drawable/logo_google</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:paddingLeft">16dp</item>
+
+    </style>
+
+
     <style name="fab">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

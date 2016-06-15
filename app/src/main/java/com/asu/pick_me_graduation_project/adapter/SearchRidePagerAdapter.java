@@ -48,4 +48,9 @@ public class SearchRidePagerAdapter extends FragmentPagerAdapter
     {
         return (ChooseRouteFragment) chooseRouteFragment;
     }
+
+    public SearchRidePreferencesFragment getSearchRidePreferencesFragment()
+    {
+        return (SearchRidePreferencesFragment) editRidePreferencesFragment;
+    }
 }

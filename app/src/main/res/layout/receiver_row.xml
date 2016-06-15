@@ -1,55 +1,75 @@
-<android.support.v7.widget.CardView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/rounded_corner_forchat"
-    app:cardBackgroundColor="#FFE082"
-    app:cardElevation="4dp">
-<LinearLayout
-
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-
-    android:orientation="horizontal"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="100dp"
-
+    android:paddingLeft="10dp"
+    android:paddingRight="100dp"
+    android:paddingTop="2dp"
+    android:paddingBottom="6dp"
+    android:clipToPadding="false"
     >
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/receiverPP"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/ic_user_small"/>
-    <TextView
-        android:id="@+id/MessageFromReceiver"
-        android:layout_weight="1"
-        android:layout_width="0dp"
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:text="this is the msg "
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:background="@drawable/rounded_corner_forchat"
-        android:minHeight="6dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:minHeight="48dp"
+        app:cardCornerRadius="8dp"
+        app:cardBackgroundColor="#FFE082"
+        app:cardElevation="4dp">
 
-        />
-    <TextView
-        android:id="@+id/MessageDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:text="date"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/receiverPP"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_user_small"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <TextView
+                    android:id="@+id/MessageDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="date"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    />
 
 
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        />
+                <TextView
+                    android:id="@+id/MessageFromReceiver"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corner_forchat"
+                    android:gravity="left"
+                    android:minHeight="6dp"
+                    android:text="this is the msg "
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
 
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
-</LinearLayout>
-</android.support.v7.widget.CardView>
+</FrameLayout>

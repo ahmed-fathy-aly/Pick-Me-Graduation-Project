@@ -6,6 +6,7 @@
     android:layout_height="56dp"
     android:background="?attr/selectableItemBackground"
     android:transitionName="@string/transition_recentChat_list_to_chat"
+    android:paddingRight="8dp"
     android:orientation="horizontal"
     >
 
@@ -22,6 +23,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,7 +55,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="name"
+            android:text="loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+            ng teeeeeeeeeeeeeeeeeeeeext"
+            android:lines="1"
+            android:ellipsize="end"
             android:textColor="@color/black"
             android:textSize="16sp"
             />

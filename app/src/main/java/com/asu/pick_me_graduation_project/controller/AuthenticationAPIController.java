@@ -40,7 +40,8 @@ public class AuthenticationAPIController
     {
 
         // make a post request
-        String url = "http://pickmeasu.azurewebsites.net/api/login"
+        String url = Constants.HOST
+                + "/login"
                 + "?email=" + mail
                 + "&password=" + password;
         Ion.with(context)

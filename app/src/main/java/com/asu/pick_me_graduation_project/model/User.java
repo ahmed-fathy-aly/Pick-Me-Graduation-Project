@@ -6,10 +6,12 @@ import com.asu.pick_me_graduation_project.utils.Constants;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by ahmed on 2/7/2016.
  */
-public class User
+public class User implements Serializable
 {
     /* fields */
     String userId;
@@ -25,17 +27,12 @@ public class User
     CarDetails carDetails;
     private int rate;
 
+
+    boolean isAdmin;
+
     /* setters and getters */
 
-    public String getGender()
-    {
-        return gender;
-    }
 
-    public void setGender(String gender)
-    {
-        this.gender = gender;
-    }
 
     public double getLocationAltitude()
     {
@@ -147,6 +144,25 @@ public class User
         this.rate = rate;
     }
 
+    public boolean isAdmin()
+    {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin)
+    {
+        this.isAdmin = isAdmin;
+    }
+
+    public String getGender()
+    {
+        return gender;
+    }
+
+    public void setGender(String gender)
+    {
+        this.gender = gender;
+    }
     /* methods */
 
     /**
@@ -163,7 +179,10 @@ public class User
             user.setFirstName(json.getString("firstName"));
             user.setLastName(json.getString("lastName"));
             user.setProfilePictureUrl(json.getString("profilePicture"));
-            user.setGender(json.getBoolean("gender") ? Constants.GENDER_MALE : Constants.GENDER_FEMALE_);
+            if (!json.isNull("gender"))
+                user.setGender(json.getBoolean("gender") ? Constants.GENDER_MALE : Constants.GENDER_FEMALE_);
+            if (!json.isNull("isAdmin"))
+                user.setIsAdmin(json.getBoolean("isAdmin"));
             user.setBio(json.getString("bio"));
             user.setPhoneNumber(json.getString("phoneNumber"));
             CarDetails carDetails = CarDetails.fromJson(json);
@@ -171,7 +190,6 @@ public class User
 
         } catch (Exception e)
         {
-            Log.e("Game", "error parsing user" + e.getMessage());
         }
         return user;
     }

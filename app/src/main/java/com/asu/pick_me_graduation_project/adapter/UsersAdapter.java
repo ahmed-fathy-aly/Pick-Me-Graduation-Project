@@ -72,6 +72,7 @@ public class UsersAdapter extends ArrayAdapter<User>
             }
         });
 
+
         return view;
     }
 
@@ -80,6 +81,7 @@ public class UsersAdapter extends ArrayAdapter<User>
     public interface Listener
     {
         public void onClick(User user, int position, View v);
-
     }
+
+
 }
