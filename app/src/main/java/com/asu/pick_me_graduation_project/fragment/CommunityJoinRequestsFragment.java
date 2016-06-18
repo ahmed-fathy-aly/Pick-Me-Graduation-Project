@@ -156,6 +156,28 @@ public class CommunityJoinRequestsFragment extends Fragment implements Community
 
         controller.answerCommunityRequests(
                 new AuthenticationAPIController(getContext()).getTokken()
+                ,"true"
+                , user.getUserId()
+                , communityId, new GenericSuccessCallback() {
+
+                    @Override
+                    public void success() {
+
+                    }
+
+                    @Override
+                    public void fail(String message) {
+                        Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    @Override
+    public void onDecline(User user, int adapterPosition ) {
+
+        controller.answerCommunityRequests(
+                new AuthenticationAPIController(getContext()).getTokken()
+                , "false"
                 , user.getUserId()
                 , communityId, new GenericSuccessCallback() {
 

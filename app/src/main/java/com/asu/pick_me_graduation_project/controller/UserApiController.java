@@ -8,6 +8,10 @@ import com.asu.pick_me_graduation_project.callback.GetProfileCallback;
 import com.asu.pick_me_graduation_project.callback.GetUsersCallback;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.github.kittinunf.fuel.Fuel;
+import com.github.kittinunf.fuel.core.FuelError;
+import com.github.kittinunf.fuel.core.Request;
+import com.github.kittinunf.fuel.core.Response;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -16,8 +20,11 @@ import com.koushikdutta.ion.future.ResponseFuture;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ahmed on 2/7/2016.
@@ -100,30 +107,58 @@ public class UserApiController
         String url = Constants.HOST + "EditProfile";
         JsonObject json = new JsonObject();
         json.addProperty("bio", user.getBio());
+        json.addProperty("firstName", user.getFirstName());
+        json.addProperty("lastName", user.getLastName());
+        json.addProperty("dob", user.getdob());
+        json.addProperty("residence", user.getResidence());
+        //json.addProperty("carAc", user.getCarDetails().isConditioned());
+        json.addProperty("carModel", user.getCarDetails().getModel());
+        json.addProperty("caryear", user.getCarDetails().getYear());
+        json.addProperty("carPlateNumber", user.getCarDetails().getPlateNumber());
+        json.addProperty("profilePicture", user.getProfilePictureUrl());
 
-        Ion.with(context)
-                .load("PUT", url)
-                        .addHeader("Content-Type", "application/json")
-                        .addHeader("Authorization", "Bearer " + token)
-                        .setJsonObjectBody(json)
-                        .asString()
-                        .setCallback(new FutureCallback<String>()
-                        {
-                            @Override
-                            public void onCompleted(Exception e, String result)
-                            {
-                                // check failed
-                                if (e != null)
-                                {
-                                    Log.e("Game", "error " + e.getMessage());
-                                    callback.fail(e.getMessage());
-                                    return;
-                                }
 
-                                callback.success(user);
-                                Log.e("Game", "result = " + result);
+
+        String body = json.toString();
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + token);
+        headers.put("Content-Type", "application/json");
+
+        Fuel.put(url)
+                .header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new com.github.kittinunf.fuel.core.Handler<String>() {
+                    @Override
+                    public void success(Request request, Response r, String s) {
+                        try {
+                            // check status
+                            JSONObject response = new JSONObject(s);
+                            int status = response.getInt("status");
+                            if (status == 0) {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
                             }
-                        });
+
+                            // parse community
+                            JSONObject userJson = response.getJSONObject("user");
+                            User user = User.fromJson(userJson);
+
+                            // invoke callback
+                            callback.success(user);
+                        } catch (Exception e2) {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+
+                    @Override
+                    public void failure(Request request, Response resp, FuelError fuelError) {
+                        callback.fail(fuelError.getMessage());
+                    }
+                });
+
     }
 
     /**

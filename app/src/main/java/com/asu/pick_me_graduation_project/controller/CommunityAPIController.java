@@ -52,7 +52,7 @@ public class CommunityAPIController {
      */
     public void createCommunity(String token, final String name, final String description, final CreateCommunityCallback callback) {
 
-        String url = Constants.HOST + "/create_community";
+        String url = Constants.HOST + "create_community";
 
         JsonObject json = new JsonObject();
         json.addProperty("communityName", name);
@@ -223,7 +223,7 @@ public class CommunityAPIController {
      * gets the members who are in this community
      */
     public void getCommunityMembers(String tokken, String userId, String communityId, final GetUsersCallback callback) {
-        String url = Constants.HOST + "/get_community_members?communityID=" + communityId;
+        String url = Constants.HOST + "get_community_members?communityID=" + communityId;
         Ion.with(context)
                 .load("GET", url)
                 .setHeader("Content-Type", "application/json")
@@ -475,7 +475,7 @@ public class CommunityAPIController {
     }
 
     public void getCommunityRequests(String tokken, String userId, String communityId, final GetUsersCallback callback) {
-        String url =  Constants.HOST + "/api/get_join_requests?communityId=" + communityId;
+        String url =  Constants.HOST + "get_join_requests?communityId=" + communityId;
         Ion.with(context)
                 .load("GET", url)
                 .setHeader("Content-Type", "application/json")
@@ -532,14 +532,14 @@ public class CommunityAPIController {
     }
 
 
-    public void answerCommunityRequests(String token, final String userId, final String communityId, final GenericSuccessCallback callback) {
+    public void answerCommunityRequests(String token,String approval, final String userId, final String communityId, final GenericSuccessCallback callback) {
 
-        String url = Constants.HOST + "/answer_join_request";
+        String url = Constants.HOST + "answer_join_request";
 
         JsonObject json = new JsonObject();
         json.addProperty("userId", userId);
         json.addProperty("communityId", communityId);
-        json.addProperty("approval", "true");
+        json.addProperty("approval", approval);
         String body = json.toString();
         Log.e("Game", "body = " + body);
         Map<String, String> headers = new HashMap<>();
@@ -595,7 +595,7 @@ public class CommunityAPIController {
      */
     public void makeUserAdmin(String token, String communityId, String userId, final GenericSuccessCallback callback)
     {
-        String url = Constants.HOST + "/make_user_admin";
+        String url = Constants.HOST + "make_user_admin";
 
         JsonObject json = new JsonObject();
         json.addProperty("communityId", communityId);
