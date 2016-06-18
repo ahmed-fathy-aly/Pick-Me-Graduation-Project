@@ -34,6 +34,18 @@ public class ChatMessagesAdapter extends ArrayAdapter<ChatMessage>
         this.CurrentUserId = CurrentUserId;
     }
 
+
+    /**
+     * checks if there's a message with that id
+     */
+    public boolean contains(String chatMessageId)
+    {
+        for (int i = 0; i < getCount(); i++)
+            if (getItem(i).getId().equals(chatMessageId))
+                return  true;
+        return false;
+    }
+
     @Override
     public View getView(int position, View view, ViewGroup parent)
     {
@@ -89,4 +101,5 @@ public class ChatMessagesAdapter extends ArrayAdapter<ChatMessage>
 
         return view;
     }
+
 }
