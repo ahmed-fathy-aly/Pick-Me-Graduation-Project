@@ -79,6 +79,25 @@ public class PreferencesUtils
     {
         SharedPreferences pref = context.getSharedPreferences(KEY_PREFERENCES_NAME, context.MODE_PRIVATE);
         return pref.getString("auth_token", "");
-
     }
+
+    public static void setGcmToken(Context context, String token)
+    {
+        SharedPreferences pref = context.getSharedPreferences(KEY_PREFERENCES_NAME, context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        editor.putString("gcm_token", token);
+
+        editor.commit();
+    }
+
+
+    public static String getGcmToken(Context context)
+    {
+        SharedPreferences pref = context.getSharedPreferences(KEY_PREFERENCES_NAME, context.MODE_PRIVATE);
+        return pref.getString("gcm_token", "");
+    }
+
+
+
 }
