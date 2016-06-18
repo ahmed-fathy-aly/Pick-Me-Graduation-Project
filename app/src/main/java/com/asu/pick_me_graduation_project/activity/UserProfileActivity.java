@@ -189,7 +189,7 @@ public class UserProfileActivity extends BaseActivity
                 textViewEmail.setText(ValidationUtils.correct(user.getEmail()));
                 textViewPhoneNumber.setText(ValidationUtils.correct(user.getPhoneNumber()));
                 textViewBio.setText(ValidationUtils.correct(user.getBio()));
-                textViewAge.setText("30");
+                textViewAge.setText(user.getdob());
                 ratingBar.setRating(5.0f);
                 if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
                     Picasso.with(getApplicationContext()).

@@ -94,13 +94,18 @@ public class CommunityRequestsAdapter extends RecyclerView.Adapter< CommunityReq
                         if (listener != null)
                             listener.onAccept(data.get(getAdapterPosition()), getAdapterPosition());
                         itemView.setVisibility(View.GONE);
+                        //data.remove(data.get(getAdapterPosition()));
                     }
                 });
 
                 declineButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View holder) {
+                        if (listener != null)
+                            listener.onDecline(data.get(getAdapterPosition()), getAdapterPosition());
                         itemView.setVisibility(View.GONE);
+                        //data.remove(data.get(getAdapterPosition()));
+
                     }
                 });
 
@@ -119,6 +124,7 @@ public class CommunityRequestsAdapter extends RecyclerView.Adapter< CommunityReq
             void onClick(User user, int position, View v);
 
             void onAccept(User user, int adapterPosition);
+            void onDecline(User user, int adapterPosition);
 
         }
     }
