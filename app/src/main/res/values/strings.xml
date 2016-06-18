@@ -115,6 +115,7 @@
     <string name="passenger">Rate this passenger</string>
     <string name="writeComment">Write a comment</string>
     <string name="feedback">Feedback</string>
+    <string name="gcm_defaultSenderId">244963852946</string>
 
 
 </resources>

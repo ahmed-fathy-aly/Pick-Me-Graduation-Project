@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.asu.pick_me_graduation_project.R;
+import com.asu.pick_me_graduation_project.services.RegisterGcmIntentService;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.iid.InstanceID;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -49,13 +52,15 @@ public class MainActivity extends BaseActivity
 
         // load ads
         loadAd();
+
+        // register for gcm
+        startService(new Intent(this, RegisterGcmIntentService.class));
     }
 
     private void loadAd()
     {
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
-
     }
 
     @OnClick(R.id.buttonPostRide)
