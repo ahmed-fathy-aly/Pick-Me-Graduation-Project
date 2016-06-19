@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/feedbackContent">
 
     <include layout="@layout/layout_toolbar" />
 
@@ -12,30 +13,12 @@
         android:scrollbars="none">
 
         <LinearLayout
+            android:id="@+id/feedbackLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="16dp">
 
-                <TextView
-                    android:id="@+id/textViewDriving"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/driving"
-                    android:textColor="@color/black" />
-
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    style="?android:attr/ratingBarStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
 
             <android.support.v7.widget.CardView
 
@@ -44,9 +27,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                app:cardElevation="4dp">
+                app:cardElevation="4dp"
+                android:id="@+id/driverCard">
 
                 <LinearLayout
+                    android:id="@+id/driverContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -60,6 +45,26 @@
                         android:text="@string/rateTheCar"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/primary" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="4dp">
+
+                        <TextView
+                            android:id="@+id/textViewDriving"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/driving"
+                            android:textColor="@color/black" />
+
+                        <RatingBar
+                            android:id="@+id/ratingBar"
+                            style="?android:attr/ratingBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/carQuestion"
@@ -74,6 +79,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="bottom">
+                        <android.support.v7.widget.AppCompatRadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/yesButton"
+                            android:text="Yes"/>
+                        <android.support.v7.widget.AppCompatRadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/noButton"
+                            android:text="No"/>
 
                     </RadioGroup>
 
@@ -97,15 +112,24 @@
                         android:textColor="@color/black"
                         android:visibility="invisible" />
 
-                    <RadioGroup
-                        android:id="@+id/selectDiffernces"
-                        android:layout_width="match_parent"
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/checkboxCarModel"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:gravity="bottom"
-                        android:visibility="invisible">
-
-                    </RadioGroup>
+                        android:text="Car model"
+                        android:visibility="invisible"/>
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/checkboxCarPlateNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Car plate number"
+                        android:visibility="invisible"/>
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/checkboxCarAc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AC"
+                        android:visibility="invisible"/>
 
 
                 </LinearLayout>
@@ -113,4 +137,5 @@
 
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>
