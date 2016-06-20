@@ -187,6 +187,7 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
         user.setFirstName(Name.getText().toString());
         user.setLastName(Lastname.getText().toString());
         user.setEmail(Email.getText().toString());
+        user.setdob(Age.getText().toString());
         user.setPhoneNumber(Phonenumber.getText().toString());
         user.setBio(Bio.getText().toString());
         CarDetails carDetails = carDetailsView.getCarDetails();

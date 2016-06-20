@@ -18,6 +18,8 @@ public class User implements Serializable
     String firstName;
     String email;
     String lastName;
+    String dob;
+    String residence;
     String profilePictureUrl;
     double locationLatitude;
     double locationAltitude;
@@ -72,6 +74,26 @@ public class User implements Serializable
     public void setLastName(String lastName)
     {
         this.lastName = lastName;
+    }
+
+    public String getdob()
+    {
+        return dob;
+    }
+
+    public void setdob(String dob)
+    {
+        this.dob = dob;
+    }
+
+    public String getResidence()
+    {
+        return residence;
+    }
+
+    public void setResidence(String residence)
+    {
+        this.residence = residence;
     }
 
     public String getEmail()
@@ -178,6 +200,8 @@ public class User implements Serializable
             user.setEmail(json.getString("email"));
             user.setFirstName(json.getString("firstName"));
             user.setLastName(json.getString("lastName"));
+            user.setdob(json.getString("dob"));
+            user.setResidence(json.getString("residence"));
             user.setProfilePictureUrl(json.getString("profilePicture"));
             if (!json.isNull("gender"))
                 user.setGender(json.getBoolean("gender") ? Constants.GENDER_MALE : Constants.GENDER_FEMALE_);

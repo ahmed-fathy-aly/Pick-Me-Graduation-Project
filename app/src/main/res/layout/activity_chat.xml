@@ -87,7 +87,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:divider="#ffffff"/>
+            android:stackFromBottom="true"
+            android:transcriptMode="alwaysScroll"
+            android:divider="#00ffffff"
+            />
 
 
         <LinearLayout

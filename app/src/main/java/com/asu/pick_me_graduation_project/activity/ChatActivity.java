@@ -1,10 +1,13 @@
 package com.asu.pick_me_graduation_project.activity;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,14 +24,20 @@ import com.asu.pick_me_graduation_project.callback.SendMessageCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.ChatAPIController;
 import com.asu.pick_me_graduation_project.controller.UserApiController;
+import com.asu.pick_me_graduation_project.events.NewMessageEvent;
 import com.asu.pick_me_graduation_project.model.ChatMessage;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.GenericMapsView;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.playlog.internal.LogEvent;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -65,9 +74,9 @@ public class ChatActivity extends BaseActivity
 
         // reference views
         ButterKnife.bind(this);
-        name= (TextView) findViewById(R.id.receiverName);
-        image= (ImageView) findViewById(R.id.receiverPP);
-        User u=new User();
+        name = (TextView) findViewById(R.id.receiverName);
+        image = (ImageView) findViewById(R.id.receiverPP);
+        User u = new User();
         // u.setFirstName();
         // setup common views
         setSupportActionBar(toolbar);
@@ -84,22 +93,46 @@ public class ChatActivity extends BaseActivity
 
 
         // TODO - setup list view and its adapter
-        adapter=new ChatMessagesAdapter(this,new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId());
+        adapter = new ChatMessagesAdapter(this, new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId());
         ListViewChat.setAdapter(adapter);
 
 
         // load data
         loadMessages();
 
+        // register for new message event
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        ((MyApplication )getApplication()).currentChat = userId;
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        ((MyApplication )getApplication()).currentChat = userId;
     }
 
     private void loadMessages()
-
     {
         UserApiController controller2 = new UserApiController(getApplicationContext());
-        controller2.getProfile(userId, new GetProfileCallback() {
+        controller2.getProfile(userId, new GetProfileCallback()
+        {
             @Override
-            public void success(User user) {
+            public void success(User user)
+            {
                 name.setText(ValidationUtils.correct(user.getFirstName()) + " " + ValidationUtils.correct(user.getLastName()));
                 if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
                     Picasso.with(getApplicationContext()).
@@ -122,7 +155,8 @@ public class ChatActivity extends BaseActivity
             }
 
             @Override
-            public void fail(String message) {
+            public void fail(String message)
+            {
 
             }
         });
@@ -133,16 +167,29 @@ public class ChatActivity extends BaseActivity
                 new AuthenticationAPIController(this).getTokken()
                 , new AuthenticationAPIController(this).getCurrentUser().getUserId()
                 , userId
-                , new GetMessagesCallback() {
+                , new GetMessagesCallback()
+                {
 
                     @Override
-                    public void success(List<ChatMessage> messages) {
+                    public void success(List<ChatMessage> messages)
+                    {
                         progressBar.setVisibility(View.INVISIBLE);
                         adapter.addAll(messages);
+
+                        // scroll to the bottom
+                        ListViewChat.postDelayed(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                ListViewChat.smoothScrollToPosition(adapter.getCount() - 1);
+                            }
+                        }, 100);
                     }
 
                     @Override
-                    public void fail(String error) {
+                    public void fail(String error)
+                    {
                         progressBar.setVisibility(View.INVISIBLE);
 
                     }
@@ -154,23 +201,23 @@ public class ChatActivity extends BaseActivity
     @OnClick(R.id.fabSend)
     public void onClick()
     {
-        final String contentt= MessageEditor.getText().toString();
-        controller.sendMessage(contentt, userId, new AuthenticationAPIController(this).getTokken(), new SendMessageCallback() {
+        final String contentt = MessageEditor.getText().toString();
+        controller.sendMessage(contentt, userId, new AuthenticationAPIController(this).getTokken(), new SendMessageCallback()
+        {
             @Override
-            public void success(ChatMessage chatMessage2) {
+            public void success(ChatMessage chatMessage2)
+            {
 
                 progressBar.setVisibility(View.INVISIBLE);
-                adapter.add(chatMessage2);
                 MessageEditor.setText("");
 
-
-
-
+                addMessage(chatMessage2);
 
             }
 
             @Override
-            public void fail(String message) {
+            public void fail(String message)
+            {
                 progressBar.setVisibility(View.INVISIBLE);
 
                 Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
@@ -181,32 +228,36 @@ public class ChatActivity extends BaseActivity
     }
 
     @OnClick(R.id.fabLocationSend)
-    public void onclick() {
+    public void onclick()
+    {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Pick your Location");
         final GenericMapsView yourMap = new GenericMapsView(this);
         builder.setView(yourMap);
 
-        builder.setPositiveButton(getString(R.string.send), new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.send), new DialogInterface.OnClickListener()
+        {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialog, int which)
+            {
                 final LatLng yourLocation = yourMap.getCurrentLatlng();
                 String locationStr = yourLocation.latitude + "," + yourLocation.longitude;
                 controller.sendMessage(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getFirstName() + " " + " sent  a location" + locationStr,
-                        userId, new AuthenticationAPIController(ChatActivity.this).getTokken(), new SendMessageCallback() {
+                        userId, new AuthenticationAPIController(ChatActivity.this).getTokken(), new SendMessageCallback()
+                        {
                             @Override
-                            public void success(ChatMessage chatMessage3) {
+                            public void success(ChatMessage chatMessage3)
+                            {
 
                                 progressBar.setVisibility(View.INVISIBLE);
-
-
-                                adapter.add(chatMessage3);
+                                addMessage(chatMessage3);
 
 
                             }
 
                             @Override
-                            public void fail(String message) {
+                            public void fail(String message)
+                            {
                                 progressBar.setVisibility(View.INVISIBLE);
 
                                 Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
@@ -215,15 +266,38 @@ public class ChatActivity extends BaseActivity
                         });
             }
         });
-        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener()
+        {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialog, int which)
+            {
                 dialog.cancel();
             }
         });
 
         builder.show();
 
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(NewMessageEvent newMessageEvent)
+    {
+        // check it's for this user
+        if (!newMessageEvent.getUserId().equals(userId))
+            return;
+
+        // add the message to the adapter if it's not there
+        ChatMessage newMessage = newMessageEvent.getChatMessage();
+        addMessage(newMessage);
+
+
+    }
+
+    private void addMessage(ChatMessage newMessage)
+    {
+        if (!adapter.contains(newMessage.getId()))
+            adapter.add(newMessage);
 
     }
 
