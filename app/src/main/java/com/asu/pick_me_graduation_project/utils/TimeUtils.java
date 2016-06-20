@@ -45,7 +45,7 @@ public class TimeUtils {
 
     public static String convertToBackendTime(Calendar time)
     {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
         return formatter.format(time.getTime()).replace("am", "AM").replace("pm", "PM");
     }
 }
