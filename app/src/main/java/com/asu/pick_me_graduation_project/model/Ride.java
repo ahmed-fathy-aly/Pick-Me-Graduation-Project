@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -118,6 +119,7 @@ public class Ride implements Serializable
         this.canRequestToJoin = canRequestToJoin;
     }
 
+    /* methods */
     public static Ride fromJson(JSONObject jsonObject)
     {
         Ride ride = new Ride();
@@ -170,5 +172,24 @@ public class Ride implements Serializable
         }
         return ride;
     }
+
+    /**
+     * gathers all the users that have locations in the ride
+     */
+    public List<User> getMembers()
+    {
+        HashSet<String> ids = new HashSet<>();
+        List<User> memberList = new ArrayList<>();
+
+        for (Location location : locations)
+            if (!ids.contains(location.getUser().getUserId()))
+            {
+                ids.add(location.getUser().getUserId());
+                memberList.add(location.getUser());
+            }
+
+        return memberList;
+    }
+
 }
 

@@ -54,7 +54,8 @@ public class RideDetailsActivity extends AppCompatActivity
         setContentView(R.layout.activity_ride_details);
 
         // TODO get ride id
-        rideId = getIntent().getExtras().getString(Constants.RIDE_ID);
+        //rideId = getIntent().getExtras().getString(Constants.RIDE_ID);
+        rideId = "11";
 
         // reference views
         ButterKnife.bind(this);
@@ -97,6 +98,8 @@ public class RideDetailsActivity extends AppCompatActivity
                 if (currentUserId.equals(ride.getRider().getUserId()))
                     rideDetailsPagerAdapter.addRideJoinRequestsFragment(rideId);
 
+                // add the members to the fragment
+                rideDetailsPagerAdapter.getMembersListFragment().setMembers(ride.getMembers());
             }
 
             @Override
