@@ -21,6 +21,9 @@ import com.github.kittinunf.fuel.Fuel;
 import com.github.kittinunf.fuel.core.FuelError;
 import com.github.kittinunf.fuel.core.Request;
 import com.github.kittinunf.fuel.core.Response;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -29,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.Charset;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -322,16 +326,73 @@ public class RidesAPIController
                 });
     }
 
-    public void requestToJoinRide(String tokken, SearchRideParams searchRideParams, String id, final GenericSuccessCallback callback)
+    public void requestToJoinRide(String token, SearchRideParams searchRideParams, String rideId, String message, final GenericSuccessCallback callback)
     {
-        new Handler().postDelayed(new Runnable()
+        // form the request
+        String url = Constants.HOST + "ride/request_to_join_ride";
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + token);
+        headers.put("Content-Type", "application/json");
+
+        JSONObject jsonObject = new JSONObject();
+        try
         {
-            @Override
-            public void run()
-            {
-                callback.success();
-            }
-        }, 2000);
+            jsonObject.put("rideId", rideId);
+            jsonObject.put("date", TimeUtils.convertToBackendTime(searchRideParams.getTime()));
+            jsonObject.put("message", message);
+            jsonObject.put("latitudeSrc", searchRideParams.getSource().getLatitude());
+            jsonObject.put("longitudeSrc", searchRideParams.getSource().getLongitude());
+            jsonObject.put("latitudeDest", searchRideParams.getDestination().getLatitude());
+            jsonObject.put("longitudeDest", searchRideParams.getDestination().getLongitude());
+            JSONArray communitiesIds = new JSONArray();
+            if (searchRideParams.getFilteredCommunities() != null)
+                for (Community community : searchRideParams.getFilteredCommunities())
+                    communitiesIds.put(Integer.parseInt(community.getId()));
+            jsonObject.put("communities", communitiesIds);
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        String body = jsonObject.toString();
+        Log.e("Game", "request to join ride body = " + body);
+
+        // make the post
+        Fuel.post(url)
+                .header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new com.github.kittinunf.fuel.core.Handler<String>()
+                {
+                    @Override
+                    public void success(Request request, Response r, String s)
+                    {
+                        Log.e("Game", "request to join ride result = " + s);
+                        try {
+                            // check status
+                            JSONObject response = new JSONObject(s);
+                            int status = response.getInt("status");
+                            if (status == 0) {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
+
+                            // success
+                            callback.success();
+                        } catch (Exception e2) {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+
+                    @Override
+                    public void failure(Request request, Response resp, FuelError fuelError)
+                    {
+                        callback.fail(fuelError.getMessage());
+                    }
+                });
+
+
 
     }
 
