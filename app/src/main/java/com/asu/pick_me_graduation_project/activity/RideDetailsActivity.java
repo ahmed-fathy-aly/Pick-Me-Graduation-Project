@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -95,6 +96,9 @@ public class RideDetailsActivity extends AppCompatActivity
                 String currentUserId = new AuthenticationAPIController(RideDetailsActivity.this).getCurrentUser().getUserId();
                 if (currentUserId.equals(ride.getRider().getUserId()))
                     rideDetailsPagerAdapter.addRideJoinRequestsFragment(rideId);
+
+                // add the members to the fragment
+                rideDetailsPagerAdapter.getMembersListFragment().setMembers(ride.getMembers());
             }
 
             @Override

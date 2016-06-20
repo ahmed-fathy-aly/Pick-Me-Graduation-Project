@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.adapter.PostRidePagerAdapter;
@@ -21,6 +22,8 @@ import com.asu.pick_me_graduation_project.model.Location;
 import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.model.SearchRideParams;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
 
 import java.io.Serializable;
@@ -58,7 +61,7 @@ public class SearchRideActivity extends AppCompatActivity
         // setup common views
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getString(R.string.post_ride));
+        getSupportActionBar().setTitle(getString(R.string.search_ride));
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         // setup view pager
@@ -85,6 +88,19 @@ public class SearchRideActivity extends AppCompatActivity
 
             }
         });
+
+        // TODO test
+        Ion.with(this)
+                .load("GET", "http://pick-me.azurewebsites.net/api/test_by_get?value=blabla")
+                .asString()
+                .setCallback(new FutureCallback<String>()
+                {
+                    @Override
+                    public void onCompleted(Exception e, String result)
+                    {
+                        Log.e("Game", "result test = " + result);
+                    }
+                });
     }
 
     @OnClick(R.id.buttonNextOrSubmit)
@@ -110,12 +126,20 @@ public class SearchRideActivity extends AppCompatActivity
             final ProgressDialog progressDialog = ProgressDialog.show(this, "", getString(R.string.searching));
             RidesAPIController controller = new RidesAPIController(this);
             controller.searchRides(new AuthenticationAPIController(this).getTokken()
+                    , searchRideParams
                     , new GetRidesCallback()
             {
                 @Override
                 public void success(List<Ride> rides)
                 {
                     progressDialog.dismiss();
+
+                    // check if no rides found
+                    if (rides.size() == 0)
+                    {
+                        Toast.makeText(getApplicationContext(), getString(R.string.no_rides_found), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
                     searchRideParams.setResult(rides);
 
@@ -129,6 +153,7 @@ public class SearchRideActivity extends AppCompatActivity
                 @Override
                 public void fail(String error)
                 {
+                    Log.e("Game", "error " + error);
                     progressDialog.dismiss();
                     Snackbar.make(content, error, Snackbar.LENGTH_SHORT).show();
                 }

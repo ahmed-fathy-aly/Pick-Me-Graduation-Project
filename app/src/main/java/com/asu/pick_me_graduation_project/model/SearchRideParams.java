@@ -1,6 +1,7 @@
 package com.asu.pick_me_graduation_project.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class SearchRideParams implements Serializable
     /* constructor */
     public SearchRideParams()
     {
+
     }
 
     /* getters and setters */
@@ -72,4 +74,5 @@ public class SearchRideParams implements Serializable
     {
         this.result = result;
     }
+
 }

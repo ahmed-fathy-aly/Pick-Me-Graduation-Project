@@ -129,12 +129,16 @@
         <activity
             android:name=".activity.PostRideActivity"
             android:label="@string/post_ride">
+
+
         </activity>
         <activity android:name=".activity.MyRidesActivity">
         </activity>
         <activity android:name=".activity.SearchRideActivity">
+
         </activity>
         <activity android:name=".activity.RideDetailsActivity">
+
         </activity>
         <activity android:name=".activity.SearchRideResults">
         </activity>

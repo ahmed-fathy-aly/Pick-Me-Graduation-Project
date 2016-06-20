@@ -197,12 +197,12 @@ public class User implements Serializable
         try
         {
             user.setUserId(json.getString("id"));
-            user.setEmail(json.getString("email"));
             user.setFirstName(json.getString("firstName"));
             user.setLastName(json.getString("lastName"));
+            user.setProfilePictureUrl(json.getString("profilePicture"));
+            user.setEmail(json.getString("email"));
             user.setdob(json.getString("dob"));
             user.setResidence(json.getString("residence"));
-            user.setProfilePictureUrl(json.getString("profilePicture"));
             if (!json.isNull("gender"))
                 user.setGender(json.getBoolean("gender") ? Constants.GENDER_MALE : Constants.GENDER_FEMALE_);
             if (!json.isNull("isAdmin"))
