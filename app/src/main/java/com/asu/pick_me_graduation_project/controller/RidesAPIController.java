@@ -20,7 +20,6 @@ import com.github.kittinunf.fuel.Fuel;
 import com.github.kittinunf.fuel.core.FuelError;
 import com.github.kittinunf.fuel.core.Request;
 import com.github.kittinunf.fuel.core.Response;
-import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -32,7 +31,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -148,7 +146,7 @@ public class RidesAPIController
 
                     Ride ride = new Ride();
                     ride.setId(i + "");
-                    ride.setRider(user);
+                    ride.setDriver(user);
                     ride.setDescription("This is ride " + i);
                     ride.setTime(Calendar.getInstance());
                     ride.setLocations(Arrays.asList(l1, l2));
@@ -297,6 +295,7 @@ public class RidesAPIController
                             callback.success(ride);
                         } catch (Exception e2)
                         {
+                            Log.e("Game", "error in ride details " + e2.getMessage());
                             callback.fail(e2.getMessage());
                             return;
                         }

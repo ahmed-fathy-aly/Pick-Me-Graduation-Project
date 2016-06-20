@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -63,7 +62,7 @@ public class Ride implements Serializable
         return rider;
     }
 
-    public void setRider(User rider)
+    public void setDriver(User rider)
     {
         this.rider = rider;
     }
@@ -131,6 +130,8 @@ public class Ride implements Serializable
             ride.setNotes(jsonObject.getString("notes"));
             ride.setTime(TimeUtils.parseCalendar(jsonObject.getString("time")));
 
+            // poster
+            ride.setDriver(User.fromJson(jsonObject.getJSONObject("postUser")));
             // locations
             JSONArray locationsJson = jsonObject.getJSONArray("locations");
             List<Location> locations = new ArrayList<>();
