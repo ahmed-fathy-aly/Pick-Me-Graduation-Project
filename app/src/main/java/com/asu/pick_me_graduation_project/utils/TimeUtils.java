@@ -43,6 +43,9 @@ public class TimeUtils {
         return DateUtils.getRelativeTimeSpanString(context, date.getTimeInMillis()).toString();
     }
 
+    /**
+     * converts to something like 6/20/2016 05:00:00 AM
+     */
     public static String convertToBackendTime(Calendar time)
     {
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
