@@ -97,12 +97,23 @@ public class JoinRideRequestAdapter extends RecyclerView.Adapter<JoinRideRequest
 
         // locations;
         holder.mapsView.reset();
-        for (Location location : joinRideRequest.getLocationList())
+        for (int i = 0; i < joinRideRequest.getLocationList().size(); i++)
         {
+            Location location = joinRideRequest.getLocationList().get(i);
+            String userName = ValidationUtils.correct(location.getUser().getFirstName())
+                    + " " + ValidationUtils.correct(location.getUser().getLastName());
+            float color = BitmapDescriptorFactory.HUE_ORANGE;
+            if (location.getId().equals("-1"))
+                color = BitmapDescriptorFactory.HUE_CYAN;
+            else if (i == 0)
+                color = BitmapDescriptorFactory.HUE_GREEN;
+            else if (i == joinRideRequest.getLocationList().size() - 1)
+                color = BitmapDescriptorFactory.HUE_RED;
+
             holder.mapsView.addMarker(
                     location.getId()
-                    , ""
-                    , BitmapDescriptorFactory.HUE_ORANGE
+                    , userName
+                    , color
                     , new LatLng(location.getLatitude(), location.getLongitude()));
         }
         holder.mapsView.fitMarkers();
@@ -165,7 +176,6 @@ public class JoinRideRequestAdapter extends RecyclerView.Adapter<JoinRideRequest
         }
 
     }
-
 
 
     public interface Listener

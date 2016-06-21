@@ -127,6 +127,7 @@ public class RidesAPIController
                 "&longitudeSrc=" + searchRideParams.getSource().getLongitude() +
                 "&latitudeDest=" + searchRideParams.getDestination().getLatitude() +
                 "&longitudeDest=" + searchRideParams.getDestination().getLongitude();
+        Log.e("Game", "search url = " + url);
         if (searchRideParams.getFilteredCommunities() != null)
             for (Community community : searchRideParams.getFilteredCommunities())
                 url += "&communities=" + community.getId();
@@ -396,48 +397,52 @@ public class RidesAPIController
 
     }
 
-    public void getRideJoinRequest(String tokken, String rideId, final GetRideJoinRequestsCallback callback)
+    public void getRideJoinRequest(String token, String rideId, final GetRideJoinRequestsCallback callback)
     {
-        new Handler().postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                // TODO now it's dummy data
-                List<JoinRideRequest> requests = new ArrayList<>();
-                for (int i = 0; i < 10; i++)
+        String url = Constants.HOST + "ride/get_ride_join_requests?rideId=" + rideId;
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + token);
+
+        Fuel.get(url)
+                .header(headers)
+                .responseString(new com.github.kittinunf.fuel.core.Handler<String>()
                 {
-                    User user = new User();
-                    user.setUserId(i + "");
-                    user.setFirstName("first");
-                    user.setLastName("last");
-                    user.setProfilePictureUrl("https://upload.wikimedia.org/wikipedia/en/7/70/Shawn_Tok_Profile.jpg");
+                    @Override
+                    public void success(Request request, Response responseFuel, String result)
+                    {
+                        try
+                        {
+                            // check status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
 
-                    Location l1 = new Location();
-                    l1.setId("1");
-                    l1.setLatitude(30.02);
-                    l1.setLongitude(31.02);
-                    l1.setType(Location.LocationType.SOURCE);
-                    l1.setUser(user);
+                            // parse requests
+                            JSONArray requestsJson = response.getJSONArray("joinRideRequests");
+                            List<JoinRideRequest> requests = new ArrayList<JoinRideRequest>();
+                            for (int i = 0; i < requestsJson.length(); i++)
+                                requests.add(JoinRideRequest.fromJson(requestsJson.getJSONObject(i)));
+                            callback.success(requests);
+                        } catch (Exception e2)
+                        {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
 
-                    Location l2 = new Location();
-                    l2.setId("2");
-                    double d = new Random().nextInt(10) / 100.0;
-                    l2.setLatitude(30.01 + d);
-                    l2.setLongitude(31.01 + d);
-                    l2.setType(Location.LocationType.DESTINATION);
-                    l2.setUser(user);
+                    @Override
+                    public void failure(Request request, Response response, FuelError fuelError)
+                    {
+                        callback.fail(fuelError.getMessage());
+                    }
+                });
 
-                    JoinRideRequest request = new JoinRideRequest();
-                    request.setUser(user);
-                    request.setMessage("Please take me " + i);
-                    request.setLocationList(Arrays.asList(l1, l2));
-                    requests.add(request);
 
-                }
-
-                callback.success(requests);
-            }
-        }, 2000);
     }
 }

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,7 @@ public class JoinRideRequestsFragment extends Fragment
 
         // load data
         loadData();
+
         return view;
     }
 
@@ -79,6 +81,8 @@ public class JoinRideRequestsFragment extends Fragment
      */
     private void loadData()
     {
+        Log.e("Game" , "loading join ride requests");
+
         swipeRefreshLayout.post(new Runnable()
         {
             @Override

@@ -23,7 +23,6 @@ public class TimeUtils {
     public static Calendar parseCalendar(String dateStr) {
 
         try {
-            Log.e("Game", "date string = " + dateStr);
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
             if (!dateStr.contains("."))
                 dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
