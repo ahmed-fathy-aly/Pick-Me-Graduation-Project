@@ -1,47 +1,22 @@
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     >
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardViewPlacesAutocomplete"
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_margin="4dp"
-        android:clickable="true"
-        android:elevation="4dp"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:visibility="gone">
+        android:layout_height="match_parent"/>
 
-        <FrameLayout
-            android:id="@+id/placesAutoCompleteContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </android.support.v7.widget.CardView>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+    <ImageView
+        android:id="@+id/imageViewCenterLocation"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="24dp"
+        android:src="@drawable/ic_location"/>
 
 
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mapView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-        <ImageView
-            android:id="@+id/imageViewCenterLocation"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="24dp"
-            android:src="@drawable/ic_location"/>
-
-
-    </FrameLayout>
-</LinearLayout>
+</FrameLayout>
