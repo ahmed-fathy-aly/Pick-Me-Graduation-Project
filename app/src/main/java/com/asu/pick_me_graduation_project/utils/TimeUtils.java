@@ -23,7 +23,10 @@ public class TimeUtils {
     public static Calendar parseCalendar(String dateStr) {
 
         try {
+            Log.e("Game", "date string = " + dateStr);
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            if (!dateStr.contains("."))
+                dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
             Date date = dateFormat.parse(dateStr);
             Calendar c = new GregorianCalendar();
@@ -35,6 +38,7 @@ public class TimeUtils {
         }
 
     }
+
 
     /**
      * converts the calendar to something like "4 days ago"
