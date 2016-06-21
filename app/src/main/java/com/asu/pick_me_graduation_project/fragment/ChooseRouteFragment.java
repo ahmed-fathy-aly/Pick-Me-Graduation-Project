@@ -1,8 +1,12 @@
 package com.asu.pick_me_graduation_project.fragment;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +18,10 @@ import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.model.Location;
 import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.view.GenericMapsView;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -30,6 +38,8 @@ import butterknife.OnClick;
  */
 public class ChooseRouteFragment extends Fragment
 {
+    /* constants */
+    public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 424;
 
     /* UI */
     @Bind(R.id.imageViewCheckSource)
@@ -42,6 +52,8 @@ public class ChooseRouteFragment extends Fragment
     TextView textViewSelectSource;
     @Bind(R.id.textViewSelectDestination)
     TextView textViewSelectDestination;
+    @Bind(R.id.cardViewPlacesAutocomplete)
+    CardView cardViewAutocomplete;
 
     /* fields */
     public ChooseRouteFragment()
@@ -110,8 +122,40 @@ public class ChooseRouteFragment extends Fragment
         drawRoute();
     }
 
+    @OnClick(R.id.cardViewPlacesAutocomplete)
+    void startSearchForLocation()
+    {
+        try
+        {
+            Intent intent =
+                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                            .build(getActivity());
+            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+        } catch (GooglePlayServicesRepairableException e)
+        {
+        } catch (GooglePlayServicesNotAvailableException e)
+        {
+        }
+    }
 
-    /* methods */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        Log.e("Game", "on activity result");
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE)
+        {
+            if (resultCode == Activity.RESULT_OK)
+            {
+                // move to that place
+                Place place = PlaceAutocomplete.getPlace(getContext(), data);
+                genericMapsView.moveToLocation(place.getLatLng());
+
+            }
+        }
+    }
+
+   /* methods */
 
     /**
      * draws the route between source and destination if possible
@@ -176,4 +220,5 @@ public class ChooseRouteFragment extends Fragment
 
         return location;
     }
+
 }

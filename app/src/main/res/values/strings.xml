@@ -63,7 +63,6 @@
     <string name="facebook_app_id">266817077006271</string>
     <string name="server_client_id">244963852946-enk80ei6ip5l1d54r080tbgmt5sdnc66.apps.googleusercontent.com</string>
 
-    <string name="maps_api_key_debug">AIzaSyCrvcZp-42PWT2tLq1CY5kP9jCaWKy9qyA</string>
     <string name="post_ride">Post a Ride</string>
     <string name="select_source">Select Source</string>
     <string name="select_destination">Select Destination</string>
@@ -118,6 +117,7 @@
     <string name="gcm_defaultSenderId">244963852946</string>
     <string name="no_rides_found">No Rides Found</string>
     <string name="send_your_request">Send your request</string>
+    <string name="search_for_location">Search for location</string>
 
 
 </resources>

@@ -43,6 +43,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-ads:9.0.2'
     compile 'com.google.android.gms:play-services-auth:9.0.2'
     compile "com.google.android.gms:play-services-gcm:9.0.2"
+    compile "com.google.android.gms:play-services-location:9.0.2"
+
     compile 'com.facebook.android:facebook-android-sdk:4.12.1'
     compile 'org.greenrobot:eventbus:3.0.0'
 
