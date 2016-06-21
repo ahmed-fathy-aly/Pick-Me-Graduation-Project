@@ -63,6 +63,22 @@ public class JoinRideRequestAdapter extends RecyclerView.Adapter<JoinRideRequest
 
 
     /**
+     * remove the request from that user
+     */
+    public void remove(String userId)
+    {
+        // find the position
+        int position = -1;
+        for (int i = 0; i < data.size(); i++)
+            if (data.get(i).getUser().getUserId().equals(userId))
+                position = i;
+
+        // remove the item at that position
+        data.remove(position);
+        notifyItemRangeRemoved(position, 1);
+    }
+
+    /**
      * registers to be invoked with callbacks
      */
     public void setListener(Listener listener)
@@ -97,12 +113,23 @@ public class JoinRideRequestAdapter extends RecyclerView.Adapter<JoinRideRequest
 
         // locations;
         holder.mapsView.reset();
-        for (Location location : joinRideRequest.getLocationList())
+        for (int i = 0; i < joinRideRequest.getLocationList().size(); i++)
         {
+            Location location = joinRideRequest.getLocationList().get(i);
+            String userName = ValidationUtils.correct(location.getUser().getFirstName())
+                    + " " + ValidationUtils.correct(location.getUser().getLastName());
+            float color = BitmapDescriptorFactory.HUE_ORANGE;
+            if (location.getId().equals("-1"))
+                color = BitmapDescriptorFactory.HUE_CYAN;
+            else if (i == 0)
+                color = BitmapDescriptorFactory.HUE_GREEN;
+            else if (i == joinRideRequest.getLocationList().size() - 1)
+                color = BitmapDescriptorFactory.HUE_RED;
+
             holder.mapsView.addMarker(
-                    location.getId()
-                    , ""
-                    , BitmapDescriptorFactory.HUE_ORANGE
+                    i + ""
+                    , userName
+                    , color
                     , new LatLng(location.getLatitude(), location.getLongitude()));
         }
         holder.mapsView.fitMarkers();
@@ -120,6 +147,7 @@ public class JoinRideRequestAdapter extends RecyclerView.Adapter<JoinRideRequest
     {
         return data.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
@@ -165,7 +193,6 @@ public class JoinRideRequestAdapter extends RecyclerView.Adapter<JoinRideRequest
         }
 
     }
-
 
 
     public interface Listener

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 import com.asu.pick_me_graduation_project.fragment.CommunityInfoFragment;
 import com.asu.pick_me_graduation_project.fragment.CommunityJoinRequestsFragment;
@@ -11,6 +12,7 @@ import com.asu.pick_me_graduation_project.fragment.CommunityPostsFragment;
 import com.asu.pick_me_graduation_project.fragment.JoinRideRequestsFragment;
 import com.asu.pick_me_graduation_project.fragment.MembersListFragment;
 import com.asu.pick_me_graduation_project.fragment.RideDetailsFragment;
+import com.asu.pick_me_graduation_project.model.JoinRideRequest;
 import com.asu.pick_me_graduation_project.utils.Constants;
 
 import java.util.ArrayList;
@@ -25,10 +27,11 @@ public class RideDetailsPagerAdapter extends FragmentPagerAdapter
 
     RideDetailsFragment rideDetailsFragment;
     MembersListFragment membersListFragment;
-    private List<String> mFragmentTitleList = Arrays.asList("Details", "Members");
+    JoinRideRequestsFragment joinRideRequestsFragment;
+    private List<String> mFragmentTitleList = new ArrayList<>();
     private List<Fragment> mFragmentList = new ArrayList<>();
 
-    public RideDetailsPagerAdapter(FragmentManager fm, String rideId)
+    public RideDetailsPagerAdapter(FragmentManager fm, String rideId, boolean withJoinRequests)
     {
         super(fm);
 
@@ -37,10 +40,22 @@ public class RideDetailsPagerAdapter extends FragmentPagerAdapter
         arguments.putString(Constants.RIDE_ID, rideId);
 
         rideDetailsFragment = new RideDetailsFragment();
+        rideDetailsFragment.setArguments(arguments);
+        mFragmentTitleList.add("Details");
+        mFragmentList.add(rideDetailsFragment);
+
         membersListFragment = new MembersListFragment();
         membersListFragment.setArguments(arguments);
-        rideDetailsFragment.setArguments(arguments);
-        mFragmentList = Arrays.asList(rideDetailsFragment, membersListFragment);
+        mFragmentTitleList.add("Members");
+        mFragmentList.add(membersListFragment);
+
+        if (withJoinRequests)
+        {
+            joinRideRequestsFragment = new JoinRideRequestsFragment();
+            joinRideRequestsFragment.setArguments(arguments);
+            mFragmentTitleList.add("Requests");
+            mFragmentList.add(joinRideRequestsFragment);
+        }
     }
 
     @Override
@@ -68,17 +83,4 @@ public class RideDetailsPagerAdapter extends FragmentPagerAdapter
 
     public RideDetailsFragment getRideDetailsFragment(){ return rideDetailsFragment;}
 
-    public void addRideJoinRequestsFragment(String rideId)
-    {
-        // make the fragment
-        JoinRideRequestsFragment joinRideRequestsFragment = new JoinRideRequestsFragment();
-        Bundle arguments = new Bundle();
-        arguments.putString(Constants.RIDE_ID, rideId);
-        joinRideRequestsFragment.setArguments(arguments);
-
-        // add it to the list
-        mFragmentTitleList = Arrays.asList("Details", "Members", "Requests");
-        mFragmentList = Arrays.asList(rideDetailsFragment, membersListFragment, joinRideRequestsFragment);
-        notifyDataSetChanged();
-    }
 }

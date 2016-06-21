@@ -54,7 +54,8 @@ public class RideDetailsActivity extends AppCompatActivity
         setContentView(R.layout.activity_ride_details);
 
         // TODO get ride id
-        rideId = getIntent().getExtras().getString(Constants.RIDE_ID);
+        //rideId = getIntent().getExtras().getString(Constants.RIDE_ID);
+        rideId = "60";
 
         // reference views
         ButterKnife.bind(this);
@@ -65,16 +66,10 @@ public class RideDetailsActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         contoller = new RidesAPIController(this);
 
-        // setup view pager
-        rideDetailsPagerAdapter = new RideDetailsPagerAdapter(getSupportFragmentManager(), rideId);
-        viewPager.setAdapter(rideDetailsPagerAdapter);
-        viewPager.setOffscreenPageLimit(3);
-        tabLayout.setupWithViewPager(viewPager);
 
         // load data
         loadRide();
 
-        rideDetailsPagerAdapter.addRideJoinRequestsFragment(rideId);
 
     }
 
@@ -83,6 +78,8 @@ public class RideDetailsActivity extends AppCompatActivity
      */
     private void loadRide()
     {
+        progressBar.setVisibility(View.VISIBLE);
+
         contoller.getRideDetails(new AuthenticationAPIController(this).getTokken()
                 , rideId
                 , new GetRideCallback()
@@ -90,12 +87,20 @@ public class RideDetailsActivity extends AppCompatActivity
             @Override
             public void success(Ride ride)
             {
-                rideDetailsPagerAdapter.getRideDetailsFragment().setData(ride);
+                progressBar.setVisibility(View.INVISIBLE);
 
                 // check if we should show the ride join request
                 String currentUserId = new AuthenticationAPIController(RideDetailsActivity.this).getCurrentUser().getUserId();
-                if (currentUserId.equals(ride.getRider().getUserId()))
-                    rideDetailsPagerAdapter.addRideJoinRequestsFragment(rideId);
+                boolean showRideRequests = currentUserId.equals(ride.getRider().getUserId());
+
+                // setup view pager
+                rideDetailsPagerAdapter = new RideDetailsPagerAdapter(getSupportFragmentManager(), rideId, showRideRequests);
+                viewPager.setAdapter(rideDetailsPagerAdapter);
+                viewPager.setOffscreenPageLimit(3);
+                tabLayout.setupWithViewPager(viewPager);
+
+                // set the details
+                rideDetailsPagerAdapter.getRideDetailsFragment().setData(ride);
 
                 // add the members to the fragment
                 rideDetailsPagerAdapter.getMembersListFragment().setMembers(ride.getMembers());
@@ -104,6 +109,8 @@ public class RideDetailsActivity extends AppCompatActivity
             @Override
             public void fail(String error)
             {
+                progressBar.setVisibility(View.INVISIBLE);
+
                 Snackbar.make(content, error, Snackbar.LENGTH_SHORT).show();
             }
         });
