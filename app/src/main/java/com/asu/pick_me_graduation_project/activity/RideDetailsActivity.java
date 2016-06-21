@@ -55,7 +55,7 @@ public class RideDetailsActivity extends AppCompatActivity
 
         // TODO get ride id
         //rideId = getIntent().getExtras().getString(Constants.RIDE_ID);
-        rideId = "59";
+        rideId = "60";
 
         // reference views
         ButterKnife.bind(this);

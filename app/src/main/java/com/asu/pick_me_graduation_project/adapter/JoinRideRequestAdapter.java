@@ -63,6 +63,22 @@ public class JoinRideRequestAdapter extends RecyclerView.Adapter<JoinRideRequest
 
 
     /**
+     * remove the request from that user
+     */
+    public void remove(String userId)
+    {
+        // find the position
+        int position = -1;
+        for (int i = 0; i < data.size(); i++)
+            if (data.get(i).getUser().getUserId().equals(userId))
+                position = i;
+
+        // remove the item at that position
+        data.remove(position);
+        notifyItemRangeRemoved(position, 1);
+    }
+
+    /**
      * registers to be invoked with callbacks
      */
     public void setListener(Listener listener)
@@ -111,7 +127,7 @@ public class JoinRideRequestAdapter extends RecyclerView.Adapter<JoinRideRequest
                 color = BitmapDescriptorFactory.HUE_RED;
 
             holder.mapsView.addMarker(
-                    location.getId()
+                    i + ""
                     , userName
                     , color
                     , new LatLng(location.getLatitude(), location.getLongitude()));
@@ -131,6 +147,7 @@ public class JoinRideRequestAdapter extends RecyclerView.Adapter<JoinRideRequest
     {
         return data.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {

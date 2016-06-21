@@ -356,7 +356,6 @@ public class RidesAPIController
             e.printStackTrace();
         }
         String body = jsonObject.toString();
-        Log.e("Game", "request to join ride body = " + body);
 
         // make the post
         Fuel.post(url)
@@ -367,12 +366,13 @@ public class RidesAPIController
                     @Override
                     public void success(Request request, Response r, String s)
                     {
-                        Log.e("Game", "request to join ride result = " + s);
-                        try {
+                        try
+                        {
                             // check status
                             JSONObject response = new JSONObject(s);
                             int status = response.getInt("status");
-                            if (status == 0) {
+                            if (status == 0)
+                            {
                                 String message = response.getString("message");
                                 callback.fail(message);
                                 return;
@@ -380,7 +380,8 @@ public class RidesAPIController
 
                             // success
                             callback.success();
-                        } catch (Exception e2) {
+                        } catch (Exception e2)
+                        {
                             callback.fail(e2.getMessage());
                             return;
                         }
@@ -404,6 +405,7 @@ public class RidesAPIController
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + token);
 
+
         Fuel.get(url)
                 .header(headers)
                 .responseString(new com.github.kittinunf.fuel.core.Handler<String>()
@@ -413,6 +415,8 @@ public class RidesAPIController
                     {
                         try
                         {
+                            Log.e("Game", "get join ride requests = " + result);
+
                             // check status
                             JSONObject response = new JSONObject(result);
                             int status = response.getInt("status");
@@ -438,6 +442,69 @@ public class RidesAPIController
 
                     @Override
                     public void failure(Request request, Response response, FuelError fuelError)
+                    {
+                        callback.fail(fuelError.getMessage());
+                    }
+                });
+
+
+    }
+
+    public void respondToJoinRideRequest(String token, String rideId, String userId, boolean accept, final GenericSuccessCallback callback)
+    {
+        // form the request
+        String url = Constants.HOST + "ride/answer_join_ride_request";
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + token);
+        headers.put("Content-Type", "application/json");
+
+        JSONObject jsonObject = new JSONObject();
+        try
+        {
+            jsonObject.put("rideId", rideId);
+            jsonObject.put("userId", userId);
+            jsonObject.put("isAccepted", accept);
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        String body = jsonObject.toString();
+        Log.e("Game", "respond to join ride body = " + body);
+
+        // make the post
+        Fuel.put(url)
+                .header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new com.github.kittinunf.fuel.core.Handler<String>()
+                {
+                    @Override
+                    public void success(Request request, Response r, String s)
+                    {
+                        Log.e("Game", "respond to join ride result = " + s);
+                        try
+                        {
+                            // check status
+                            JSONObject response = new JSONObject(s);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
+
+                            // success
+                            callback.success();
+                        } catch (Exception e2)
+                        {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+
+                    @Override
+                    public void failure(Request request, Response resp, FuelError fuelError)
                     {
                         callback.fail(fuelError.getMessage());
                     }
