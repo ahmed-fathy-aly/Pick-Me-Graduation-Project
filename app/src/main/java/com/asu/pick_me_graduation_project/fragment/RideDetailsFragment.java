@@ -1,6 +1,7 @@
 package com.asu.pick_me_graduation_project.fragment;
 
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.ContactUserView;
 import com.asu.pick_me_graduation_project.view.GenericMapsView;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -56,6 +58,8 @@ public class RideDetailsFragment extends Fragment
     TextView textViewNoSmoking;
     @Bind(R.id.textViewLadiesOnly)
     TextView textViewLadiesOnly;
+    @Bind(R.id.shareLayout)
+    View shareLayout;
 
     /* UI */
 
@@ -131,5 +135,10 @@ public class RideDetailsFragment extends Fragment
     {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    public GenericMapsView getMapsView()
+    {
+        return mapsView;
     }
 }

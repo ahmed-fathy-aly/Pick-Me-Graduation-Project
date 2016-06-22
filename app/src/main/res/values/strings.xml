@@ -118,6 +118,7 @@
     <string name="no_rides_found">No Rides Found</string>
     <string name="send_your_request">Send your request</string>
     <string name="search_for_location">Search for location</string>
+    <string name="action_share">Share</string>
 
 
 </resources>

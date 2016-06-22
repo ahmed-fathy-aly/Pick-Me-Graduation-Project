@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -142,7 +143,7 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
         }
 
         mapView.onResume();
-
+            mapView.setDrawingCacheEnabled(true);
 
     }
 
@@ -175,6 +176,7 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
         int padding = 50;
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         googleMap.animateCamera(cameraUpdate);
+
     }
 
 
@@ -334,4 +336,11 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
             polyline.remove();
     }
 
+    /**
+     * requests to get the bitmap of the map
+     */
+    public void requestBitmap(GoogleMap.SnapshotReadyCallback callback)
+    {
+        googleMap.snapshot(callback);
+    }
 }
