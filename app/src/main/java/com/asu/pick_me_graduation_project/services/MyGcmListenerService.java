@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.activity.ChatActivity;
+import com.asu.pick_me_graduation_project.activity.CommunityProfileActivity;
 import com.asu.pick_me_graduation_project.activity.FeedBackActivity;
 import com.asu.pick_me_graduation_project.activity.MyApplication;
 import com.asu.pick_me_graduation_project.activity.RideDetailsActivity;
@@ -176,6 +177,30 @@ public class MyGcmListenerService extends GcmListenerService
                 }
                 break;
 
+            case "communityRequestNotification":
+                try
+                {
+                    // parse the data
+                    JSONObject communityJson= new JSONObject(data);
+                    String communityId= communityJson.getString("communityId");
+
+                    // set the pending intent
+                    Intent communityRequestsIntent = new Intent(this, CommunityProfileActivity.class);
+                    communityRequestsIntent .putExtra(Constants.COMMUNITY_ID, communityId);
+                    communityRequestsIntent .putExtra(Constants.IS_COMMUNITY_ADMIN, true);
+                    communityRequestsIntent .putExtra(CommunityProfileActivity.SWITCH_TO_REQUEST_TAB, true);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), communityRequestsIntent, 0);
+                    mBuilder.setContentIntent(pendingIntent);
+
+                    // unique notification
+                    notificationId = Constants.getNotificationId(Constants.NOTIFICATION_COMMUNITY_REQUESTS, communityId);
+                } catch (JSONException e)
+                {
+                    Log.e("Game", "error " + e.getMessage());
+                    e.printStackTrace();
+                }
+
+                break;
         }
 
         // post notification

@@ -31,6 +31,9 @@ import butterknife.ButterKnife;
 public class CommunityProfileActivity extends BaseActivity
 {
 
+    /* constants */
+    public static final String SWITCH_TO_REQUEST_TAB = "switchToRequestsTab";
+
     /* UI */
     @Bind(R.id.toolbar)
     android.support.v7.widget.Toolbar toolbar;
@@ -54,7 +57,8 @@ public class CommunityProfileActivity extends BaseActivity
     private boolean isAdmin;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_profile);
 
@@ -71,28 +75,27 @@ public class CommunityProfileActivity extends BaseActivity
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         contoller = new CommunityAPIController(this);
 
-        // setup view pager
-        communityPagerAdapter = new CommunityPagerAdapter(getSupportFragmentManager(), communityId, isAdmin);
-        viewPager.setAdapter(communityPagerAdapter);
-        viewPager.setOffscreenPageLimit(4);
-        tabLayout.setupWithViewPager(viewPager);
-
         // load data
         loadInfo();
-        loadMembers();
-
     }
 
     /**
      * loads the community profile from backend
      */
-    private void loadInfo() {
+    private void loadInfo()
+    {
+        progressBar.setVisibility(View.VISIBLE);
+
         contoller.getCommunityProfile(
                 new AuthenticationAPIController(this).getTokken()
                 , communityId
-                , new GetCommunityCallback() {
+                , new GetCommunityCallback()
+                {
                     @Override
-                    public void success(Community community) {
+                    public void success(Community community)
+                    {
+                        progressBar.setVisibility(View.GONE);
+
                         // popoulate views
                         textViewCommunityName.setText(community.getName());
                         if (ValidationUtils.notEmpty(community.getProfilePictureUrl()))
@@ -106,12 +109,29 @@ public class CommunityProfileActivity extends BaseActivity
                                     .placeholder(R.drawable.ic_user_small)
                                     .into(imageViewCommunityPP);
 
+
+                        // setup view pager
+                        communityPagerAdapter = new CommunityPagerAdapter(getSupportFragmentManager(), communityId, isAdmin);
+                        viewPager.setAdapter(communityPagerAdapter);
+                        viewPager.setOffscreenPageLimit(4);
+                        tabLayout.setupWithViewPager(viewPager);
+
+                        // check if should swtich to the requests tab
+                        if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean(SWITCH_TO_REQUEST_TAB, false))
+                            if (viewPager.getChildCount()== 4)
+                                viewPager.setCurrentItem(3, true);
+
+
                         // populate the info fragment
                         communityPagerAdapter.getInfoFragment().setDetails(ValidationUtils.correct(community.getDescription()));
+
+                        loadMembers();
                     }
 
                     @Override
-                    public void fail(String message) {
+                    public void fail(String message)
+                    {
+                        progressBar.setVisibility(View.GONE);
                         Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
                     }
                 }
@@ -122,19 +142,23 @@ public class CommunityProfileActivity extends BaseActivity
     /**
      * loads the community members from the backend
      */
-    private void loadMembers() {
+    private void loadMembers()
+    {
         contoller.getCommunityMembers(
                 new AuthenticationAPIController(this).getTokken()
                 , new AuthenticationAPIController(this).getCurrentUser().getUserId()
-                , communityId, new GetUsersCallback() {
+                , communityId, new GetUsersCallback()
+                {
 
                     @Override
-                    public void success(List<User> users) {
+                    public void success(List<User> users)
+                    {
                         communityPagerAdapter.getMembersListFragment().setMembers(users);
                     }
 
                     @Override
-                    public void fail(String message) {
+                    public void fail(String message)
+                    {
                         Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
                     }
                 });
