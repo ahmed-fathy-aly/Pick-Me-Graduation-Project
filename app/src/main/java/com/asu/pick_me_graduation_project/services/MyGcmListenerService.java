@@ -200,6 +200,29 @@ public class MyGcmListenerService extends GcmListenerService
                     e.printStackTrace();
                 }
 
+            case "communityUpdateNotification":
+                try
+                {
+                    // parse the data
+                    JSONObject communityJson= new JSONObject(data);
+                    String communityId= communityJson.getString("communityId");
+                    boolean isAdmin = communityJson.getBoolean("isAdmin");
+
+                    // set the pending intent
+                    Intent communityRequestsIntent = new Intent(this, CommunityProfileActivity.class);
+                    communityRequestsIntent .putExtra(Constants.COMMUNITY_ID, communityId);
+                    communityRequestsIntent .putExtra(Constants.IS_COMMUNITY_ADMIN, isAdmin);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), communityRequestsIntent, 0);
+                    mBuilder.setContentIntent(pendingIntent);
+
+                    // unique notification
+                    notificationId = Constants.getNotificationId(Constants.NOTIFICATION_COMMUNITY_UPDATE, communityId);
+                } catch (JSONException e)
+                {
+                    Log.e("Game", "error " + e.getMessage());
+                    e.printStackTrace();
+                }
+
                 break;
         }
 
