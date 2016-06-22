@@ -30,6 +30,9 @@ import butterknife.ButterKnife;
 
 public class RideDetailsActivity extends AppCompatActivity
 {
+    /* constants */
+    public static final String SWITCH_TO_REQUEST_TAB = "switchToRequestsTab";
+
     /* UI */
     @Bind(R.id.toolbar)
     android.support.v7.widget.Toolbar toolbar;
@@ -104,6 +107,11 @@ public class RideDetailsActivity extends AppCompatActivity
 
                 // add the members to the fragment
                 rideDetailsPagerAdapter.getMembersListFragment().setMembers(ride.getMembers());
+
+                // check if should open the requests tab
+                if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean(SWITCH_TO_REQUEST_TAB, false))
+                    if (viewPager.getChildCount()== 3)
+                        viewPager.setCurrentItem(2, true);
             }
 
             @Override
