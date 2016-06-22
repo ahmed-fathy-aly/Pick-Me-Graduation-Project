@@ -154,6 +154,28 @@ public class MyGcmListenerService extends GcmListenerService
                 }
                 break;
 
+            case  "acceptedInRide":
+                try
+                {
+                    // parse the data
+                    JSONObject rideJson = new JSONObject(data);
+                    String rideId = rideJson.getString("rideId");
+
+                    // set the pending intent
+                    Intent rideDetailsIntent = new Intent(this, RideDetailsActivity.class);
+                    rideDetailsIntent.putExtra(Constants.RIDE_ID, rideId);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), rideDetailsIntent, 0);
+                    mBuilder.setContentIntent(pendingIntent);
+
+                    // unique notification
+                    notificationId = Constants.getNotificationId(Constants.NOTIFICATION_ACCEPTED_IN_RIDE, rideId);
+                } catch (JSONException e)
+                {
+                    Log.e("Game", "error " + e.getMessage());
+                    e.printStackTrace();
+                }
+                break;
+
         }
 
         // post notification

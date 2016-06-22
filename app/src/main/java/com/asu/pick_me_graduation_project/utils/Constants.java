@@ -31,7 +31,8 @@ public class Constants
 
     /* notifications */
     public static final int NOTIFICATION_CHAT_ID_SUGGESTED_BY_OSSAMA_7ABIBY = 42;
-    public static final int NOTIFICATION_JOIN_RIDE_ID= 43;
+    public static final int NOTIFICATION_JOIN_RIDE_ID= 7;
+    public static final int NOTIFICATION_ACCEPTED_IN_RIDE = 11;
 
     /**
      * uses the Noob multiplier to get a unique notification for each type and each object of that type
