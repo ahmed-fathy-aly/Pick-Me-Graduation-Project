@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.activity.ChatActivity;
+import com.asu.pick_me_graduation_project.activity.FeedBackActivity;
 import com.asu.pick_me_graduation_project.activity.MyApplication;
 import com.asu.pick_me_graduation_project.activity.RideDetailsActivity;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
@@ -73,6 +74,8 @@ public class MyGcmListenerService extends GcmListenerService
         boolean showNotification = true;
         switch (type)
         {
+            case "announcement":
+                break;
             case "chat":
                 try
                 {
@@ -109,6 +112,7 @@ public class MyGcmListenerService extends GcmListenerService
             case "joinRideRequest":
                 try
                 {
+                    // parse the data
                     JSONObject rideJson = new JSONObject(data);
                     String rideId = rideJson.getString("rideId");
 
@@ -124,6 +128,28 @@ public class MyGcmListenerService extends GcmListenerService
                 } catch (JSONException e)
                 {
                     Log.e("Game", "error " + e.getMessage());
+                    e.printStackTrace();
+                }
+                break;
+
+            case "takeSelfie":
+                break;
+
+            case "sendFeedback":
+                try
+                {
+                    // parse the data
+                    JSONObject rideJson =new JSONObject(data);
+                    String rideId = rideJson.getString("rideId");
+
+                    // set the pending intent
+                    Intent feedbackIntent = new Intent(this, FeedBackActivity.class);
+                    feedbackIntent.putExtra(Constants.RIDE_ID, rideId);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), feedbackIntent, 0);
+                    mBuilder.setContentIntent(pendingIntent);
+
+                } catch (JSONException e)
+                {
                     e.printStackTrace();
                 }
                 break;
