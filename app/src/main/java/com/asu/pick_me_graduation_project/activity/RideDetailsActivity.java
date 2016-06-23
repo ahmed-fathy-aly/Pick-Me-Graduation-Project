@@ -38,7 +38,7 @@ import java.util.Random;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class RideDetailsActivity extends AppCompatActivity
+public class RideDetailsActivity extends BaseActivity
 {
     /* constants */
     public static final String SWITCH_TO_REQUEST_TAB = "switchToRequestsTab";
