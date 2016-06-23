@@ -153,8 +153,6 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
 
     private void fitMarkersNow()
     {
-        Log.e("Game", "fitting " + markers.keySet());
-
         // get the bounds
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (Marker marker : markers.values())
@@ -162,7 +160,7 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
         LatLngBounds bounds = builder.build();
 
         // update the map
-        int padding = 25;
+        int padding = 50;
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         googleMap.animateCamera(cameraUpdate);
     }

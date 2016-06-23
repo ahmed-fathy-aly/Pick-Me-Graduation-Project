@@ -17,6 +17,7 @@ import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.GenericMapsView;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
@@ -109,12 +110,22 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
 
         // locations;
         holder.mapsView.reset();
-        for (Location location : ride.getLocations())
+        for (int i = 0; i < ride.getLocations().size(); i++)
         {
+            Location location = ride.getLocations().get(i);
+            String userName = ValidationUtils.correct(location.getUser().getFirstName())
+                    + " " + ValidationUtils.correct(location.getUser().getLastName());
+            float color = BitmapDescriptorFactory.HUE_ORANGE;
+            if (location.getId().equals("-1"))
+                color = BitmapDescriptorFactory.HUE_CYAN;
+            else if (i == 0)
+                color = BitmapDescriptorFactory.HUE_GREEN;
+            else if (i == ride.getLocations().size() - 1)
+                color = BitmapDescriptorFactory.HUE_RED;
             holder.mapsView.addMarker(
-                    location.getId()
-                    , ""
-                    , BitmapDescriptorFactory.HUE_ORANGE
+                    i + ""
+                    , userName
+                    , color
                     , new LatLng(location.getLatitude(), location.getLongitude()));
         }
         holder.mapsView.fitMarkers();
@@ -178,7 +189,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
                 @Override
                 public void doClick(View v)
                 {
-                    if (listener!=null)
+                    if (listener != null)
                         listener.onRideClicked(getAdapterPosition(), data.get(getAdapterPosition()));
 
                 }
@@ -204,6 +215,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
     public interface Listener
     {
         public void onRequestToJoin(int position, Ride ride);
+
         public void onRideClicked(int position, Ride ride);
     }
 }

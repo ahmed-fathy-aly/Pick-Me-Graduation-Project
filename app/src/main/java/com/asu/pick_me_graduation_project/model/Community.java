@@ -5,6 +5,7 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by ahmed on 3/3/2016.
@@ -110,4 +111,23 @@ public class Community implements Serializable
     }
 
 
+
+    /**
+     * returns a list of the communities id like this [1,2,3]
+     * returns [] for no communities selected
+     */
+    public static  String getCommunitiesStr(List<Community> communityList)
+    {
+        StringBuilder strb = new StringBuilder();
+        strb.append("[");
+        if (communityList!= null)
+            for (int i = 0; i < communityList.size(); i++)
+            {
+                if (i != 0)
+                    strb.append(",");
+                strb.append(communityList.get(i).getId());
+            }
+        strb.append("]");
+        return strb.toString();
+    }
 }

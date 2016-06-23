@@ -105,7 +105,7 @@ public class PostRideActivity extends BaseActivity
                 public void success()
                 {
                     progressDialog.dismiss();
-                    Toast.makeText(getApplicationContext(), getString(R.string.success), Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), getString(R.string.success), Toast.LENGTH_SHORT).show();
                     finish();
                 }
 
@@ -113,7 +113,7 @@ public class PostRideActivity extends BaseActivity
                 public void fail(String message)
                 {
                     progressDialog.dismiss();
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
                 }
             });

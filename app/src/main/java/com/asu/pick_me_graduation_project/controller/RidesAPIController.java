@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
+import com.asu.pick_me_graduation_project.activity.SearchRideResults;
 import com.asu.pick_me_graduation_project.callback.GenericSuccessCallback;
 import com.asu.pick_me_graduation_project.callback.GetRideCallback;
 import com.asu.pick_me_graduation_project.callback.GetRideJoinRequestsCallback;
@@ -20,7 +21,6 @@ import com.github.kittinunf.fuel.Fuel;
 import com.github.kittinunf.fuel.core.FuelError;
 import com.github.kittinunf.fuel.core.Request;
 import com.github.kittinunf.fuel.core.Response;
-import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -32,7 +32,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -114,52 +113,71 @@ public class RidesAPIController
 
     }
 
-    public void searchRides(String token, final GetRidesCallback callback)
+    public void searchRides(String token, SearchRideParams searchRideParams, final GetRidesCallback callback)
     {
-        new Handler().postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                // TODO now it's dummy data
-                List<Ride> rideList = new ArrayList<>();
-                for (int i = 0; i < 10; i++)
+
+        String url = Constants.HOST +
+                "/ride/search_for_ride?" +
+                "time=" + TimeUtils.convertToBackendTime(searchRideParams.getTime()) +
+                "&latitudeSrc=" + searchRideParams.getSource().getLatitude() +
+                "&longitudeSrc=" + searchRideParams.getSource().getLongitude() +
+                "&latitudeDest=" + searchRideParams.getDestination().getLatitude() +
+                "&longitudeDest=" + searchRideParams.getDestination().getLongitude();
+        if (searchRideParams.getFilteredCommunities() != null)
+            for (Community community : searchRideParams.getFilteredCommunities())
+                url += "&communities=" + community.getId();
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + token);
+        Fuel.get(url)
+                .header(headers)
+                .responseString(new com.github.kittinunf.fuel.core.Handler<String>()
                 {
-                    User user = new User();
-                    user.setUserId(i + "");
-                    user.setFirstName("first");
-                    user.setLastName("last");
-                    user.setProfilePictureUrl("https://upload.wikimedia.org/wikipedia/en/7/70/Shawn_Tok_Profile.jpg");
+                    @Override
+                    public void success(Request request, Response responseFuel, String result)
+                    {
+                        try
+                        {
+                            // check status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
 
-                    Location l1 = new Location();
-                    l1.setId("1");
-                    l1.setLatitude(30.02);
-                    l1.setLongitude(31.02);
-                    l1.setType(Location.LocationType.SOURCE);
-                    l1.setUser(user);
+                            // parse rides
+                            JSONArray ridesJson = response.getJSONArray("rides");
+                            List<Ride> rides = new ArrayList<Ride>();
+                            for (int i = 0; i < ridesJson.length(); i++)
+                                rides.add(Ride.fromJson(ridesJson.getJSONObject(i)));
 
-                    Location l2 = new Location();
-                    l2.setId("2");
-                    double d = new Random().nextInt(10) / 100.0;
-                    l2.setLatitude(30.01 + d);
-                    l2.setLongitude(31.01 + d);
-                    l2.setType(Location.LocationType.DESTINATION);
-                    l2.setUser(user);
+                            // sort by data
+                            Collections.sort(rides, new Comparator<Ride>()
+                            {
+                                @Override
+                                public int compare(Ride lhs, Ride rhs)
+                                {
+                                    return rhs.getTime().compareTo(lhs.getTime());
+                                }
+                            });
+                            callback.success(rides);
+                        } catch (Exception e2)
+                        {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
 
-                    Ride ride = new Ride();
-                    ride.setId(i + "");
-                    ride.setRider(user);
-                    ride.setDescription("This is ride " + i);
-                    ride.setTime(Calendar.getInstance());
-                    ride.setLocations(Arrays.asList(l1, l2));
+                    @Override
+                    public void failure(Request request, Response response, FuelError fuelError)
+                    {
+                        callback.fail(fuelError.getMessage());
+                    }
+                });
 
-
-                    ride.setCanRequestToJoin(true);
-                    rideList.add(ride);
-                }
-                callback.success(rideList);
-            }
-        }, 2000);
 
     }
 
@@ -191,12 +209,11 @@ public class RidesAPIController
             destination.put("latitude", ride.getLocations().get(1).getLatitude());
             destination.put("longitude", ride.getLocations().get(1).getLongitude());
             json.put("destination", destination);
-
-            JSONArray communities = new JSONArray();
+            JSONArray communitiesIds = new JSONArray();
             if (ride.getRideDetails().getFilteredCommunities() != null)
                 for (Community community : ride.getRideDetails().getFilteredCommunities())
-                    communities.put(community.getId());
-            json.put("communities", communities);
+                    communitiesIds.put(Integer.parseInt(community.getId()));
+            json.put("communities", communitiesIds);
 
             json.put("numberOfFreeSeats", ride.getRideDetails().getNumberOfFreeSeats());
             json.put("ladiesOnly", ride.getRideDetails().isLadiesOnly());
@@ -297,6 +314,7 @@ public class RidesAPIController
                             callback.success(ride);
                         } catch (Exception e2)
                         {
+                            Log.e("Game", "error in ride details " + e2.getMessage());
                             callback.fail(e2.getMessage());
                             return;
                         }

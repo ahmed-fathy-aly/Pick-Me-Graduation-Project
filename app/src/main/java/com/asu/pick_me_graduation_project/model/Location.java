@@ -100,12 +100,8 @@ public class Location implements Serializable
             location.setLongitude(jsonObject.getDouble("longitude"));
             location.setOrder(jsonObject.getInt("order"));
             location.setType(jsonObject.getBoolean("type") ?
-                    LocationType.DESTINATION: LocationType.SOURCE);
-
-            // TODO user's stuff
-            User user = new User();
-            user.setUserId(jsonObject.getString("pinpointedUserId"));
-            location.setUser(user);
+                    LocationType.DESTINATION : LocationType.SOURCE);
+            location.setUser(User.fromJson(jsonObject.getJSONObject("user")));
         } catch (Exception e)
         {
             Log.e("Game", "parse lcoation exception " + e.getMessage());
