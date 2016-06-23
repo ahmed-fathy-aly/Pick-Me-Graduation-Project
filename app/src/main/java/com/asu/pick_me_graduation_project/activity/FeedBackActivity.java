@@ -17,11 +17,16 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.asu.pick_me_graduation_project.R;
+import com.asu.pick_me_graduation_project.callback.GenericSuccessCallback;
 import com.asu.pick_me_graduation_project.callback.GetFeedbackFormCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.FeedbackAPIController;
+import com.asu.pick_me_graduation_project.model.Feedback;
 import com.asu.pick_me_graduation_project.model.User;
 
+import org.json.JSONException;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -104,11 +109,14 @@ public class FeedBackActivity extends AppCompatActivity {
     }
 
 
+
     /**
      * TODO
      * - get the users of that ride
      * - inflate a row for each user
      */
+     List<Feedback> feedbackList=new ArrayList<>();
+    Feedback.DriverSpecificFeedback driverFeedback;
     private void getFeedBackForm() {
 
 
@@ -127,7 +135,9 @@ public class FeedBackActivity extends AppCompatActivity {
 
                     }
 
+
                 }
+
                 inflatebutton();
             }
 
@@ -143,17 +153,69 @@ public class FeedBackActivity extends AppCompatActivity {
     // id inflate new view
 
 
+
     /**
      * TODO
      * gather the data as a list of Feedback objects
      * send it to backend
      */
+    void gatherData()
+    {
+        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.feedbackLayout);
+        for (int i = 0; i < linearLayout.getChildCount(); i++)
+        {
+            Feedback passengerFeedback=new Feedback();
+
+            View card = linearLayout.getChildAt(i);
+            passengerFeedback.setUserId(card.getTag().toString());
+            RatingBar atittude=(RatingBar) card.findViewById(R.id.ratingBar2);
+            passengerFeedback.setAttitude(atittude.getNumStars());
+            RatingBar punctuality=(RatingBar) card.findViewById(R.id.ratingBar3);
+            passengerFeedback.setPunctuality(punctuality.getNumStars());
+            feedbackList.add(passengerFeedback);
+
+
+        }
+        RatingBar driving= (RatingBar) findViewById(R.id.ratingBar);
+        driverFeedback.setDriving(driving.getNumStars());
+        if(yesButton.isChecked()) {
+            driverFeedback.setSameAc(true);
+            driverFeedback.setSameModel(true);
+            driverFeedback.setSamePlate(true);
+
+        }
+        else {
+            CheckBox sameAc= (CheckBox)findViewById(R.id.checkboxCarAc);
+            driverFeedback.setSameAc(!(sameAc.isChecked()));
+            CheckBox sameModel=(CheckBox)findViewById(R.id.checkboxCarModel);
+            driverFeedback.setSameModel((!sameModel.isChecked()));
+            CheckBox samePlate=(CheckBox)findViewById(R.id.checkboxCarPlateNo);
+            driverFeedback.setSamePlate(!(samePlate.isChecked()));}
+
+    }
     @OnClick(R.id.submitButton)
     public void onclick() {
         sendFeedback();
     }
 
     void sendFeedback() {
+        try {
+            controller.postFeedback(controller2.getTokken(), controller2.getCurrentUser().getUserId(), rideId, feedbackList, driverFeedback, new GenericSuccessCallback() {
+                @Override
+                public void success()
+                {
+                 gatherData();
+
+                }
+
+                @Override
+                public void fail(String message) {
+
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -166,6 +228,7 @@ public class FeedBackActivity extends AppCompatActivity {
     private void inflateRow(User user) {
         final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.feedbackLayout);
         final View PassengerCard = LayoutInflater.from(this).inflate(R.layout.passenger_row, null);
+        PassengerCard.setTag(user.getUserId());
         linearLayout.addView(PassengerCard);
         Log.e("Game", "card added");
 

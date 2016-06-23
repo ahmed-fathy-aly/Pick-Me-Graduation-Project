@@ -68,7 +68,8 @@ public class Feedback
         this.driverSpecificFeedback = driverSpecificFeedback;
     }
 
-    public class DriverSpecificFeedback
+
+   public class DriverSpecificFeedback
     {
         int driving;
         boolean sameCar;
