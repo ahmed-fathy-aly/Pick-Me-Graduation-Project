@@ -131,6 +131,8 @@ public class UserApiController
                 .responseString(new com.github.kittinunf.fuel.core.Handler<String>() {
                     @Override
                     public void success(Request request, Response r, String s) {
+                        Log.e("Game", "edit profile result = " + s);
+
                         try {
                             // check status
                             JSONObject response = new JSONObject(s);

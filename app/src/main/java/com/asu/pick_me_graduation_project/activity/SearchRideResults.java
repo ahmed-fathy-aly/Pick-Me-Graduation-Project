@@ -8,6 +8,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -72,6 +74,9 @@ public class SearchRideResults extends AppCompatActivity implements RideListFrag
                 .commit();
 
         // set data
+        String currentUserId = new AuthenticationAPIController(this).getCurrentUser().getUserId();
+        for (Ride ride : searchRideParams.getResult())
+            ride.setCanRequestToJoin(!currentUserId.equals(ride.getRider().getUserId()));
         rideListFragment.setData(searchRideParams.getResult());
 
         // load interstitial ad (currently disabled)
@@ -84,13 +89,13 @@ public class SearchRideResults extends AppCompatActivity implements RideListFrag
     public void onRequestToJoin(int position, final Ride ride)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.request_to_join));
+        builder.setTitle(getString(R.string.send_your_request));
 
         // Set up the input
         final EditText editTextMessage = new EditText(this);
         editTextMessage.setInputType(InputType.TYPE_CLASS_TEXT);
-        editTextMessage.setPadding(8, 8, 8, 8);
         editTextMessage.setHint(getString(R.string.message));
+        editTextMessage.setGravity(Gravity.CENTER_VERTICAL);
         builder.setView(editTextMessage);
 
         // Set up the buttons
@@ -117,13 +122,14 @@ public class SearchRideResults extends AppCompatActivity implements RideListFrag
 
     public void requestToJoinRide(String message, final Ride ride)
     {
-        // make a request
+        // make a requestX
         final ProgressDialog progressDialog = ProgressDialog.show(this, "", getString(R.string.sending));
         final RidesAPIController controller = new RidesAPIController(this);
         controller.requestToJoinRide(
                 new AuthenticationAPIController(this).getTokken()
                 , searchRideParams
                 , ride.getId()
+                ,message
                 , new GenericSuccessCallback()
                 {
 

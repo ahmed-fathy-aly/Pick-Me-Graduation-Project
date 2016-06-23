@@ -2,19 +2,34 @@ package com.asu.pick_me_graduation_project.view;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.callback.GetRouteCallback;
 import com.asu.pick_me_graduation_project.controller.MapsAPIController;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,13 +49,13 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.internal.DebouncingOnClickListener;
 
 /**
  * A generic maps view
  */
 public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
 {
-
 
     /* UI */
     @Bind(R.id.mapView)
@@ -88,6 +103,8 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
         // init map view
         mapView.onCreate(new Bundle());
         mapView.getMapAsync(this);
+
+
     }
 
 
@@ -126,7 +143,7 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
         }
 
         mapView.onResume();
-
+            mapView.setDrawingCacheEnabled(true);
 
     }
 
@@ -140,11 +157,7 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
             {
                 LatLng myLocation = new LatLng(location.getLatitude(),
                         location.getLongitude());
-                CameraPosition cameraPosition = CameraPosition.builder()
-                        .target(myLocation)
-                        .zoom(15)
-                        .build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                moveToLocation(myLocation);
                 googleMap.setOnMyLocationChangeListener(null);
             }
         });
@@ -163,6 +176,7 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
         int padding = 50;
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         googleMap.animateCamera(cameraUpdate);
+
     }
 
 
@@ -177,6 +191,23 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
             goToMyLocationNow();
         else
             goToMyLocation = true;
+    }
+
+
+    /**
+     * animates to that latlng
+     */
+    public void moveToLocation(LatLng latLng)
+    {
+        if (googleMap != null)
+        {
+            CameraPosition cameraPosition = CameraPosition.builder()
+                    .target(latLng)
+                    .zoom(15)
+                    .build();
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        }
     }
 
     /**
@@ -303,5 +334,13 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
         // remove polyine
         if (polyline != null)
             polyline.remove();
+    }
+
+    /**
+     * requests to get the bitmap of the map
+     */
+    public void requestBitmap(GoogleMap.SnapshotReadyCallback callback)
+    {
+        googleMap.snapshot(callback);
     }
 }
