@@ -26,6 +26,7 @@ import com.asu.pick_me_graduation_project.callback.GetRideCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.RidesAPIController;
 import com.asu.pick_me_graduation_project.model.Ride;
+import com.asu.pick_me_graduation_project.utils.Constants;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.io.File;
@@ -67,9 +68,8 @@ public class RideDetailsActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ride_details);
 
-        // TODO get ride id
-        //rideId = getIntent().getExtras().getString(Constants.RIDE_ID);
-        rideId = "60";
+        // get ride id
+        rideId = getIntent().getExtras().getString(Constants.RIDE_ID);
 
         // reference views
         ButterKnife.bind(this);
