@@ -3,6 +3,7 @@ package com.asu.pick_me_graduation_project.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -103,6 +104,7 @@ public class BaseActivity extends AppCompatActivity
                 , new PrimaryDrawerItem().withIdentifier(4).withName("Messages").withIcon(R.drawable.ic_chat_bubble_outline_black_48dp)
                 , new PrimaryDrawerItem().withIdentifier(5).withName("Communities").withIcon(R.drawable.ic_people_outline_black_48dp)
                 , new PrimaryDrawerItem().withIdentifier(6).withName("My Rides").withIcon(R.drawable.ic_directions_car_black_24dp)
+                , new PrimaryDrawerItem().withIdentifier(7).withName("Contact Us").withIcon(R.drawable.ic_mail_outline_black_24dp)
                 , new DividerDrawerItem()
                 , new PrimaryDrawerItem().withIdentifier(10).withName("Log Out").withIcon(R.drawable.ic_exit_to_app_black_48dp));
 
@@ -128,15 +130,21 @@ public class BaseActivity extends AppCompatActivity
                     } else if (id == 3)
                     {
                         intent.setClass(activity, SearchUsersActivity.class);
-                    }else if (id == 4)
+                    } else if (id == 4)
                     {
                         intent.setClass(activity, RecentChatsActivity.class);
                     } else if (id == 5)
                     {
                         intent.setClass(activity, CommunitiesActivity.class);
-                    }else if (id == 6)
+                    } else if (id == 6)
                     {
                         intent.setClass(activity, MyRidesActivity.class);
+                    } else if (id == 7)
+                    {
+                        // make a send email intent
+                        intent.setAction(Intent.ACTION_SENDTO);
+                        intent.setData(Uri.fromParts(
+                                "mailto", getString(R.string.contact_mail), null));
                     }
 
                     // launch the activity after some milliseconds to show the drawer close animation
@@ -173,14 +181,16 @@ public class BaseActivity extends AppCompatActivity
         return drawer;
     }
 
-    protected  void closeKeyboard()
+    protected void closeKeyboard()
     {
         View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (view != null)
+        {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
     @Override
     public void onBackPressed()
     {
