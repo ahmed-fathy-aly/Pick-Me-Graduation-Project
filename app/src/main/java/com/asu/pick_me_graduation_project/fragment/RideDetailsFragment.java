@@ -1,7 +1,6 @@
 package com.asu.pick_me_graduation_project.fragment;
 
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.ContactUserView;
 import com.asu.pick_me_graduation_project.view.GenericMapsView;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -34,8 +32,8 @@ import butterknife.ButterKnife;
  */
 public class RideDetailsFragment extends Fragment
 {
-    @Bind(R.id.timeChooserView)
-    ContactUserView timeChooserView;
+    @Bind(R.id.contactUserView)
+    ContactUserView contactUserView;
     @Bind(R.id.mapsView)
     GenericMapsView mapsView;
     @Bind(R.id.textViewDescription)
@@ -87,7 +85,9 @@ public class RideDetailsFragment extends Fragment
         User user = new AuthenticationAPIController(getContext()).getCurrentUser();
 
         // time
-        timeChooserView.setData(user);
+        String currentUserId = new AuthenticationAPIController(getContext()).getCurrentUser().getUserId();
+        boolean canChat = !currentUserId.equals(ride.getRider().getUserId());
+        contactUserView.setData(user, canChat);
 
         // map
         // locations

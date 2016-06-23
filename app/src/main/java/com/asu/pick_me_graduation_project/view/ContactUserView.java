@@ -68,7 +68,7 @@ public class ContactUserView extends LinearLayout
     /**
      * updates the UI with this user
      */
-    public void setData(final User user)
+    public void setData(final User user, boolean canChat)
     {
         // set data
         textViewUserName.setText(user.getFirstName() + " " + user.getLastName());
@@ -100,5 +100,6 @@ public class ContactUserView extends LinearLayout
                 getContext().startActivity(intent);
             }
         });
+        fabChat.setEnabled(canChat);
     }
 }
