@@ -110,5 +110,20 @@ public class DatabaseHelper extends SQLiteOpenHelper
     }
 
 
+    /**
+     * clears all contents of the tables
+     */
+    public void clearTables()
+    {
+        String clearUserTable = "DELETE  FROM " + USER_TABLE;
+        String clearLocationTable = "DELETE  FROM " + LOCATION_TABLE;
+        String clearRideTable = "DELETE  FROM " + RIDE_TABLE;
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(clearUserTable);
+        db.execSQL(clearLocationTable);
+        db.execSQL(clearRideTable);
+    }
+
 
 }

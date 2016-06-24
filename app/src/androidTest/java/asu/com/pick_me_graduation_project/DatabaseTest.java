@@ -104,6 +104,10 @@ public class DatabaseTest extends ApplicationTestCase<Application>
         // create database
         DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
 
+        // clear database
+        databaseHelper.clearTables();
+
+
 
     }
 }
