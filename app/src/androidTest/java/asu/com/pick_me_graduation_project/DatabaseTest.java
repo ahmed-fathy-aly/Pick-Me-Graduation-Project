@@ -107,7 +107,8 @@ public class DatabaseTest extends ApplicationTestCase<Application>
         // clear database
         databaseHelper.clearTables();
 
-
+        // insert rides
+        databaseHelper.insertRides(Arrays.asList(ride1, ride2));
 
     }
 }

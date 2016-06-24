@@ -125,5 +125,107 @@ public class DatabaseHelper extends SQLiteOpenHelper
         db.execSQL(clearRideTable);
     }
 
+    public void insertRides(List<Ride> rideList)
+    {
+        //Database
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
 
+        // the users
+        HashSet<Integer> userIds = new HashSet<>();
+        for (Ride ride : rideList)
+        {
+            for (User user : ride.getMembers())
+                if (!userIds.contains(Integer.parseInt(user.getUserId())))
+                {
+                    userIds.add(Integer.parseInt(user.getUserId()));
+                    insertUser(user, db);
+                }
+        }
+        userIds.clear();
+
+        // the locations
+        for (Ride ride : rideList)
+            for (Location location : ride.getLocations())
+                insertLocation(location, db);
+
+        // the rides
+        for (Ride ride : rideList)
+            insertRide(ride, db);
+
+    }
+
+
+    private void insertUser(User user, SQLiteDatabase database)
+    {
+        String keysString = String.format(" ( %s , %s, %s, %s ) "
+                , ID
+                , FIRST_NAME
+                , LAST_NAME
+                , PROFILE_PICTURE_URL);
+        String valuesString = String.format(" ( %d, \"%s\", \"%s\", \"%s\" ) ",
+                Integer.parseInt(user.getUserId())
+                , user.getFirstName()
+                , user.getLastName()
+                , user.getProfilePictureUrl());
+        String insertUser =
+                "INSERT INTO " + USER_TABLE
+                        + keysString
+                        + " VALUES " + valuesString;
+        database.execSQL(insertUser);
+    }
+
+
+    private void insertLocation(Location location, SQLiteDatabase database)
+    {
+        String keysString = String.format(" ( %s , %s, %s, %s , %s , %s ) "
+                , ID
+                , LONGITUDE
+                , LATITUDE
+                , ORDER
+                , USER_ID
+                , TYPE);
+        String valuesString = String.format(" ( %d, %.8f, %.8f, %d , %d , %d ) ",
+                Integer.parseInt(location.getId())
+                , location.getLongitude()
+                , location.getLatitude()
+                , location.getOrder()
+                , Integer.parseInt(location.getUser().getUserId())
+                , location.getType() == Location.LocationType.SOURCE ? 0 : 1);
+        String insertLocation =
+                "INSERT INTO " + LOCATION_TABLE
+                        + keysString
+                        + " VALUES " + valuesString;
+        Log.e("Game", insertLocation);
+        database.execSQL(insertLocation);
+    }
+
+    private void insertRide(Ride ride, SQLiteDatabase database)
+    {
+        String keysString = String.format(" ( %s , %s, %s, %s , %s , %s , %s , %s ) "
+                , ID
+                , DRIVER_ID
+                , DESCRIPTION
+                , NOTES
+                , TIME_STR
+                , FREE_SEATS
+                , NO_SMOKING
+                , LADIES_ONLY);
+        String valuesString = String.format(" ( %d, %d, \"%s\" , \"%s\", \"%s\",  %d , %d , %d ) ",
+                Integer.parseInt(ride.getId())
+                , Integer.parseInt(ride.getRider().getUserId())
+                , ride.getDescription()
+                , ride.getNotes()
+                , TimeUtils.convertToDatabaseTime(ride.getTime())
+                , ride.getRideDetails().getNumberOfFreeSeats()
+                , ride.getRideDetails().isNoSmoking() ? 1 : 0
+                , ride.getRideDetails().isLadiesOnly() ? 1 : 0
+        );
+        String insertRide =
+                "INSERT INTO " + RIDE_TABLE
+                        + keysString
+                        + " VALUES " + valuesString;
+        Log.e("Game", insertRide);
+        database.execSQL(insertRide);
+    }
 }
