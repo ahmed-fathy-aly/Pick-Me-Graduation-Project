@@ -56,8 +56,9 @@ public class RideDetailsFragment extends Fragment
     TextView textViewNoSmoking;
     @Bind(R.id.textViewLadiesOnly)
     TextView textViewLadiesOnly;
-    @Bind(R.id.shareLayout)
-    View shareLayout;
+    @Bind(R.id.layoutCarDetails)
+    View layoutCarDetails;
+
 
     /* UI */
 
@@ -122,12 +123,17 @@ public class RideDetailsFragment extends Fragment
         textViewLadiesOnly.setVisibility(ride.getRideDetails().isLadiesOnly() ? View.VISIBLE : View.GONE);
 
         // car details
-        textViewCarModel.setText(ValidationUtils.correct(ride.getRideDetails().getCarDetails().getModel()));
-        textViewCarYear.setText(ValidationUtils.correct(ride.getRideDetails().getCarDetails().getYear()));
-        textViewCarPlateNumber.setText(ValidationUtils.correct(ride.getRideDetails().getCarDetails().getPlateNumber()));
-        checkBoxAirConditioned.setVisibility(ride.getRideDetails().getCarDetails().isConditioned() ? View.VISIBLE : View.GONE);
-        checkBoxAirConditioned.setChecked(ride.getRideDetails().getCarDetails().isConditioned());
-
+        if (ride.getRideDetails().getCarDetails() != null)
+        {
+            layoutCarDetails.setVisibility(View.VISIBLE);
+            textViewCarModel.setText(ValidationUtils.correct(ride.getRideDetails().getCarDetails().getModel()));
+            textViewCarYear.setText(ValidationUtils.correct(ride.getRideDetails().getCarDetails().getYear()));
+            textViewCarPlateNumber.setText(ValidationUtils.correct(ride.getRideDetails().getCarDetails().getPlateNumber()));
+            checkBoxAirConditioned.setVisibility(ride.getRideDetails().getCarDetails().isConditioned() ? View.VISIBLE : View.GONE);
+            checkBoxAirConditioned.setChecked(ride.getRideDetails().getCarDetails().isConditioned());
+        }
+        else
+            layoutCarDetails.setVisibility(View.GONE);
     }
 
     @Override

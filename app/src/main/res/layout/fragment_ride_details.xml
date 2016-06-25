@@ -127,6 +127,7 @@
     </android.support.v7.widget.CardView>
 
     <include
+        android:id="@+id/layoutCarDetails"
         layout="@layout/layout_car_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

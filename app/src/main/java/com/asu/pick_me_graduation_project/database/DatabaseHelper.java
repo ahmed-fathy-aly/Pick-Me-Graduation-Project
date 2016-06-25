@@ -165,6 +165,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
         for (Ride ride : rideList)
             insertRideDetails(ride, db);
 
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
 
@@ -197,6 +199,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
             driverId = cursor.getInt(cursor.getColumnIndex(DRIVER_ID));
         } else
             return null;
+
+        Log.e("Game", "found its details ");
 
         // get the driver
         User driver = getUser(driverId, db);
@@ -280,7 +284,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 "INSERT INTO " + LOCATION_TABLE
                         + keysString
                         + " VALUES " + valuesString;
-        Log.e("Game", insertLocation);
         database.execSQL(insertLocation);
     }
 
@@ -309,7 +312,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 "INSERT INTO " + RIDE_TABLE
                         + keysString
                         + " VALUES " + valuesString;
-        Log.e("Game", insertRide);
         database.execSQL(insertRide);
     }
 

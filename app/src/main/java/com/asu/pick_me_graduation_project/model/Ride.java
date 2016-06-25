@@ -134,6 +134,7 @@ public class Ride implements Serializable
 
             // poster
             ride.setDriver(User.fromJson(jsonObject.getJSONObject("postUser")));
+
             // locations
             JSONArray locationsJson = jsonObject.getJSONArray("locations");
             List<Location> locations = new ArrayList<>();
