@@ -1,19 +1,16 @@
 package com.asu.pick_me_graduation_project.activity;
 
+import android.app.LoaderManager;
+import android.content.AsyncTaskLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ActionProvider;
-import android.support.v4.view.MenuCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,14 +22,13 @@ import com.asu.pick_me_graduation_project.adapter.RideDetailsPagerAdapter;
 import com.asu.pick_me_graduation_project.callback.GetRideCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.RidesAPIController;
+import com.asu.pick_me_graduation_project.database.DatabaseHelper;
 import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Random;
 
@@ -82,8 +78,7 @@ public class RideDetailsActivity extends BaseActivity
 
 
         // load data
-        loadRide();
-
+        readRideFromDatabase();
 
     }
 
@@ -103,23 +98,42 @@ public class RideDetailsActivity extends BaseActivity
 
     }
 
-
     /**
-     * downloads the ride info from the api
+     * reads the ride from the database (details, members) without requests
+     * then load it from backend
      */
-    private void loadRide()
+    private void readRideFromDatabase()
     {
         progressBar.setVisibility(View.VISIBLE);
 
-        contoller.getRideDetails(new AuthenticationAPIController(this).getTokken()
-                , rideId
-                , new GetRideCallback()
+        Loader<Ride> loader = getLoaderManager().initLoader(54, null, new LoaderManager.LoaderCallbacks<Ride>()
         {
             @Override
-            public void success(Ride ride)
+            public Loader<Ride> onCreateLoader(int id, Bundle args)
             {
-                progressBar.setVisibility(View.INVISIBLE);
-                RideDetailsActivity.this.ride  = ride;
+                return new AsyncTaskLoader<Ride>(RideDetailsActivity.this)
+                {
+                    @Override
+                    public Ride loadInBackground()
+                    {
+                        DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
+                        Ride ride = databaseHelper.getRide(Integer.parseInt(rideId));
+                        databaseHelper.close();
+                        return ride;
+                    }
+                };
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Ride> loader, Ride data)
+            {
+                // if the ride is not there then let if go and load from backend
+                if (data == null)
+                {
+                    loadRideFromBackend();
+                    return;
+                }
+                RideDetailsActivity.this.ride = data;
 
                 // check if we should show the ride join request
                 String currentUserId = new AuthenticationAPIController(RideDetailsActivity.this).getCurrentUser().getUserId();
@@ -142,6 +156,55 @@ public class RideDetailsActivity extends BaseActivity
                     if (viewPager.getChildCount() == 3)
                         viewPager.setCurrentItem(2, true);
 
+                // now load from backend
+                loadRideFromBackend();
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Ride> loader)
+            {
+            }
+
+        });
+        loader.forceLoad();
+    }
+
+
+    /**
+     * downloads the ride info from the api
+     */
+    private void loadRideFromBackend()
+    {
+        progressBar.setVisibility(View.VISIBLE);
+
+        contoller.getRideDetails(new AuthenticationAPIController(this).getTokken()
+                , rideId
+                , new GetRideCallback()
+        {
+            @Override
+            public void success(Ride ride)
+            {
+                progressBar.setVisibility(View.INVISIBLE);
+                RideDetailsActivity.this.ride = ride;
+
+                // check if we should show the ride join request
+                String currentUserId = new AuthenticationAPIController(RideDetailsActivity.this).getCurrentUser().getUserId();
+                boolean showRideRequests = currentUserId.equals(ride.getRider().getUserId());
+
+                // setup view pager
+                if (rideDetailsPagerAdapter == null)
+                {
+                    rideDetailsPagerAdapter = new RideDetailsPagerAdapter(getSupportFragmentManager(), rideId, showRideRequests);
+                    viewPager.setAdapter(rideDetailsPagerAdapter);
+                    viewPager.setOffscreenPageLimit(3);
+                    tabLayout.setupWithViewPager(viewPager);
+                }
+
+                // set the details
+                rideDetailsPagerAdapter.getRideDetailsFragment().setData(ride);
+
+                // add the members to the fragment
+                rideDetailsPagerAdapter.getMembersListFragment().setMembers(ride.getMembers());
             }
 
             @Override

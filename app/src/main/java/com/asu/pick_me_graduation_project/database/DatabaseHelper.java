@@ -200,6 +200,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
         } else
             return null;
 
+        Log.e("Game", "found its details ");
+
         // get the driver
         User driver = getUser(driverId, db);
         if (driver != null)
@@ -282,7 +284,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 "INSERT INTO " + LOCATION_TABLE
                         + keysString
                         + " VALUES " + valuesString;
-        Log.e("Game", insertLocation);
         database.execSQL(insertLocation);
     }
 
@@ -311,7 +312,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 "INSERT INTO " + RIDE_TABLE
                         + keysString
                         + " VALUES " + valuesString;
-        Log.e("Game", insertRide);
         database.execSQL(insertRide);
     }
 

@@ -68,6 +68,7 @@ public class MyRidesActivity extends BaseActivity implements SwipeRefreshLayout.
                 .commit();
 
         // setup swipe refresh
+        swipeRefreshLayout.setColorSchemeResources(R.color.accent);
         swipeRefreshLayout.setOnRefreshListener(this);
 
         // load data
@@ -149,8 +150,9 @@ public class MyRidesActivity extends BaseActivity implements SwipeRefreshLayout.
                     @Override
                     public List<Ride> loadInBackground()
                     {
-                        DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
+                        DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
                         List<Ride> rides = databaseHelper.getAllRides();
+                        Log.e("Game", "found " + rides.size());
                         databaseHelper.close();
                         return rides;
                     }
@@ -193,7 +195,7 @@ public class MyRidesActivity extends BaseActivity implements SwipeRefreshLayout.
                     @Override
                     public Boolean loadInBackground()
                     {
-                        DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
+                        DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
                         databaseHelper.clearTables();
                         databaseHelper.insertRides(rides);
                         databaseHelper.close();
