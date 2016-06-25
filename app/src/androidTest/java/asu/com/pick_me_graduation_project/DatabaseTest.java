@@ -11,6 +11,10 @@ import com.asu.pick_me_graduation_project.model.RideDetails;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.TimeUtils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -124,6 +128,172 @@ public class DatabaseTest extends ApplicationTestCase<Application>
 
     }
 
+    public void testMyRides2()
+    {
+        // user data from the server as json strings
+        String jsonString =
+                " [\n" +
+                        "    {\n" +
+                        "      \"id\": 46,\n" +
+                        "      \"postUser\": {\n" +
+                        "        \"id\": 7,\n" +
+                        "        \"firstName\": \"Snow\",\n" +
+                        "        \"lastName\": \"White\",\n" +
+                        "        \"profilePicture\": \"\"\n" +
+                        "      },\n" +
+                        "      \"notes\": \"bla bla blaa at bla bla\",\n" +
+                        "      \"description\": \"To A new brave world\",\n" +
+                        "      \"time\": \"2016-11-30T12:00:00\",\n" +
+                        "      \"ac\": true,\n" +
+                        "      \"ladiesOnly\": false,\n" +
+                        "      \"noSmoking\": true,\n" +
+                        "      \"locations\": [\n" +
+                        "        {\n" +
+                        "          \"id\": 74,\n" +
+                        "          \"user\": {\n" +
+                        "            \"id\": 7,\n" +
+                        "            \"firstName\": \"Snow\",\n" +
+                        "            \"lastName\": \"White\",\n" +
+                        "            \"profilePicture\": \"\"\n" +
+                        "          },\n" +
+                        "          \"longitude\": 2.355,\n" +
+                        "          \"latitude\": 48.87308,\n" +
+                        "          \"type\": false,\n" +
+                        "          \"order\": 1\n" +
+                        "        },\n" +
+                        "        {\n" +
+                        "          \"id\": 75,\n" +
+                        "          \"user\": {\n" +
+                        "            \"id\": 7,\n" +
+                        "            \"firstName\": \"Snow\",\n" +
+                        "            \"lastName\": \"White\",\n" +
+                        "            \"profilePicture\": \"\"\n" +
+                        "          },\n" +
+                        "          \"longitude\": 2.3547,\n" +
+                        "          \"latitude\": 48.8776,\n" +
+                        "          \"type\": true,\n" +
+                        "          \"order\": 2\n" +
+                        "        }\n" +
+                        "      ]\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"id\": 47,\n" +
+                        "      \"postUser\": {\n" +
+                        "        \"id\": 7,\n" +
+                        "        \"firstName\": \"Snow\",\n" +
+                        "        \"lastName\": \"White\",\n" +
+                        "        \"profilePicture\": \"\"\n" +
+                        "      },\n" +
+                        "      \"notes\": \"bla bla blaa at bla bla\",\n" +
+                        "      \"description\": \"To A new brave world\",\n" +
+                        "      \"time\": \"2016-11-30T12:00:00\",\n" +
+                        "      \"ac\": true,\n" +
+                        "      \"ladiesOnly\": false,\n" +
+                        "      \"noSmoking\": true,\n" +
+                        "      \"locations\": [\n" +
+                        "        {\n" +
+                        "          \"id\": 76,\n" +
+                        "          \"user\": {\n" +
+                        "            \"id\": 7,\n" +
+                        "            \"firstName\": \"Snow\",\n" +
+                        "            \"lastName\": \"White\",\n" +
+                        "            \"profilePicture\": \"\"\n" +
+                        "          },\n" +
+                        "          \"longitude\": 2.355,\n" +
+                        "          \"latitude\": 48.87308,\n" +
+                        "          \"type\": false,\n" +
+                        "          \"order\": 1\n" +
+                        "        },\n" +
+                        "        {\n" +
+                        "          \"id\": 77,\n" +
+                        "          \"user\": {\n" +
+                        "            \"id\": 7,\n" +
+                        "            \"firstName\": \"Snow\",\n" +
+                        "            \"lastName\": \"White\",\n" +
+                        "            \"profilePicture\": \"\"\n" +
+                        "          },\n" +
+                        "          \"longitude\": 2.3547,\n" +
+                        "          \"latitude\": 48.8776,\n" +
+                        "          \"type\": true,\n" +
+                        "          \"order\": 2\n" +
+                        "        }\n" +
+                        "      ]\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"id\": 48,\n" +
+                        "      \"postUser\": {\n" +
+                        "        \"id\": 7,\n" +
+                        "        \"firstName\": \"Snow\",\n" +
+                        "        \"lastName\": \"White\",\n" +
+                        "        \"profilePicture\": \"\"\n" +
+                        "      },\n" +
+                        "      \"notes\": \"bla bla blaa at bla bla\",\n" +
+                        "      \"description\": \"To A new brave world\",\n" +
+                        "      \"time\": \"2016-11-30T12:00:00\",\n" +
+                        "      \"ac\": true,\n" +
+                        "      \"ladiesOnly\": false,\n" +
+                        "      \"noSmoking\": true,\n" +
+                        "      \"locations\": [\n" +
+                        "        {\n" +
+                        "          \"id\": 78,\n" +
+                        "          \"user\": {\n" +
+                        "            \"id\": 7,\n" +
+                        "            \"firstName\": \"Snow\",\n" +
+                        "            \"lastName\": \"White\",\n" +
+                        "            \"profilePicture\": \"\"\n" +
+                        "          },\n" +
+                        "          \"longitude\": 2.355,\n" +
+                        "          \"latitude\": 48.87308,\n" +
+                        "          \"type\": false,\n" +
+                        "          \"order\": 1\n" +
+                        "        },\n" +
+                        "        {\n" +
+                        "          \"id\": 79,\n" +
+                        "          \"user\": {\n" +
+                        "            \"id\": 7,\n" +
+                        "            \"firstName\": \"Snow\",\n" +
+                        "            \"lastName\": \"White\",\n" +
+                        "            \"profilePicture\": \"\"\n" +
+                        "          },\n" +
+                        "          \"longitude\": 2.3547,\n" +
+                        "          \"latitude\": 48.8776,\n" +
+                        "          \"type\": true,\n" +
+                        "          \"order\": 2\n" +
+                        "        }\n" +
+                        "      ]\n" +
+                        "    }" +
+                        "]";
+        try
+        {
+            // parse the rides
+            JSONArray jsonArray = new JSONArray(jsonString);
+            List<Ride> expectedRides = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++)
+                expectedRides.add(Ride.fromJson(jsonArray.getJSONObject(i)));
+
+            // create database
+            DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
+
+            // clear database
+            databaseHelper.clearTables();
+
+            // insert rides
+            databaseHelper.insertRides(expectedRides);
+
+            // read rides
+            List<Ride> resultRides = databaseHelper.getAllRides();
+            assertEquals(expectedRides.size(), resultRides.size());
+            for (int i = 0 ; i < expectedRides.size(); i++)
+                assertSameRide(expectedRides.get(i), resultRides.get(i));
+
+        } catch (JSONException e)
+        {
+
+            fail("failed to parse the data");
+        }
+
+
+    }
     private void assertSameRide(Ride ride1, Ride ride2)
     {
         // same details
