@@ -166,7 +166,7 @@ public class LoginActivity extends BaseActivity
     @OnClick(R.id.buttonFacebookLogin)
     void onButtonFacebookClicked()
     {
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends", "email"));
     }
 
     @OnClick(R.id.buttonGoogleSignIn)

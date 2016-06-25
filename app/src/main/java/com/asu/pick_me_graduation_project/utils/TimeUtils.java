@@ -54,4 +54,31 @@ public class TimeUtils {
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
         return formatter.format(time.getTime()).replace("am", "AM").replace("pm", "PM");
     }
+
+    /**
+     * converts to a string like 11 05 2017 10 30 00
+     */
+    public static String convertToDatabaseTime(Calendar time)
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy hh mm ss");
+        return formatter.format(time.getTime());
+    }
+
+    /**
+     * converts from a string like 11 05 2017 10 30 00
+     */
+    public static Calendar getDatabaseTime(String timeStr)
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy hh mm ss");
+        try
+        {
+            Date date = formatter.parse(timeStr);
+            Calendar c = new GregorianCalendar();
+            c.setTime(date);
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+        return new GregorianCalendar();
+    }
 }
