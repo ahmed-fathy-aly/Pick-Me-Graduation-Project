@@ -165,6 +165,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
         for (Ride ride : rideList)
             insertRideDetails(ride, db);
 
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
 

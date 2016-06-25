@@ -126,6 +126,9 @@ public class DatabaseTest extends ApplicationTestCase<Application>
         for (int i = 0; i < rides.size(); i++)
             assertSameRide(rides.get(i), expectedRides.get(i));
 
+        // close the database
+        databaseHelper.close();
+
     }
 
     public void testMyRides2()
@@ -286,6 +289,9 @@ public class DatabaseTest extends ApplicationTestCase<Application>
             for (int i = 0 ; i < expectedRides.size(); i++)
                 assertSameRide(expectedRides.get(i), resultRides.get(i));
 
+            // close the database
+            databaseHelper.close();
+
         } catch (JSONException e)
         {
 
@@ -311,6 +317,7 @@ public class DatabaseTest extends ApplicationTestCase<Application>
         assertEquals(ride1.getLocations().size(), ride2.getLocations().size());
         for (int i = 0;i< ride1.getLocations().size(); i++)
             assertSameLocation(ride1.getLocations().get(i), ride1.getLocations().get(i));
+
 
     }
 
