@@ -12,6 +12,7 @@ import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.TimeUtils;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
@@ -24,7 +25,7 @@ public class DatabaseTest extends ApplicationTestCase<Application>
     }
 
 
-    public void testMyRides()
+    public void testMyRides1()
     {
         // create users
         User user1 = new User();
@@ -44,6 +45,7 @@ public class DatabaseTest extends ApplicationTestCase<Application>
         user3.setFirstName("first3");
         user3.setLastName("last3");
         user3.setProfilePictureUrl("picture3");
+
 
         // create locations
         Location location1 = new Location();
@@ -69,7 +71,6 @@ public class DatabaseTest extends ApplicationTestCase<Application>
         location3.setOrder(2);
         location3.setUser(user3);
         location3.setType(Location.LocationType.SOURCE);
-
 
         Location location4 = new Location();
         location4.setId("4");
@@ -110,5 +111,54 @@ public class DatabaseTest extends ApplicationTestCase<Application>
         // insert rides
         databaseHelper.insertRides(Arrays.asList(ride1, ride2));
 
+        // get 1 ride
+        Ride ride = databaseHelper.getRide(1);
+        assertSameRide(ride, ride1);
+
+        // get all rides
+        List<Ride> rides = databaseHelper.getAllRides();
+        List<Ride> expectedRides = Arrays.asList(ride1, ride2);
+        assertEquals(rides.size(), expectedRides.size());
+        for (int i = 0; i < rides.size(); i++)
+            assertSameRide(rides.get(i), expectedRides.get(i));
+
+    }
+
+    private void assertSameRide(Ride ride1, Ride ride2)
+    {
+        // same details
+        assertEquals(ride1.getId(), ride2.getId());
+        assertEquals(ride1.getDescription(), ride2.getDescription());
+        assertEquals(ride1.getNotes(), ride2.getNotes());
+        assertEquals(ride1.getRideDetails().getNumberOfFreeSeats(), ride2.getRideDetails().getNumberOfFreeSeats());
+        assertEquals(ride1.getRideDetails().isNoSmoking(), ride2.getRideDetails().isNoSmoking());
+        assertEquals(ride1.getRideDetails().isLadiesOnly(), ride2.getRideDetails().isLadiesOnly());
+
+        // same driver
+        assertSameUser(ride1.getRider(), ride2.getRider());
+
+        // same locations
+        assertEquals(ride1.getLocations().size(), ride2.getLocations().size());
+        for (int i = 0;i< ride1.getLocations().size(); i++)
+            assertSameLocation(ride1.getLocations().get(i), ride1.getLocations().get(i));
+
+    }
+
+    private void assertSameLocation(Location location1, Location location2)
+    {
+        assertEquals(location1.getId(), location2.getId());
+        assertEquals(location1.getLatitude(), location2.getLatitude());
+        assertEquals(location1.getLongitude(), location2.getLongitude());
+        assertEquals(location1.getOrder(), location2.getOrder());
+        assertEquals(location1.getType(), location2.getType());
+        assertSameUser(location1.getUser(), location2.getUser());
+    }
+
+    private void assertSameUser(User user1, User user2)
+    {
+        assertEquals(user1.getUserId(), user2.getUserId());
+        assertEquals(user1.getFirstName(), user2.getFirstName());
+        assertEquals(user1.getLastName(), user2.getLastName());
+        assertEquals(user1.getProfilePictureUrl(), user2.getProfilePictureUrl());
     }
 }

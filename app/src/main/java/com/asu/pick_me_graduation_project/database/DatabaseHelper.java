@@ -1,15 +1,18 @@
 package com.asu.pick_me_graduation_project.database;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.asu.pick_me_graduation_project.model.Location;
 import com.asu.pick_me_graduation_project.model.Ride;
+import com.asu.pick_me_graduation_project.model.RideDetails;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.TimeUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -20,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 {
     /* general constants */
     public static String DATABASE_NAME = "pickMeDatabase";
-    public static int DATABASE_VERSION = 7;
+    public static int DATABASE_VERSION = 8;
 
     /* users table */
     public static String USER_TABLE = "userTable";
@@ -31,6 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
     /* locations table */
     public static String LOCATION_TABLE = "locationTable";
+    public static String RIDE_ID = "rideId";
     public static String LATITUDE = "latitude";
     public static String LONGITUDE = "longitude";
     public static String ORDER = "locationOrder";
@@ -68,6 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 "CREATE TABLE " + LOCATION_TABLE
                         + " ( "
                         + ID + " INT PRIMARY KEY , "
+                        + RIDE_ID + " INT , "
                         + LATITUDE + " REAL , "
                         + LONGITUDE + " REAL , "
                         + ORDER + " INT , "
@@ -125,6 +130,10 @@ public class DatabaseHelper extends SQLiteOpenHelper
         db.execSQL(clearRideTable);
     }
 
+    /**
+     * adds the list of ride to the db
+     * make sure you clear the db first
+     */
     public void insertRides(List<Ride> rideList)
     {
         //Database
@@ -147,14 +156,87 @@ public class DatabaseHelper extends SQLiteOpenHelper
         // the locations
         for (Ride ride : rideList)
             for (Location location : ride.getLocations())
+            {
+                location.setRideId(ride.getId());
                 insertLocation(location, db);
+            }
 
-        // the rides
+        // the ride details
         for (Ride ride : rideList)
-            insertRide(ride, db);
+            insertRideDetails(ride, db);
 
     }
 
+
+    /**
+     * returns a ride along with its details, locations and driver
+     * returns null if that ride doesn't exist
+     */
+    public Ride getRide(int id)
+    {
+        Ride ride = new Ride();
+        int driverId;
+
+        // get the ride details
+        String selectDetails =
+                "SELECT * FROM " + RIDE_TABLE
+                        + " WHERE " + ID + " = " + id;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectDetails, null);
+        if (cursor.moveToFirst())
+        {
+            ride.setId("" + cursor.getInt(cursor.getColumnIndex(ID)));
+            ride.setTime(TimeUtils.getDatabaseTime(cursor.getString(cursor.getColumnIndex(TIME_STR))));
+            ride.setDescription(cursor.getString(cursor.getColumnIndex(DESCRIPTION)));
+            ride.setNotes(cursor.getString(cursor.getColumnIndex(NOTES)));
+            RideDetails rideDetails = new RideDetails();
+            rideDetails.setNoSmoking(cursor.getInt(cursor.getColumnIndex(NO_SMOKING)) == 1);
+            rideDetails.setNumberOfFreeSeats(cursor.getInt(cursor.getColumnIndex(FREE_SEATS)));
+            rideDetails.setLadiesOnly(cursor.getInt(cursor.getColumnIndex(LADIES_ONLY)) == 1);
+            ride.setRideDetails(rideDetails);
+            driverId = cursor.getInt(cursor.getColumnIndex(DRIVER_ID));
+        } else
+            return null;
+
+        // get the driver
+        User driver = getUser(driverId, db);
+        if (driver != null)
+            ride.setDriver(driver);
+        else
+            return null;
+
+        // get the locations
+        List<Location> locationList = getLocations(id, db);
+        if (locationList != null)
+            ride.setLocations(locationList);
+        else
+            return null;
+
+        return ride;
+    }
+
+    /**
+     * returns all the rides in the database
+     */
+    public List<Ride> getAllRides()
+    {
+        String selectRideIds =
+                "SELECT " + ID + " FROM " + RIDE_TABLE;
+        Cursor cursor = getReadableDatabase().rawQuery(selectRideIds, null);
+
+        List<Ride> rides = new ArrayList<>();
+        if (cursor.moveToFirst())
+            do
+            {
+                int rideId = cursor.getInt(cursor.getColumnIndex(ID));
+                Ride ride = getRide(rideId);
+                if (ride == null)
+                    return null;
+                else
+                    rides.add(ride);
+            } while (cursor.moveToNext());
+        return rides;
+    }
 
     private void insertUser(User user, SQLiteDatabase database)
     {
@@ -178,15 +260,17 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
     private void insertLocation(Location location, SQLiteDatabase database)
     {
-        String keysString = String.format(" ( %s , %s, %s, %s , %s , %s ) "
+        String keysString = String.format(" ( %s , %s , %s, %s, %s , %s , %s ) "
                 , ID
+                , RIDE_ID
                 , LONGITUDE
                 , LATITUDE
                 , ORDER
                 , USER_ID
                 , TYPE);
-        String valuesString = String.format(" ( %d, %.8f, %.8f, %d , %d , %d ) ",
+        String valuesString = String.format(" ( %d, %d,  %.8f, %.8f, %d , %d , %d ) ",
                 Integer.parseInt(location.getId())
+                , Integer.parseInt(location.getRideId())
                 , location.getLongitude()
                 , location.getLatitude()
                 , location.getOrder()
@@ -200,7 +284,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
         database.execSQL(insertLocation);
     }
 
-    private void insertRide(Ride ride, SQLiteDatabase database)
+    private void insertRideDetails(Ride ride, SQLiteDatabase database)
     {
         String keysString = String.format(" ( %s , %s, %s, %s , %s , %s , %s , %s ) "
                 , ID
@@ -227,5 +311,63 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + " VALUES " + valuesString;
         Log.e("Game", insertRide);
         database.execSQL(insertRide);
+    }
+
+
+    private User getUser(int driverId, SQLiteDatabase db)
+    {
+        String selectDriver =
+                "SELECT * FROM " + USER_TABLE
+                        + " WHERE " + ID + " = " + driverId;
+        Cursor cursor = db.rawQuery(selectDriver, null);
+        if (cursor.moveToFirst())
+        {
+            User user = new User();
+            user.setUserId("" + cursor.getInt(cursor.getColumnIndex(ID)));
+            user.setFirstName(cursor.getString(cursor.getColumnIndex(FIRST_NAME)));
+            user.setLastName(cursor.getString(cursor.getColumnIndex(LAST_NAME)));
+            user.setProfilePictureUrl(cursor.getString(cursor.getColumnIndex(PROFILE_PICTURE_URL)));
+            return user;
+        }
+        return null;
+
+    }
+
+
+    private List<Location> getLocations(int id, SQLiteDatabase db)
+    {
+        String selectLocations =
+                "SELECT * FROM " + LOCATION_TABLE
+                        + " JOIN " + USER_TABLE
+                        + " ON " + LOCATION_TABLE + "." + USER_ID + " = " + USER_TABLE + "." + ID
+                        + " WHERE " + RIDE_ID + " = " + id;
+        Cursor cursor = db.rawQuery(selectLocations, null);
+        List<Location> locationList = new ArrayList<>();
+        if (cursor.moveToFirst())
+            do
+            {
+                // locations details
+                Location location = new Location();
+                location.setId("" + cursor.getInt(cursor.getColumnIndex(ID)));
+                location.setRideId("" + cursor.getInt(cursor.getColumnIndex(RIDE_ID)));
+                location.setLatitude(cursor.getDouble(cursor.getColumnIndex(LATITUDE)));
+                location.setLongitude(cursor.getDouble(cursor.getColumnIndex(LONGITUDE)));
+                location.setOrder(cursor.getInt(cursor.getColumnIndex(ORDER)));
+                location.setType(cursor.getInt(cursor.getColumnIndex(TYPE)) == 0 ?
+                        Location.LocationType.SOURCE : Location.LocationType.DESTINATION);
+
+                // its user
+                User user = new User();
+                user.setUserId("" + cursor.getInt(cursor.getColumnIndex(ID)));
+                user.setFirstName(cursor.getString(cursor.getColumnIndex(FIRST_NAME)));
+                user.setLastName(cursor.getString(cursor.getColumnIndex(LAST_NAME)));
+                user.setProfilePictureUrl(cursor.getString(cursor.getColumnIndex(PROFILE_PICTURE_URL)));
+                location.setUser(user);
+
+                locationList.add(location);
+            }
+            while (cursor.moveToNext());
+
+        return locationList;
     }
 }

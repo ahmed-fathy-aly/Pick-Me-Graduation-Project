@@ -13,6 +13,7 @@ public class Location implements Serializable
 {
     /* fields */
     String id;
+        String rideId;
     double latitude;
     double longitude;
     LocationType type;
@@ -87,6 +88,16 @@ public class Location implements Serializable
     public void setOrder(int order)
     {
         this.order = order;
+    }
+
+    public String getRideId()
+    {
+        return rideId;
+    }
+
+    public void setRideId(String rideId)
+    {
+        this.rideId = rideId;
     }
 
     public static Location fromJson(JSONObject jsonObject)
