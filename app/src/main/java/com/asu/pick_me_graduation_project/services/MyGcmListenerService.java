@@ -140,7 +140,7 @@ public class MyGcmListenerService extends GcmListenerService
                 try
                 {
                     // parse the data
-                    JSONObject rideJson =new JSONObject(data);
+                    JSONObject rideJson = new JSONObject(data);
                     String rideId = rideJson.getString("rideId");
 
                     // set the pending intent
@@ -155,7 +155,7 @@ public class MyGcmListenerService extends GcmListenerService
                 }
                 break;
 
-            case  "acceptedInRide":
+            case "acceptedInRide":
                 try
                 {
                     // parse the data
@@ -181,14 +181,14 @@ public class MyGcmListenerService extends GcmListenerService
                 try
                 {
                     // parse the data
-                    JSONObject communityJson= new JSONObject(data);
-                    String communityId= communityJson.getString("communityId");
+                    JSONObject communityJson = new JSONObject(data);
+                    String communityId = communityJson.getString("communityId");
 
                     // set the pending intent
                     Intent communityRequestsIntent = new Intent(this, CommunityProfileActivity.class);
-                    communityRequestsIntent .putExtra(Constants.COMMUNITY_ID, communityId);
-                    communityRequestsIntent .putExtra(Constants.IS_COMMUNITY_ADMIN, true);
-                    communityRequestsIntent .putExtra(CommunityProfileActivity.SWITCH_TO_REQUEST_TAB, true);
+                    communityRequestsIntent.putExtra(Constants.COMMUNITY_ID, communityId);
+                    communityRequestsIntent.putExtra(Constants.IS_COMMUNITY_ADMIN, true);
+                    communityRequestsIntent.putExtra(CommunityProfileActivity.SWITCH_TO_REQUEST_TAB, true);
                     PendingIntent pendingIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), communityRequestsIntent, 0);
                     mBuilder.setContentIntent(pendingIntent);
 
@@ -204,14 +204,14 @@ public class MyGcmListenerService extends GcmListenerService
                 try
                 {
                     // parse the data
-                    JSONObject communityJson= new JSONObject(data);
-                    String communityId= communityJson.getString("communityId");
+                    JSONObject communityJson = new JSONObject(data);
+                    String communityId = communityJson.getString("communityId");
                     boolean isAdmin = communityJson.getBoolean("isAdmin");
 
                     // set the pending intent
                     Intent communityRequestsIntent = new Intent(this, CommunityProfileActivity.class);
-                    communityRequestsIntent .putExtra(Constants.COMMUNITY_ID, communityId);
-                    communityRequestsIntent .putExtra(Constants.IS_COMMUNITY_ADMIN, isAdmin);
+                    communityRequestsIntent.putExtra(Constants.COMMUNITY_ID, communityId);
+                    communityRequestsIntent.putExtra(Constants.IS_COMMUNITY_ADMIN, isAdmin);
                     PendingIntent pendingIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), communityRequestsIntent, 0);
                     mBuilder.setContentIntent(pendingIntent);
 
@@ -222,7 +222,11 @@ public class MyGcmListenerService extends GcmListenerService
                     Log.e("Game", "error " + e.getMessage());
                     e.printStackTrace();
                 }
+                break;
 
+            case "updateMyRides":
+                startService(new Intent(this, GetMyRidesService.class));
+                showNotification = false;
                 break;
         }
 

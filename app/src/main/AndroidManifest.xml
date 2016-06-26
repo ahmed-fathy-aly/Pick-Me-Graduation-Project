@@ -10,10 +10,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <permission android:name="com.asu.pick_me_graduation_project.permission.C2D_MESSAGE"
-                android:protectionLevel="signature" />
-    <uses-permission android:name="com.asu.pick_me_graduation_project.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <permission
+        android:name="com.asu.pick_me_graduation_project.permission.C2D_MESSAGE"
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="com.asu.pick_me_graduation_project.permission.C2D_MESSAGE"/>
 
     <!-- for google maps -->
     <uses-feature
@@ -44,12 +46,15 @@
             android:theme="@android:style/Theme.Translucent"/>
 
         <!-- facebook stuff -->
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
-        <activity android:name="com.facebook.FacebookActivity"
-                  android:configChanges=
-                      "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-                  android:theme="@android:style/Theme.Translucent.NoTitleBar"
-                  android:label="@string/app_name" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
         <!-- gcm stuff -->
         <!-- registers for a token -->
@@ -59,7 +64,9 @@
         </service>
 
         <!-- when token needs refreshing -->
-        <service android:name=".services.MyInstanceIdListenerService" android:exported="false">
+        <service
+            android:name=".services.MyInstanceIdListenerService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID"/>
             </intent-filter>
@@ -68,26 +75,31 @@
         <!-- receives gcm messages -->
         <service
             android:name="com.asu.pick_me_graduation_project.services.MyGcmListenerService"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
             </intent-filter>
         </service>
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.asu.pick_me_graduation_project" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <category android:name="com.asu.pick_me_graduation_project"/>
             </intent-filter>
         </receiver>
 
         <!-- external libraries activities -->
         <activity android:name="com.soundcloud.android.crop.CropImageActivity"/>
 
+        <!-- app services -->
+        <service
+            android:name=".services.GetMyRidesService"
+            android:exported="false"/>
 
+        <!-- activities -->
         <activity android:name=".activity.LoginActivity">
         </activity>
         <activity

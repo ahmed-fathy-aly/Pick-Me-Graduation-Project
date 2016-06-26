@@ -200,8 +200,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
         } else
             return null;
 
-        Log.e("Game", "found its details ");
-
         // get the driver
         User driver = getUser(driverId, db);
         if (driver != null)

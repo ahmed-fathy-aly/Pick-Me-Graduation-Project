@@ -16,8 +16,12 @@ import com.asu.pick_me_graduation_project.callback.GetRidesCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.RidesAPIController;
 import com.asu.pick_me_graduation_project.database.DatabaseHelper;
+import com.asu.pick_me_graduation_project.events.MyRidesUpdatedEvent;
 import com.asu.pick_me_graduation_project.fragment.RideListFragment;
 import com.asu.pick_me_graduation_project.model.Ride;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
@@ -74,6 +78,20 @@ public class MyRidesActivity extends BaseActivity implements SwipeRefreshLayout.
         // load data
         readRidesFromDatabase();
 
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -152,7 +170,6 @@ public class MyRidesActivity extends BaseActivity implements SwipeRefreshLayout.
                     {
                         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
                         List<Ride> rides = databaseHelper.getAllRides();
-                        Log.e("Game", "found " + rides.size());
                         databaseHelper.close();
                         return rides;
                     }
@@ -162,9 +179,16 @@ public class MyRidesActivity extends BaseActivity implements SwipeRefreshLayout.
             @Override
             public void onLoadFinished(Loader<List<Ride>> loader, List<Ride> data)
             {
-                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshLayout.post(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
 
-                if (data.size() > 0)
+                if (data.size() >= 0)
                     rideListFragment.setData(data);
                 else
                     getMyRidesFromBackend();
@@ -218,5 +242,10 @@ public class MyRidesActivity extends BaseActivity implements SwipeRefreshLayout.
         loader.forceLoad();
     }
 
+    @Subscribe
+    public void onEvent(MyRidesUpdatedEvent event)
+    {
+        readRidesFromDatabase();
+    }
 
 }
