@@ -58,7 +58,7 @@ public class RidesAPIController
     }
 
     /* methods */
-    public void getMyRides(String token, String userId, final GetRidesCallback callback)
+       public void getMyRides(String token, String userId, final GetRidesCallback callback)
     {
         String url = Constants.HOST + "/ride/get_my_rides?postUserId=" + userId;
         Ion.with(context)
