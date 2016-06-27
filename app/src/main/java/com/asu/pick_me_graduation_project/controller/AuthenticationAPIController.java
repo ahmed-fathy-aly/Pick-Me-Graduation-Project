@@ -8,11 +8,20 @@ import com.asu.pick_me_graduation_project.callback.SignUpCallback;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.PreferencesUtils;
+import com.github.kittinunf.fuel.Fuel;
+import com.github.kittinunf.fuel.core.FuelError;
+import com.github.kittinunf.fuel.core.Handler;
+import com.github.kittinunf.fuel.core.Request;
+import com.github.kittinunf.fuel.core.Response;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import org.json.JSONObject;
+
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by ahmed on 12/17/2015.
@@ -93,6 +102,141 @@ public class AuthenticationAPIController
                 });
 
 
+    }
+
+    /**
+     * logs in a user that may or may not have signed in before with facebook
+     * the result will have the user details (the ones sent)and an authentication token
+     * these results will be saved in the pereferences
+     */
+    public void loginByFacebook(String token, final LoginCallback callback)
+    {
+
+        // the request header
+        String url = Constants.HOST
+                + "/login_by_facebook";
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+
+        // form the body
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("token", token);
+        String body = jsonObject.toString();
+
+
+        // make the post
+        Fuel.post(url)
+                .header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new Handler<String>()
+                {
+                    @Override
+                    public void success(Request request, Response fuelResponse, String result)
+                    {
+                        // parse the response
+                        try
+                        {
+                            // check status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
+
+                            // parse user
+                            JSONObject userJson = response.getJSONObject("user");
+                            User user = User.fromJson(userJson);
+                            String token = response.getString("token");
+
+                            // update preferences
+                            setCurrentUser(user, token);
+
+                            // invoke callback
+                            callback.success(user, token);
+                        } catch (Exception e2)
+                        {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+
+                    @Override
+                    public void failure(Request request, Response response, FuelError fuelError)
+                    {
+                        callback.fail(fuelError.getMessage());
+                    }
+                });
+
+    }
+
+    /**
+     * logs in a user that may or may not have signed in before with facebook
+     * the result will have the user details (the ones sent)and an authentication token
+     * these results will be saved in the pereferences
+     */
+    public void loginByGmail(String token, final LoginCallback callback)
+    {
+
+        // the request header
+        String url = Constants.HOST
+                + "/login_by_google";
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+
+        // form the body
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("token", token);
+        String body = jsonObject.toString();
+
+
+        // make the post
+        Fuel.post(url)
+                .header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new Handler<String>()
+                {
+                    @Override
+                    public void success(Request request, Response fuelResponse, String result)
+                    {
+                        // parse the response
+                        try
+                        {
+                            // check status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
+
+                            // parse user
+                            JSONObject userJson = response.getJSONObject("user");
+                            User user = User.fromJson(userJson);
+                            String token = response.getString("token");
+
+                            // update preferences
+                            setCurrentUser(user, token);
+
+                            // invoke callback
+                            callback.success(user, token);
+                        } catch (Exception e2)
+                        {
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+
+                    @Override
+                    public void failure(Request request, Response response, FuelError fuelError)
+                    {
+                        callback.fail(fuelError.getMessage());
+                    }
+                });
     }
 
     /**
