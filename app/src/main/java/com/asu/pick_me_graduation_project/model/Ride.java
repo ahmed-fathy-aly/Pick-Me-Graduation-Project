@@ -23,7 +23,7 @@ public class Ride implements Serializable
     /* fields */
     String id;
     String description;
-    User rider;
+    User driver;
     Calendar time;
     List<Location> locations;
     RideDetails rideDetails;
@@ -58,14 +58,14 @@ public class Ride implements Serializable
         this.description = description;
     }
 
-    public User getRider()
+    public User getDriver()
     {
-        return rider;
+        return driver;
     }
 
     public void setDriver(User rider)
     {
-        this.rider = rider;
+        this.driver = rider;
     }
 
     public Calendar getTime()
@@ -169,7 +169,6 @@ public class Ride implements Serializable
             // can request
             if (!jsonObject.isNull("canRequest"))
                 ride.setCanRequestToJoin(jsonObject.getBoolean("canRequest"));
-            ride.setCanRequestToJoin(true);
         } catch (Exception e)
         {
             Log.e("Game", "parse ride exception " + e.getMessage());

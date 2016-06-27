@@ -11,7 +11,6 @@ import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -137,7 +136,7 @@ public class RideDetailsActivity extends BaseActivity
 
                 // check if we should show the ride join request
                 String currentUserId = new AuthenticationAPIController(RideDetailsActivity.this).getCurrentUser().getUserId();
-                boolean showRideRequests = currentUserId.equals(ride.getRider().getUserId());
+                boolean showRideRequests = currentUserId.equals(ride.getDriver().getUserId());
 
                 // setup view pager
                 rideDetailsPagerAdapter = new RideDetailsPagerAdapter(getSupportFragmentManager(), rideId, showRideRequests);
@@ -189,7 +188,7 @@ public class RideDetailsActivity extends BaseActivity
 
                 // check if we should show the ride join request
                 String currentUserId = new AuthenticationAPIController(RideDetailsActivity.this).getCurrentUser().getUserId();
-                boolean showRideRequests = currentUserId.equals(ride.getRider().getUserId());
+                boolean showRideRequests = currentUserId.equals(ride.getDriver().getUserId());
 
                 // setup view pager
                 if (rideDetailsPagerAdapter == null)

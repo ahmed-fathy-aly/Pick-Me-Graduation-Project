@@ -2,7 +2,6 @@ package asu.com.pick_me_graduation_project;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
-import android.util.Log;
 
 import com.asu.pick_me_graduation_project.database.DatabaseHelper;
 import com.asu.pick_me_graduation_project.model.Location;
@@ -311,7 +310,7 @@ public class DatabaseTest extends ApplicationTestCase<Application>
         assertEquals(ride1.getRideDetails().isLadiesOnly(), ride2.getRideDetails().isLadiesOnly());
 
         // same driver
-        assertSameUser(ride1.getRider(), ride2.getRider());
+        assertSameUser(ride1.getDriver(), ride2.getDriver());
 
         // same locations
         assertEquals(ride1.getLocations().size(), ride2.getLocations().size());

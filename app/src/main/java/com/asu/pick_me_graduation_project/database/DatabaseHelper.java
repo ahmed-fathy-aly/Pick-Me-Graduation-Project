@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.asu.pick_me_graduation_project.model.Location;
 import com.asu.pick_me_graduation_project.model.Ride;
@@ -298,7 +297,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 , LADIES_ONLY);
         String valuesString = String.format(" ( %d, %d, \"%s\" , \"%s\", \"%s\",  %d , %d , %d ) ",
                 Integer.parseInt(ride.getId())
-                , Integer.parseInt(ride.getRider().getUserId())
+                , Integer.parseInt(ride.getDriver().getUserId())
                 , ride.getDescription()
                 , ride.getNotes()
                 , TimeUtils.convertToDatabaseTime(ride.getTime())

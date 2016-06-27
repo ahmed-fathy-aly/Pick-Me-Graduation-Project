@@ -61,7 +61,7 @@ public class FeedbackAPIController {
         Ride ride = new Ride();
         ride.setId(rideId);
         User user4;
-        user4 = ride.getRider();
+        user4 = ride.getDriver();
         user4.setFirstName("Abo Bakr");
         user4.setLastName("Walid ");
         user4.setProfilePictureUrl("http://zblogged.com/wp-content/uploads/2015/11/17.jpg");
@@ -92,7 +92,7 @@ public class FeedbackAPIController {
         ride.setId(rideId);
 
         driverJason.put("fromUserId", userId);
-        driverJason.put("toUserId", ride.getRider().getUserId());
+        driverJason.put("toUserId", ride.getDriver().getUserId());
         driverJason.put("rideId", rideId);
         driverJason.put("sameAC", driverfeedback.isSameAc());
         driverJason.put("sameModel", driverfeedback.isSameModel());
