@@ -340,7 +340,6 @@ public class RidesAPIController
         try
         {
             jsonObject.put("rideId", rideId);
-            jsonObject.put("date", TimeUtils.convertToBackendTime(searchRideParams.getTime()));
             jsonObject.put("message", message);
             jsonObject.put("latitudeSrc", searchRideParams.getSource().getLatitude());
             jsonObject.put("longitudeSrc", searchRideParams.getSource().getLongitude());

@@ -166,6 +166,9 @@ public class Ride implements Serializable
             CarDetails carDetails = CarDetails.fromJson(jsonObject);
             ride.getRideDetails().setCarDetails(carDetails);
 
+            // can request
+            if (!jsonObject.isNull("canRequest"))
+                ride.setCanRequestToJoin(jsonObject.getBoolean("canRequest"));
 
         } catch (Exception e)
         {

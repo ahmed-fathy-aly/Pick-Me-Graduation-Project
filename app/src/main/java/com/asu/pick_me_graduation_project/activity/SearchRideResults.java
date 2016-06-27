@@ -74,9 +74,6 @@ public class SearchRideResults extends AppCompatActivity implements RideListFrag
                 .commit();
 
         // set data
-        String currentUserId = new AuthenticationAPIController(this).getCurrentUser().getUserId();
-        for (Ride ride : searchRideParams.getResult())
-            ride.setCanRequestToJoin(!currentUserId.equals(ride.getRider().getUserId()));
         rideListFragment.setData(searchRideParams.getResult());
 
         // load interstitial ad (currently disabled)
