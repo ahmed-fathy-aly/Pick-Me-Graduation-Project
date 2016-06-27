@@ -170,22 +170,37 @@ public class AuthenticationAPIController
                     }
                 });
 
-        Ion.with(context)
-                .load("GET", url)
-                .addHeader("Content-Type", "application/json")
-                .asString()
-                .setCallback(new FutureCallback<String>()
+    }
+
+    /**
+     * logs in a user that may or may not have signed in before with facebook
+     * the result will have the user details (the ones sent)and an authentication token
+     * these results will be saved in the pereferences
+     */
+    public void loginByGmail(String token, final LoginCallback callback)
+    {
+
+        // the request header
+        String url = Constants.HOST
+                + "/login_by_google";
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+
+        // form the body
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("token", token);
+        String body = jsonObject.toString();
+
+
+        // make the post
+        Fuel.post(url)
+                .header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new Handler<String>()
                 {
                     @Override
-                    public void onCompleted(Exception e, String result)
+                    public void success(Request request, Response fuelResponse, String result)
                     {
-                        // check failed
-                        if (e != null)
-                        {
-                            callback.fail(e.getMessage());
-                            return;
-                        }
-
                         // parse the response
                         try
                         {
@@ -215,9 +230,13 @@ public class AuthenticationAPIController
                             return;
                         }
                     }
+
+                    @Override
+                    public void failure(Request request, Response response, FuelError fuelError)
+                    {
+                        callback.fail(fuelError.getMessage());
+                    }
                 });
-
-
     }
 
     /**

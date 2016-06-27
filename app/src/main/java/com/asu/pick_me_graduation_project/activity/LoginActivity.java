@@ -188,36 +188,7 @@ public class LoginActivity extends BaseActivity
         // login
         progressBar.setVisibility(View.VISIBLE);
         AuthenticationAPIController controller = new AuthenticationAPIController(getApplicationContext());
-        controller.login(email, password, new LoginCallback()
-        {
-            @Override
-            public void success(User user, String authenticationToken)
-            {
-                // show succes
-                progressBar.setVisibility(View.GONE);
-
-                // open the main activity
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(LoginActivity.this);
-                ActivityCompat.startActivity(LoginActivity.this, intent, options.toBundle());
-                new Handler().postDelayed(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        finish();
-                    }
-                }, 500);
-            }
-
-            @Override
-            public void fail(String message)
-            {
-                // show error
-                progressBar.setVisibility(View.GONE);
-                Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
-            }
-        });
+        controller.login(email, password, new LoginCallback());
     }
 
     /**
@@ -230,48 +201,57 @@ public class LoginActivity extends BaseActivity
 
         // login from backend
         AuthenticationAPIController controller = new AuthenticationAPIController(this);
-        controller.loginByFacebook(token, new LoginCallback()
-        {
-            @Override
-            public void success(User user, String authenticationToken)
-            {
-                // show succes
-                progressBar.setVisibility(View.GONE);
-
-                // open the main activity
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(LoginActivity.this);
-                ActivityCompat.startActivity(LoginActivity.this, intent, options.toBundle());
-                new Handler().postDelayed(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        finish();
-                    }
-                }, 500);
-            }
-
-            @Override
-            public void fail(String message)
-            {
-                // show error
-                progressBar.setVisibility(View.GONE);
-                Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
-            }
-        });
-
-        Log.e("Game", "facebook token = " + token);
-        Toast.makeText(getApplicationContext(), token, Toast.LENGTH_SHORT).show();
+        controller.loginByFacebook(token, new LoginCallback());
     }
 
 
+    /**
+     * called after we receive the token from google SDK
+     * sends the google token to the backend for authentication
+     */
     private void onGoogleLogin(String token)
     {
-        Log.e("Game", "google token = " + token);
-        Toast.makeText(getApplicationContext(), token, Toast.LENGTH_SHORT).show();
+        progressBar.setVisibility(View.VISIBLE);
+
+        // login from backend
+        AuthenticationAPIController controller = new AuthenticationAPIController(this);
+        controller.loginByGmail(token, new LoginCallback());
     }
 
+    /**
+     * called after google or facebook or normal login
+     * opens the dashboard activity then finishes this one
+     */
+    class LoginCallback implements com.asu.pick_me_graduation_project.callback.LoginCallback
+    {
+        @Override
+        public void success(User user, String authenticationToken)
+        {
+            // show succes
+            progressBar.setVisibility(View.GONE);
+
+            // open the main activity
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(LoginActivity.this);
+            ActivityCompat.startActivity(LoginActivity.this, intent, options.toBundle());
+            new Handler().postDelayed(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    finish();
+                }
+            }, 500);
+        }
+
+        @Override
+        public void fail(String message)
+        {
+            // show error
+            progressBar.setVisibility(View.GONE);
+            Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
+        }
+    }
 
     @OnClick(R.id.textViewSignUp)
     void goToSignUp()
