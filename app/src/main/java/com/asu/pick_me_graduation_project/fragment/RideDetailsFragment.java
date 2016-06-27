@@ -87,8 +87,8 @@ public class RideDetailsFragment extends Fragment
 
         // time
         String currentUserId = new AuthenticationAPIController(getContext()).getCurrentUser().getUserId();
-        boolean canChat = !currentUserId.equals(ride.getRider().getUserId());
-        contactUserView.setData(user, canChat);
+        boolean canChat = !currentUserId.equals(ride.getDriver().getUserId());
+        contactUserView.setData(ride.getDriver(), canChat);
 
         // map
         // locations

@@ -17,7 +17,6 @@ import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.GenericMapsView;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
@@ -89,7 +88,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
         Ride ride = data.get(position);
 
         // user data
-        User rider = ride.getRider();
+        User rider = ride.getDriver();
         holder.textViewUserName.setText(rider.getFirstName() + " " + rider.getLastName());
         if (ValidationUtils.notEmpty(rider.getProfilePictureUrl()))
             Picasso.with(context).
