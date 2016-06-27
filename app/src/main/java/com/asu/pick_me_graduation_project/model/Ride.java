@@ -169,7 +169,7 @@ public class Ride implements Serializable
             // can request
             if (!jsonObject.isNull("canRequest"))
                 ride.setCanRequestToJoin(jsonObject.getBoolean("canRequest"));
-
+            ride.setCanRequestToJoin(true);
         } catch (Exception e)
         {
             Log.e("Game", "parse ride exception " + e.getMessage());

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.asu.pick_me_graduation_project.callback.LoginCallback;
 import com.asu.pick_me_graduation_project.callback.SignUpCallback;
+import com.asu.pick_me_graduation_project.database.DatabaseHelper;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.PreferencesUtils;
@@ -312,10 +313,13 @@ public class AuthenticationAPIController
     /**
      * calls api backend
      * clear the preferences
+     * clears the database
      */
     public void logOut()
     {
         PreferencesUtils.clear(context);
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        databaseHelper.clearTables();
     }
 
     /**
