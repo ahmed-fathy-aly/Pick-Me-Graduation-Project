@@ -253,36 +253,31 @@ public class AuthenticationAPIController
      */
     public void signUp(final String email, final String firstName, final String lastName, String password, final String gender, final SignUpCallback callback)
     {
+        // the request header
+        String url = Constants.HOST
+                + "/sign_up";
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+
+        // form the body
         JsonObject json = new JsonObject();
         json.addProperty("email", email);
         json.addProperty("password", password);
         json.addProperty("firstName", firstName);
         json.addProperty("lastName", lastName);
-        json.addProperty("gender", gender.equals(Constants.GENDER_MALE) ? "true" : "false");
+        json.addProperty("gender", gender.equals(Constants.GENDER_MALE));
+        String body = json.toString();
 
-        // make a post request,
-        String url = "http://pickmeasu.azurewebsites.net/api/sign_up";
-        Ion.with(context)
-                .load(url)
-                .addHeader("Content-Type", "application/json")
-                .setJsonObjectBody(json)
-                .asString()
-                .setCallback(new FutureCallback<String>()
+        // make the post
+        Fuel.post(url)
+                .header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new Handler<String>()
                 {
                     @Override
-                    public void onCompleted(Exception e, String result)
+                    public void success(Request request, Response fuelResponse, String result)
                     {
-                        // check failed
-                        Log.e("Game", "error ? " + (e != null));
-                        if (e != null)
-                        {
-                            Log.e("Game", "error sign up " + e.getMessage());
-                            callback.fail(e.getMessage());
-                            return;
-                        }
-
                         // parse the response
-                        Log.e("Game", "sign up result = " + result);
                         try
                         {
                             // check status
@@ -310,6 +305,12 @@ public class AuthenticationAPIController
                             callback.fail(e2.getMessage());
                             return;
                         }
+                    }
+
+                    @Override
+                    public void failure(Request request, Response response, FuelError fuelError)
+                    {
+                        callback.fail(fuelError.getMessage());
                     }
                 });
 
