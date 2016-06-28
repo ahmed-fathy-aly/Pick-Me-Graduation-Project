@@ -188,7 +188,7 @@ public class MyRidesActivity extends BaseActivity implements SwipeRefreshLayout.
                     }
                 });
 
-                if (data.size() >= 0)
+                if (data.size() > 0)
                     rideListFragment.setData(data);
                 else
                     getMyRidesFromBackend();
