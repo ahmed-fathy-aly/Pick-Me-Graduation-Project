@@ -10,6 +10,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -17,6 +18,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
@@ -38,16 +40,28 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.github.kittinunf.fuel:fuel-android:1.2.1'
     //for Android
-
     compile 'com.google.android.gms:play-services-maps:9.0.2'
     compile 'com.google.android.gms:play-services-ads:9.0.2'
     compile 'com.google.android.gms:play-services-auth:9.0.2'
-    compile "com.google.android.gms:play-services-gcm:9.0.2"
-    compile "com.google.android.gms:play-services-location:9.0.2"
-
+    compile 'com.google.android.gms:play-services-gcm:9.0.2'
+    compile 'com.google.android.gms:play-services-location:9.0.2'
     compile 'com.facebook.android:facebook-android-sdk:4.12.1'
     compile 'org.greenrobot:eventbus:3.0.0'
 
-}
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile "com.android.support.test:rules:0.5"
 
+    // Espresso UI Testing dependencies.
+    androidTestCompile 'com.android.support:support-annotations:23.4.0'
+
+    androidTestCompile("com.android.support.test.espresso:espresso-core:2.2.+")
+            {
+                exclude group: 'com.android.support'
+            }
+    androidTestCompile("com.android.support.test.espresso:espresso-contrib:2.2.+")
+            {
+                exclude group: 'com.android.support'
+            }
+
+}
 // can you see me ? you sohuldn't...tb now? tb now?

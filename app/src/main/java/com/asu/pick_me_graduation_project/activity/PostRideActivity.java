@@ -2,6 +2,7 @@ package com.asu.pick_me_graduation_project.activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
@@ -64,7 +65,7 @@ public class PostRideActivity extends BaseActivity
             @Override
             public void onPageSelected(int position)
             {
-                buttonNextOrSubmit.setText(getString(position == 0 ? R.string.next :  R.string.submit));
+                buttonNextOrSubmit.setText(getString(position == 0 ? R.string.next :  R.string.post));
             }
 
             @Override
@@ -81,7 +82,7 @@ public class PostRideActivity extends BaseActivity
         if (viewPager.getCurrentItem() == 0)
         {
             viewPager.setCurrentItem(1, true);
-            buttonNextOrSubmit.setText(getString(R.string.submit));
+            buttonNextOrSubmit.setText(getString(R.string.post));
         }
         else
         {

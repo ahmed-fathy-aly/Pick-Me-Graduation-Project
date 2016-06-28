@@ -88,7 +88,6 @@ public class TimeChooserView extends LinearLayout implements DatePickerDialog.On
                 , now.get(Calendar.DAY_OF_MONTH)
         );
         datePickerDialog.show();
-
     }
 
     @OnClick(R.id.layoutSelectTime)

@@ -40,15 +40,6 @@ public class MainActivity extends BaseActivity
         setupNavigationBar(this, toolbar);
         toolbar.setTitle("Dashboard");
 
-        // open drawer
-        new Handler().postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                drawer.openDrawer();
-            }
-        }, 700);
 
         // load ads
         loadAd();
