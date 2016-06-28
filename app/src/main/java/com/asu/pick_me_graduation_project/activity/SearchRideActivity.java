@@ -79,7 +79,7 @@ public class SearchRideActivity extends AppCompatActivity
             @Override
             public void onPageSelected(int position)
             {
-                buttonNextOrSubmit.setText(getString(position == 0 ? R.string.next : R.string.submit));
+                buttonNextOrSubmit.setText(getString(position == 0 ? R.string.next : R.string.search));
             }
 
             @Override
@@ -109,7 +109,7 @@ public class SearchRideActivity extends AppCompatActivity
         if (viewPager.getCurrentItem() == 0)
         {
             viewPager.setCurrentItem(1, true);
-            buttonNextOrSubmit.setText(getString(R.string.submit));
+            buttonNextOrSubmit.setText(getString(R.string.search));
         } else
         {
             if (!validateData())

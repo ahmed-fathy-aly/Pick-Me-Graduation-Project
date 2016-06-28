@@ -134,6 +134,8 @@ public class RidesAPIController
 
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + token);
+
+        Log.e("Game", "seraching ");
         Fuel.get(url)
                 .header(headers)
                 .responseString(new com.github.kittinunf.fuel.core.Handler<String>()
@@ -158,6 +160,7 @@ public class RidesAPIController
                             List<Ride> rides = new ArrayList<Ride>();
                             for (int i = 0; i < ridesJson.length(); i++)
                                 rides.add(Ride.fromJson(ridesJson.getJSONObject(i)));
+                            callback.success(rides);
 
                         } catch (Exception e2)
                         {

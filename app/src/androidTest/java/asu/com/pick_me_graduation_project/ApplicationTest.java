@@ -1,4 +1,4 @@
-package com.asu.pick_me_graduation_project;
+package asu.com.pick_me_graduation_project;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
