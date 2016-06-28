@@ -159,16 +159,6 @@ public class RidesAPIController
                             for (int i = 0; i < ridesJson.length(); i++)
                                 rides.add(Ride.fromJson(ridesJson.getJSONObject(i)));
 
-                            // sort by data
-                            Collections.sort(rides, new Comparator<Ride>()
-                            {
-                                @Override
-                                public int compare(Ride lhs, Ride rhs)
-                                {
-                                    return rhs.getTime().compareTo(lhs.getTime());
-                                }
-                            });
-                            callback.success(rides);
                         } catch (Exception e2)
                         {
                             callback.fail(e2.getMessage());
