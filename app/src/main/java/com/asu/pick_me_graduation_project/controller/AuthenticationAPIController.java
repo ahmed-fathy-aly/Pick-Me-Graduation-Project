@@ -49,29 +49,29 @@ public class AuthenticationAPIController
     public void login(String mail, String password, final LoginCallback callback)
     {
 
-        // make a post request
+        // the request header
         String url = Constants.HOST
-                + "/login"
-                + "?email=" + mail
-                + "&password=" + password;
-        Ion.with(context)
-                .load("GET", url)
-                .addHeader("Content-Type", "application/json")
-                .asString()
-                .setCallback(new FutureCallback<String>()
+                + "/login";
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+
+        // form the body
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("email", mail);
+        jsonObject.addProperty("password", password);
+        String body = jsonObject.toString();
+
+
+        // make the post
+        Fuel.post(url)
+                .header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new Handler<String>()
                 {
                     @Override
-                    public void onCompleted(Exception e, String result)
+                    public void success(Request request, Response fuelResponse, String result)
                     {
-                        // check failed
-                        if (e != null)
-                        {
-                            callback.fail(e.getMessage());
-                            return;
-                        }
-
                         // parse the response
-                        Log.e("Game", "log in result = " + result);
                         try
                         {
                             // check status
@@ -99,6 +99,12 @@ public class AuthenticationAPIController
                             callback.fail(e2.getMessage());
                             return;
                         }
+                    }
+
+                    @Override
+                    public void failure(Request request, Response response, FuelError fuelError)
+                    {
+                        callback.fail(fuelError.getMessage());
                     }
                 });
 
