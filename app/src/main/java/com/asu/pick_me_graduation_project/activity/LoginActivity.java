@@ -232,16 +232,9 @@ public class LoginActivity extends BaseActivity
 
             // open the main activity
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(LoginActivity.this);
-            ActivityCompat.startActivity(LoginActivity.this, intent, options.toBundle());
-            new Handler().postDelayed(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    finish();
-                }
-            }, 500);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
         }
 
         @Override

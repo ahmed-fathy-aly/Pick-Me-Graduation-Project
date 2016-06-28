@@ -1,10 +1,8 @@
 package com.asu.pick_me_graduation_project.controller;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.asu.pick_me_graduation_project.callback.LoginCallback;
-import com.asu.pick_me_graduation_project.callback.SignUpCallback;
 import com.asu.pick_me_graduation_project.database.DatabaseHelper;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
@@ -15,8 +13,6 @@ import com.github.kittinunf.fuel.core.Handler;
 import com.github.kittinunf.fuel.core.Request;
 import com.github.kittinunf.fuel.core.Response;
 import com.google.gson.JsonObject;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 
 import org.json.JSONObject;
 
@@ -49,56 +45,35 @@ public class AuthenticationAPIController
     public void login(String mail, String password, final LoginCallback callback)
     {
 
-        // make a post request
+        // the request header
         String url = Constants.HOST
-                + "/login"
-                + "?email=" + mail
-                + "&password=" + password;
-        Ion.with(context)
-                .load("GET", url)
-                .addHeader("Content-Type", "application/json")
-                .asString()
-                .setCallback(new FutureCallback<String>()
+                + "/login";
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+
+        // form the body
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("email", mail);
+        jsonObject.addProperty("password", password);
+        String body = jsonObject.toString();
+
+
+        // make the post
+        Fuel.post(url)
+                .header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new Handler<String>()
                 {
                     @Override
-                    public void onCompleted(Exception e, String result)
+                    public void success(Request request, Response fuelResponse, String result)
                     {
-                        // check failed
-                        if (e != null)
-                        {
-                            callback.fail(e.getMessage());
-                            return;
-                        }
+                        handleLoginResponse(callback, result);
+                    }
 
-                        // parse the response
-                        Log.e("Game", "log in result = " + result);
-                        try
-                        {
-                            // check status
-                            JSONObject response = new JSONObject(result);
-                            int status = response.getInt("status");
-                            if (status == 0)
-                            {
-                                String message = response.getString("message");
-                                callback.fail(message);
-                                return;
-                            }
-
-                            // parse user
-                            JSONObject userJson = response.getJSONObject("user");
-                            User user = User.fromJson(userJson);
-                            String token = response.getString("token");
-
-                            // update preferences
-                            setCurrentUser(user, token);
-
-                            // invoke callback
-                            callback.success(user, token);
-                        } catch (Exception e2)
-                        {
-                            callback.fail(e2.getMessage());
-                            return;
-                        }
+                    @Override
+                    public void failure(Request request, Response response, FuelError fuelError)
+                    {
+                        callback.fail(fuelError.getMessage());
                     }
                 });
 
@@ -134,34 +109,8 @@ public class AuthenticationAPIController
                     @Override
                     public void success(Request request, Response fuelResponse, String result)
                     {
-                        // parse the response
-                        try
-                        {
-                            // check status
-                            JSONObject response = new JSONObject(result);
-                            int status = response.getInt("status");
-                            if (status == 0)
-                            {
-                                String message = response.getString("message");
-                                callback.fail(message);
-                                return;
-                            }
+                        handleLoginResponse(callback, result);
 
-                            // parse user
-                            JSONObject userJson = response.getJSONObject("user");
-                            User user = User.fromJson(userJson);
-                            String token = response.getString("token");
-
-                            // update preferences
-                            setCurrentUser(user, token);
-
-                            // invoke callback
-                            callback.success(user, token);
-                        } catch (Exception e2)
-                        {
-                            callback.fail(e2.getMessage());
-                            return;
-                        }
                     }
 
                     @Override
@@ -202,34 +151,7 @@ public class AuthenticationAPIController
                     @Override
                     public void success(Request request, Response fuelResponse, String result)
                     {
-                        // parse the response
-                        try
-                        {
-                            // check status
-                            JSONObject response = new JSONObject(result);
-                            int status = response.getInt("status");
-                            if (status == 0)
-                            {
-                                String message = response.getString("message");
-                                callback.fail(message);
-                                return;
-                            }
-
-                            // parse user
-                            JSONObject userJson = response.getJSONObject("user");
-                            User user = User.fromJson(userJson);
-                            String token = response.getString("token");
-
-                            // update preferences
-                            setCurrentUser(user, token);
-
-                            // invoke callback
-                            callback.success(user, token);
-                        } catch (Exception e2)
-                        {
-                            callback.fail(e2.getMessage());
-                            return;
-                        }
+                        handleLoginResponse(callback, result);
                     }
 
                     @Override
@@ -245,70 +167,75 @@ public class AuthenticationAPIController
      * the result will have the user details (the ones sent)and an authentication token
      * these results will be saved in the pereferences
      */
-    public void signUp(final String email, final String firstName, final String lastName, String password, final String gender, final SignUpCallback callback)
+    public void signUp(final String email, final String firstName, final String lastName, String password, final String gender, final LoginCallback callback)
     {
+        // the request header
+        String url = Constants.HOST
+                + "/sign_up";
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+
+        // form the body
         JsonObject json = new JsonObject();
         json.addProperty("email", email);
         json.addProperty("password", password);
         json.addProperty("firstName", firstName);
         json.addProperty("lastName", lastName);
-        json.addProperty("gender", gender.equals(Constants.GENDER_MALE) ? "true" : "false");
+        json.addProperty("gender", gender.equals(Constants.GENDER_MALE));
+        String body = json.toString();
 
-        // make a post request,
-        String url = "http://pickmeasu.azurewebsites.net/api/sign_up";
-        Ion.with(context)
-                .load(url)
-                .addHeader("Content-Type", "application/json")
-                .setJsonObjectBody(json)
-                .asString()
-                .setCallback(new FutureCallback<String>()
+        // make the post
+        Fuel.post(url)
+                .header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new Handler<String>()
                 {
                     @Override
-                    public void onCompleted(Exception e, String result)
+                    public void success(Request request, Response fuelResponse, String result)
                     {
-                        // check failed
-                        Log.e("Game", "error ? " + (e != null));
-                        if (e != null)
-                        {
-                            Log.e("Game", "error sign up " + e.getMessage());
-                            callback.fail(e.getMessage());
-                            return;
-                        }
+                        handleLoginResponse(callback, result);
+                    }
 
-                        // parse the response
-                        Log.e("Game", "sign up result = " + result);
-                        try
-                        {
-                            // check status
-                            JSONObject response = new JSONObject(result);
-                            int status = response.getInt("status");
-                            if (status == 0)
-                            {
-                                String message = response.getString("message");
-                                callback.fail(message);
-                                return;
-                            }
-
-                            // parse user
-                            JSONObject userJson = response.getJSONObject("user");
-                            User user = User.fromJson(userJson);
-                            String token = response.getString("token");
-
-                            // update preferences
-                            setCurrentUser(user, token);
-
-                            // invoke callback
-                            callback.success(user, token);
-                        } catch (Exception e2)
-                        {
-                            callback.fail(e2.getMessage());
-                            return;
-                        }
+                    @Override
+                    public void failure(Request request, Response response, FuelError fuelError)
+                    {
+                        callback.fail(fuelError.getMessage());
                     }
                 });
-
     }
 
+
+    private void handleLoginResponse(LoginCallback callback, String result)
+    {
+        // parse the response
+        try
+        {
+            // check status
+            JSONObject response = new JSONObject(result);
+            int status = response.getInt("status");
+            if (status == 0)
+            {
+                String message = response.getString("message");
+                callback.fail(message);
+                return;
+            }
+
+            // parse user
+            JSONObject userJson = response.getJSONObject("user");
+            User user = User.fromJson(userJson);
+            String token = response.getString("token");
+
+            // update preferences
+            setCurrentUser(user, token);
+
+            // invoke callback
+            callback.success(user, token);
+        } catch (Exception e2)
+        {
+            callback.fail(e2.getMessage());
+            return;
+        }
+    }
 
     /**
      * calls api backend

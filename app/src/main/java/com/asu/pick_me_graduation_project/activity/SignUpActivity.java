@@ -12,7 +12,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.asu.pick_me_graduation_project.R;
-import com.asu.pick_me_graduation_project.callback.SignUpCallback;
+import com.asu.pick_me_graduation_project.callback.LoginCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.model.User;
 
@@ -61,7 +61,7 @@ public class SignUpActivity extends AppCompatActivity
         // sign up
         progressBar.setVisibility(View.VISIBLE);
         AuthenticationAPIController controller = new AuthenticationAPIController(getApplicationContext());
-        controller.signUp(email, firstName, lastName, password, gender, new SignUpCallback()
+        controller.signUp(email, firstName, lastName, password, gender, new LoginCallback()
         {
 
             @Override
