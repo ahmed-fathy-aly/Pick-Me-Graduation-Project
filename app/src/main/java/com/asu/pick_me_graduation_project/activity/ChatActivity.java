@@ -115,14 +115,14 @@ public class ChatActivity extends BaseActivity
     protected void onResume()
     {
         super.onResume();
-        ((MyApplication )getApplication()).currentChat = userId;
+        ((MyApplication) getApplication()).currentChat = userId;
     }
 
     @Override
     protected void onPause()
     {
         super.onPause();
-        ((MyApplication )getApplication()).currentChat = userId;
+        ((MyApplication) getApplication()).currentChat = userId;
     }
 
     private void loadMessages()
@@ -202,28 +202,32 @@ public class ChatActivity extends BaseActivity
     public void onClick()
     {
         final String contentt = MessageEditor.getText().toString();
-        controller.sendMessage(contentt, userId, new AuthenticationAPIController(this).getTokken(), new SendMessageCallback()
-        {
-            @Override
-            public void success(ChatMessage chatMessage2)
-            {
+        controller.sendMessage(
+                contentt,
+                "",
+                userId,
+                new AuthenticationAPIController(this).getTokken(), new SendMessageCallback()
+                {
+                    @Override
+                    public void success(ChatMessage chatMessage2)
+                    {
 
-                progressBar.setVisibility(View.INVISIBLE);
-                MessageEditor.setText("");
+                        progressBar.setVisibility(View.INVISIBLE);
+                        MessageEditor.setText("");
 
-                addMessage(chatMessage2);
+                        addMessage(chatMessage2);
 
-            }
+                    }
 
-            @Override
-            public void fail(String message)
-            {
-                progressBar.setVisibility(View.INVISIBLE);
+                    @Override
+                    public void fail(String message)
+                    {
+                        progressBar.setVisibility(View.INVISIBLE);
 
-                Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
 
-            }
-        });
+                    }
+                });
 
     }
 
@@ -233,6 +237,7 @@ public class ChatActivity extends BaseActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Pick your Location");
         final GenericMapsView yourMap = new GenericMapsView(this);
+        yourMap.goToMyLocation();
         builder.setView(yourMap);
 
         builder.setPositiveButton(getString(R.string.send), new DialogInterface.OnClickListener()
@@ -240,10 +245,16 @@ public class ChatActivity extends BaseActivity
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-                final LatLng yourLocation = yourMap.getCurrentLatlng();
-                String locationStr = yourLocation.latitude + "," + yourLocation.longitude;
-                controller.sendMessage(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getFirstName() + " " + " sent  a location" + locationStr,
-                        userId, new AuthenticationAPIController(ChatActivity.this).getTokken(), new SendMessageCallback()
+                final LatLng chosenLocation = yourMap.getCurrentLatlng();
+                String message = getString(R.string.sent_a_location);
+                String extras = ChatMessage.getExtrasLatlng(chosenLocation);
+
+                controller.sendMessage(
+                        message,
+                        extras,
+                        userId,
+                        new AuthenticationAPIController(ChatActivity.this).getTokken(),
+                        new SendMessageCallback()
                         {
                             @Override
                             public void success(ChatMessage chatMessage3)
@@ -259,7 +270,6 @@ public class ChatActivity extends BaseActivity
                             public void fail(String message)
                             {
                                 progressBar.setVisibility(View.INVISIBLE);
-
                                 Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
 
                             }

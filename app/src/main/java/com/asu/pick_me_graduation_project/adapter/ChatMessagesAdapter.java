@@ -14,6 +14,8 @@ import com.asu.pick_me_graduation_project.model.ChatMessage;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.TimeUtils;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
+import com.asu.pick_me_graduation_project.view.GenericMapsView;
+import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -24,14 +26,10 @@ public class ChatMessagesAdapter extends ArrayAdapter<ChatMessage>
 {
     String CurrentUserId;
 
-    public ChatMessagesAdapter(Context context,String CurrentUserId)
-
+    public ChatMessagesAdapter(Context context,String currentUserId)
     {
-
-
-        // TODO - replace with your layout
         super(context, R.layout.sender_row);
-        this.CurrentUserId = CurrentUserId;
+        this.CurrentUserId = currentUserId;
     }
 
 
@@ -51,7 +49,28 @@ public class ChatMessagesAdapter extends ArrayAdapter<ChatMessage>
     {
         final ChatMessage message = getItem(position);
         User user = message.getFrom();
-        if (user.getUserId().equals(CurrentUserId)) {
+        boolean isSender =user.getUserId().equals(CurrentUserId);
+
+        if (message.getLatLngExtra() != null)
+        {
+            // choose which resource to inflate
+            int resourceId = isSender ? R.layout.row_location_sender : R.layout.row_location_reciever;
+            View locationView = LayoutInflater.from(getContext())
+                    .inflate(resourceId, parent, false);
+
+            // reference view
+            GenericMapsView genericMapsView = (GenericMapsView) locationView.findViewById(R.id.genericMapsView);
+
+            // get the location from extras
+            LatLng latLng = message.getLatLngExtra();
+
+            // move to that location
+            genericMapsView.setCenterMarkerShown(false);
+            genericMapsView.moveToLocation(latLng);
+
+            return locationView;
+        }
+        else if (isSender) {
 
             // TODO - infalte
             view = LayoutInflater.from(getContext()).inflate(R.layout.sender_row, parent, false);
