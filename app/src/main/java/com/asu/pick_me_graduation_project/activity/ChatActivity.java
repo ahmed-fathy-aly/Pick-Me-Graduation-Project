@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -58,6 +59,8 @@ public class ChatActivity extends BaseActivity
     ListView ListViewChat;
     @Bind(R.id.MessageEditor)
     EditText MessageEditor;
+    @Bind(R.id.fabSend)
+    FloatingActionButton fabSend;
 
     /* fields */
     String userId;
@@ -202,6 +205,8 @@ public class ChatActivity extends BaseActivity
     public void onClick()
     {
         final String contentt = MessageEditor.getText().toString();
+        progressBar.setVisibility(View.VISIBLE);
+        fabSend.setEnabled(false);
         controller.sendMessage(
                 contentt,
                 "",
@@ -213,6 +218,7 @@ public class ChatActivity extends BaseActivity
                     {
 
                         progressBar.setVisibility(View.INVISIBLE);
+                        fabSend.setEnabled(true);
                         MessageEditor.setText("");
 
                         addMessage(chatMessage2);
@@ -223,7 +229,7 @@ public class ChatActivity extends BaseActivity
                     public void fail(String message)
                     {
                         progressBar.setVisibility(View.INVISIBLE);
-
+                        fabSend.setEnabled(true);
                         Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
 
                     }
@@ -249,6 +255,7 @@ public class ChatActivity extends BaseActivity
                 String message = getString(R.string.sent_a_location);
                 String extras = ChatMessage.getExtrasLatlng(chosenLocation);
 
+                progressBar.setVisibility(View.VISIBLE);
                 controller.sendMessage(
                         message,
                         extras,
