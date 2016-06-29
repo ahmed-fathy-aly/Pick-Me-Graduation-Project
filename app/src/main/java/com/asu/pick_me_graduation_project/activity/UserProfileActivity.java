@@ -60,6 +60,12 @@ public class UserProfileActivity extends BaseActivity
     TextView textViewPhoneNumber;
     @Bind(R.id.textViewAge)
     TextView textViewAge;
+    @Bind(R.id.textViewno_of_rides)
+    TextView no_of_rides;
+    @Bind(R.id.points)
+    TextView points;
+    @Bind(R.id.Residence)
+    TextView Residence;
     @Bind(R.id.textViewBio)
     TextView textViewBio;
     @Bind(R.id.textViewCarModel)
@@ -188,8 +194,12 @@ public class UserProfileActivity extends BaseActivity
                 ratingBar.setRating(5);
                 textViewEmail.setText(ValidationUtils.correct(user.getEmail()));
                 textViewPhoneNumber.setText(ValidationUtils.correct(user.getPhoneNumber()));
+                Residence.setText(ValidationUtils.correct(user.getResidence()));
+                no_of_rides.setText(ValidationUtils.correct(user.getNo_of_rides()));
+                points.setText(ValidationUtils.correct(user.getPoints()));
+                String s= user.getdob().substring(0, user.getdob().indexOf('T'));
+                textViewAge.setText(ValidationUtils.correct(s));
                 textViewBio.setText(ValidationUtils.correct(user.getBio()));
-                textViewAge.setText(user.getdob());
                 ratingBar.setRating(5.0f);
                 if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
                     Picasso.with(getApplicationContext()).

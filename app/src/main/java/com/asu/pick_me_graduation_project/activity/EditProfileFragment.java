@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.SharedElementCallback;
 import android.support.v4.view.ViewCompat;
 import android.transition.Transition;
@@ -32,6 +33,7 @@ import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController
 import com.asu.pick_me_graduation_project.controller.UserApiController;
 import com.asu.pick_me_graduation_project.model.CarDetails;
 import com.asu.pick_me_graduation_project.model.User;
+import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.CarDetailsView;
 import com.soundcloud.android.crop.Crop;
@@ -59,8 +61,6 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
     EditText Name;
     @Bind(R.id.Lastname)
     EditText Lastname;
-    @Bind(R.id.Age)
-    EditText Age;
     @Bind(R.id.Email)
     EditText Email;
     @Bind(R.id.CountryCode)
@@ -81,6 +81,10 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
     LinearLayout content;
     @Bind(R.id.carDetailsView)
     CarDetailsView carDetailsView;
+    @Bind(R.id.Residence)
+    EditText Residence;
+    @Bind(R.id.dob)
+    EditText Age;
 
     /* fields */
     private Uri imageUri;
@@ -116,7 +120,14 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
 
         // load data
         loadProfile();
+        Age.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog(v);
 
+
+            }
+        });
         return editProfileDialog;
     }
 
@@ -187,7 +198,8 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
         user.setFirstName(Name.getText().toString());
         user.setLastName(Lastname.getText().toString());
         user.setEmail(Email.getText().toString());
-        user.setdob(Age.getText().toString());
+        user.setResidence(Residence.getText().toString());
+        user.setdob(Constants.dob);
         user.setPhoneNumber(Phonenumber.getText().toString());
         user.setBio(Bio.getText().toString());
         CarDetails carDetails = carDetailsView.getCarDetails();
@@ -246,6 +258,9 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
                 Name.setText(ValidationUtils.correct(user.getFirstName()));
                 Lastname.setText(ValidationUtils.correct(user.getLastName()));
                 Email.setText(ValidationUtils.correct(user.getEmail()));
+                Residence.setText(ValidationUtils.correct(user.getResidence()));
+                //String s= user.getdob().substring(0, user.getdob().indexOf('T'));
+                Age.setText("pick your date of birth");
                 Phonenumber.setText(ValidationUtils.correct(user.getPhoneNumber()));
                 Bio.setText(ValidationUtils.correct(user.getBio()));
                 if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
@@ -255,8 +270,7 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
                             .placeholder(R.drawable.ic_user_large)
                             .into(ProfilePic);
 
-                // TODO age
-                Age.setText("30");
+
                 carDetailsView.setCarDetails(user.getCarDetails());
 
             }
@@ -273,5 +287,8 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
         });
     }
 
-
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DataPickerFragment();
+        newFragment.show(getChildFragmentManager(), "datePicker");
+    }
 }
