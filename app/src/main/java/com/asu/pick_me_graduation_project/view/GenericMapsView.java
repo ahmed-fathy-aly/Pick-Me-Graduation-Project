@@ -70,6 +70,7 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
     private Polyline polyline;
     boolean goToMyLocation = false;
     boolean fitMarkers = false;
+    private LatLng locationToBeMoved;
 
     public GenericMapsView(Context context)
     {
@@ -130,6 +131,13 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
             goToMyLocation = false;
         }
 
+        // move to a location
+        if (locationToBeMoved != null)
+        {
+            moveToLocationNow(locationToBeMoved);
+            locationToBeMoved = null;
+        }
+
         // unadded markers
         for (String id : unaddedMarkers.keySet())
             markers.put(id, googleMap.addMarker(unaddedMarkers.get(id)));
@@ -143,25 +151,12 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
         }
 
         mapView.onResume();
-            mapView.setDrawingCacheEnabled(true);
+        mapView.setDrawingCacheEnabled(true);
 
     }
 
 
-    private void goToMyLocationNow()
-    {
-        googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener()
-        {
-            @Override
-            public void onMyLocationChange(Location location)
-            {
-                LatLng myLocation = new LatLng(location.getLatitude(),
-                        location.getLongitude());
-                moveToLocation(myLocation);
-                googleMap.setOnMyLocationChangeListener(null);
-            }
-        });
-    }
+
 
 
     private void fitMarkersNow()
@@ -193,6 +188,20 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
             goToMyLocation = true;
     }
 
+    private void goToMyLocationNow()
+    {
+        googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener()
+        {
+            @Override
+            public void onMyLocationChange(Location location)
+            {
+                LatLng myLocation = new LatLng(location.getLatitude(),
+                        location.getLongitude());
+                moveToLocationNow(myLocation);
+                googleMap.setOnMyLocationChangeListener(null);
+            }
+        });
+    }
 
     /**
      * animates to that latlng
@@ -200,15 +209,21 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
     public void moveToLocation(LatLng latLng)
     {
         if (googleMap != null)
-        {
-            CameraPosition cameraPosition = CameraPosition.builder()
-                    .target(latLng)
-                    .zoom(15)
-                    .build();
-            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-        }
+            moveToLocationNow(latLng);
+        else
+            locationToBeMoved = latLng;
     }
+
+
+    private void moveToLocationNow(LatLng latLng)
+    {
+        CameraPosition cameraPosition = CameraPosition.builder()
+                .target(latLng)
+                .zoom(15)
+                .build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
 
     /**
      * shows or hide the center marker

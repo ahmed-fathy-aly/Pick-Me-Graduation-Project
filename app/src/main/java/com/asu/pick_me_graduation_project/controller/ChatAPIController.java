@@ -170,17 +170,20 @@ public class ChatAPIController
 
     }
 
-    public void sendMessage(String content, String userId, String token, final SendMessageCallback callback)
+    public void sendMessage(String content, String extras, String userId, String token, final SendMessageCallback callback)
     {
         String url = Constants.HOST + "Message/send_message";
+
         JsonObject json = new JsonObject();
         json.addProperty("content", content);
         json.addProperty("userId", userId);
+        json.addProperty("extras", extras);
         String body = json.toString();
-        Log.e("Game", "body = " + body);
+
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + token);
         headers.put("Content-Type", "application/json");
+
         Fuel.post(url).header(headers)
                 .body(body, Charset.defaultCharset())
                 .responseString(new com.github.kittinunf.fuel.core.Handler<String>()
@@ -188,9 +191,13 @@ public class ChatAPIController
                     @Override
                     public void success(Request request, Response r, String s)
                     {
-                        Log.e("Game", "send message  " + s);
+                        Log.e("Game", "send message  request" + request.toString());
+                        Log.e("Game", "send message  response" + r.toString());
+
+
                         try
-                        {// check status
+                        {
+                            // check status
                             JSONObject response = new JSONObject(s);
                             int status = response.getInt("status");
                             if (status == 0)
