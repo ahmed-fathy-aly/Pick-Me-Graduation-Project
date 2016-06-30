@@ -160,8 +160,6 @@
         <activity android:name=".activity.linkedin">
 
         </activity>
-        <activity android:name=".activity.linkedin_signup">
-        </activity>
     </application>
 
 </manifest>

@@ -72,7 +72,7 @@ public class linkedin extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         LISessionManager.getInstance(getApplicationContext()).onActivityResult(this,
                 requestCode, resultCode, data);
-        Intent intent = new Intent(linkedin.this, linkedin_signup.class);
+        Intent intent = new Intent(linkedin.this, SignUpActivity.class);
         startActivity(intent);
     }
 

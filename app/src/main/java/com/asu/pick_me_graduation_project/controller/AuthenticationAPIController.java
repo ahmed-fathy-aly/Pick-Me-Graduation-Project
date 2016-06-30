@@ -167,45 +167,7 @@ public class AuthenticationAPIController
      * the result will have the user details (the ones sent)and an authentication token
      * these results will be saved in the pereferences
      */
-    public void signUp(final String email, final String firstName, final String lastName, String password, final String gender, final LoginCallback callback)
-    {
-        // the request header
-        String url = Constants.HOST
-                + "/sign_up";
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "application/json");
-
-        // form the body
-        JsonObject json = new JsonObject();
-        json.addProperty("email", email);
-        json.addProperty("password", password);
-        json.addProperty("firstName", firstName);
-        json.addProperty("lastName", lastName);
-        json.addProperty("gender", gender.equals(Constants.GENDER_MALE));
-        String body = json.toString();
-
-        // make the post
-        Fuel.post(url)
-                .header(headers)
-                .body(body, Charset.defaultCharset())
-                .responseString(new Handler<String>()
-                {
-                    @Override
-                    public void success(Request request, Response fuelResponse, String result)
-                    {
-                        handleLoginResponse(callback, result);
-                    }
-
-                    @Override
-                    public void failure(Request request, Response response, FuelError fuelError)
-                    {
-                        callback.fail(fuelError.getMessage());
-                    }
-                });
-    }
-
-
-    public void signUp_linked(final String email, final String firstName, final String lastName, String password, final String gender, String profilepic, final LoginCallback callback)
+    public void signUp(final String email, final String firstName, final String lastName, String password, final String gender, String profilepic ,final LoginCallback callback)
     {
         // the request header
         String url = Constants.HOST
@@ -242,6 +204,7 @@ public class AuthenticationAPIController
                     }
                 });
     }
+
 
 
     private void handleLoginResponse(LoginCallback callback, String result)
