@@ -15,6 +15,12 @@ import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.callback.LoginCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.model.User;
+import com.linkedin.platform.APIHelper;
+import com.linkedin.platform.errors.LIApiError;
+import com.linkedin.platform.listeners.ApiListener;
+import com.linkedin.platform.listeners.ApiResponse;
+
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,6 +28,11 @@ import butterknife.OnClick;
 
 public class SignUpActivity extends AppCompatActivity
 {
+    private static final String hostl = "api.linkedin.com";
+    private static final String topCardUrl = "https://" + hostl + "/v1/people/~:" +
+            "(email-address,first-name,last-name,phone-numbers,public-profile-url,picture-url,picture-urls::(original))";
+    String profilepic;
+
 
     /* views */
 
@@ -46,7 +57,52 @@ public class SignUpActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
+        linkededinApiHelper();
     }
+
+    public void linkededinApiHelper(){
+        APIHelper apiHelper = APIHelper.getInstance(getApplicationContext());
+        apiHelper.getRequest(SignUpActivity.this, topCardUrl, new ApiListener() {
+            @Override
+            public void onApiSuccess(ApiResponse result) {
+                try {
+
+                    setprofile(result.getResponseDataAsJson());
+                    //progress.dismiss();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onApiError(LIApiError error) {
+                // ((TextView) findViewById(R.id.error)).setText(error.toString());
+
+            }
+        });
+    }
+
+    /*
+       Set User Profile Information in Navigation Bar.
+     */
+
+    public  void  setprofile(JSONObject response){
+
+        try {
+
+
+            editTextEmail.setText(response.get("emailAddress").toString());
+            editTextFirstName.setText(response.get("firstName").toString());
+            editTextLastName.setText(response.get("lastName").toString());
+            profilepic  = response.getString("pictureUrl").toString();
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     @OnClick(R.id.buttonSignUp)
     public void signUp()
@@ -61,7 +117,7 @@ public class SignUpActivity extends AppCompatActivity
         // sign up
         progressBar.setVisibility(View.VISIBLE);
         AuthenticationAPIController controller = new AuthenticationAPIController(getApplicationContext());
-        controller.signUp(email, firstName, lastName, password, gender, new LoginCallback()
+        controller.signUp(email, firstName, lastName, password, gender, profilepic , new LoginCallback()
         {
 
             @Override
