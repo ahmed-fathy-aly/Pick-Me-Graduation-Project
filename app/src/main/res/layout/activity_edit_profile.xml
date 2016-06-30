@@ -67,17 +67,34 @@
                     android:paddingRight="10.0dip"/>
 
                 <EditText
-                    android:id="@+id/Age"
+                    android:id="@+id/Residence"
                     android:layout_width="fill_parent"
                     android:layout_height="50.0dip"
+                    android:layout_marginBottom="10.0dip"
                     android:drawableRight="@drawable/star_red"
-                    android:hint="@string/age"
+                    android:hint="Residence"
                     android:inputType="textPersonName|textCapSentences"
                     android:maxLength="20"
                     android:paddingRight="10.0dip"/>
 
 
+
+
             </LinearLayout>
+            <EditText
+                android:id="@+id/dob"
+                android:layout_width="fill_parent"
+                android:layout_height="50.0dip"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginRight="10.0dip"
+                android:drawableLeft="@drawable/calendar1"
+                android:drawablePadding="10.0dip"
+                android:drawableRight="@drawable/star_red"
+                android:hint="Date Of Birth"
+                android:inputType="textWebEmailAddress|textCapSentences"
+                android:maxLength="30"
+                android:editable="false"
+                android:paddingRight="10.0dip"/>
 
             <EditText
                 android:id="@+id/Email"
