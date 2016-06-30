@@ -12,6 +12,8 @@ import com.github.kittinunf.fuel.Fuel;
 import com.github.kittinunf.fuel.core.FuelError;
 import com.github.kittinunf.fuel.core.Request;
 import com.github.kittinunf.fuel.core.Response;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,9 +43,9 @@ public class FeedbackAPIController {
     /**
      * gets the list of users who are on the ride and which one is the rider
      */
-    public void getFeedbackForm(String token, String rideId, GetFeedbackFormCallback callback) {
+    public void getFeedbackForm(String token, String rideId,final GetFeedbackFormCallback callback) {
         // TODO invoke callback on mock data
-        User user1 = new User();
+       /* User user1 = new User();
         user1.setUserId("1");
         user1.setFirstName("Ahmed");
         user1.setLastName("Ali");
@@ -72,7 +74,54 @@ public class FeedbackAPIController {
         passengers.add(user3);
         passengers.add(user4);
 
-        callback.success(passengers, driverid);
+        callback.success(passengers, driverid);*/
+
+        String url="http://pick-me.azurewebsites.net/api/ride/get_feedback_from?rideId=59";
+        Ion.with(context)
+                .load("GET",url)
+                .addHeader("Authorization","Bearer " + token)
+                .asString().setCallback(new FutureCallback<String>() {
+            @Override
+            public void onCompleted(Exception e, String result) {
+                if (e != null)
+                {
+                    Log.e("Game", "error " + e.getMessage());
+                    callback.fail(e.getMessage());
+                    return;
+                }
+                //parse el response
+                Log.e("Game", "get feedbackform result = " + result);
+                try {
+                    JSONObject response = new JSONObject(result);
+                    int status = response.getInt("status");
+                    if (status == 0)
+                    {
+                        String message = response.getString("feedback");
+                        callback.fail(message);
+                        return;
+                    }
+                    //parse
+                    JSONArray passengers = response.getJSONArray("passengerId");
+                    List<User> passengers2=new ArrayList<User>();
+                    for (int i = 0; i < passengers.length(); i++)
+                    {
+                        JSONObject passengerJson = passengers.getJSONObject(i);
+                        User passenger = User.fromJson(passengerJson);
+                        passengers2.add(passenger);
+
+                    }
+                    JSONObject driverJson=response.getJSONObject("driverId");
+                    User driver=User.fromJson(driverJson);
+                    String driverId= driver.getUserId();
+                    callback.success(passengers2,driverId);
+                } catch (Exception e2 ) {
+                   callback.fail(e2.getMessage());
+                }
+
+            }
+        });
+
+
 
     }
 
@@ -80,7 +129,7 @@ public class FeedbackAPIController {
      * posts feedbacks for each user in the ride
      * the feedback object will contain specificDriverFeedback only for the driver
      */
-    public void postFeedback(String token, String userId, String rideId, List<Feedback> feedbackList, Feedback.DriverSpecificFeedback driverfeedback, final GenericSuccessCallback callback) throws JSONException {
+    public void postFeedback(String token, String userId, String rideId, List<Feedback> feedbackList, Feedback.DriverSpecificFeedback driverfeedback,Feedback.RouteFeedback roadFeedback,final GenericSuccessCallback callback) throws JSONException {
         // TODO invoke callback on mock data
         String url = "http://pick-me.azurewebsites.net/api/ride/post_feedback";
         JSONObject json = new JSONObject();
@@ -91,14 +140,19 @@ public class FeedbackAPIController {
         Ride ride = new Ride();
         ride.setId(rideId);
 
-        driverJason.put("fromUserId", userId);
+       // driverJason.put("fromUserId", userId);
         driverJason.put("toUserId", ride.getRider().getUserId());
-        driverJason.put("rideId", rideId);
+       // driverJason.put("rideId", rideId);
         driverJason.put("sameAC", driverfeedback.isSameAc());
         driverJason.put("sameModel", driverfeedback.isSameModel());
         driverJason.put("samePlateNumber", driverfeedback.isSamePlate());
         driverJason.put("driving", driverfeedback.getDriving());
         json.put("driverFeedback", driverJason);
+
+        JSONObject roadJason= new JSONObject();
+        roadJason.put("route",roadFeedback.getRouteSmoothness());
+        roadJason.put("traffic",roadFeedback.getTrafficGoodness());
+        json.put("roadFeedback",roadJason);
 
         JSONArray array = new JSONArray();
         for (int i = 0; i < feedbackList.size(); i++) {
@@ -108,9 +162,10 @@ public class FeedbackAPIController {
             json2.put("fromUserId", userId);
             try {
                 json2.put("toUserId", feedback.getUserId());
-                json2.put("rideId", rideId);
+               // json2.put("rideId", rideId);
                 json2.put("Punctuality", feedback.getPunctuality());
                 json2.put("attitude", feedback.getAttitude());
+                json2.put("comment",feedback.getComment());
 
                 array.put(i, json2);
             } catch (JSONException e) {

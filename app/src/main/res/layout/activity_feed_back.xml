@@ -134,6 +134,102 @@
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
+
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardElevation="4dp"
+                android:id="@+id/routecard">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:id="@+id/routeRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Rate the route"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/primary" />
+                    <TextView
+                        android:id="@+id/textViewTraffic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="The Traffic "
+                        android:textColor="@color/black"
+                       />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="4dp">
+                    <TextView
+                        android:id="@+id/textViewCrowded"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="very Crowded"
+                        android:textColor="@color/black"
+                        android:padding="2dp"/>
+                    <RatingBar
+                        android:id="@+id/ratingBar4"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/textViewGood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="very Good"
+                        android:textColor="@color/black"
+                        android:padding="2dp"/>
+
+                </LinearLayout>
+                    <TextView
+                        android:id="@+id/textViewRoute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="The Route  "
+                        android:textColor="@color/black" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="4dp">
+                        <TextView
+                            android:id="@+id/textViewRoughness"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="very Rough"
+                            android:textColor="@color/black"
+                            android:padding="2dp"/>
+                        <RatingBar
+                            android:id="@+id/ratingBar5"
+                            style="?android:attr/ratingBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/textViewSmoothness"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="very Smooth"
+                            android:textColor="@color/black"
+                            android:padding="2dp"/>
+
+                    </LinearLayout>
+
+
+
+
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
 
         </LinearLayout>
     </ScrollView>

@@ -127,4 +127,23 @@ public class Feedback
             this.sameAc = sameAc;
         }
     }
+    public class RouteFeedback
+    {
+        int trafficGoodness;
+        int routeSmoothness;
+
+        public void setTrafficGoddness(int goodness){trafficGoodness=goodness;}
+
+        public int getTrafficGoodness() {
+            return trafficGoodness;
+        }
+
+        public int getRouteSmoothness() {
+            return routeSmoothness;
+        }
+
+        public void setRouteSmoothness(int routeSmoothness) {
+            this.routeSmoothness = routeSmoothness;
+        }
+    }
 }
