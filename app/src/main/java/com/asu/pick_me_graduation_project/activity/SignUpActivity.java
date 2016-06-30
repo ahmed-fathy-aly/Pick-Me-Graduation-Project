@@ -15,6 +15,7 @@ import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.callback.LoginCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.model.User;
+import com.asu.pick_me_graduation_project.utils.Constants;
 import com.linkedin.platform.APIHelper;
 import com.linkedin.platform.errors.LIApiError;
 import com.linkedin.platform.listeners.ApiListener;
@@ -31,7 +32,6 @@ public class SignUpActivity extends AppCompatActivity
     private static final String hostl = "api.linkedin.com";
     private static final String topCardUrl = "https://" + hostl + "/v1/people/~:" +
             "(email-address,first-name,last-name,phone-numbers,public-profile-url,picture-url,picture-urls::(original))";
-    String profilepic;
 
 
     /* views */
@@ -57,50 +57,21 @@ public class SignUpActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
-        linkededinApiHelper();
+        if (getIntent() != null && getIntent().getExtras() != null)
+            populateDataFromIntent();
     }
 
-    public void linkededinApiHelper(){
-        APIHelper apiHelper = APIHelper.getInstance(getApplicationContext());
-        apiHelper.getRequest(SignUpActivity.this, topCardUrl, new ApiListener() {
-            @Override
-            public void onApiSuccess(ApiResponse result) {
-                try {
-
-                    setprofile(result.getResponseDataAsJson());
-                    //progress.dismiss();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onApiError(LIApiError error) {
-                // ((TextView) findViewById(R.id.error)).setText(error.toString());
-
-            }
-        });
-    }
-
-    /*
-       Set User Profile Information in Navigation Bar.
+    /**
+     * moves data from the intent extras to the fields
      */
-
-    public  void  setprofile(JSONObject response){
-
-        try {
-
-
-            editTextEmail.setText(response.get("emailAddress").toString());
-            editTextFirstName.setText(response.get("firstName").toString());
-            editTextLastName.setText(response.get("lastName").toString());
-            profilepic  = response.getString("pictureUrl").toString();
-
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+    private void populateDataFromIntent()
+    {
+        if (getIntent().getExtras().containsKey(Constants.FIRST_NAME))
+            editTextFirstName.setText(getIntent().getStringExtra(Constants.FIRST_NAME));
+        if (getIntent().getExtras().containsKey(Constants.LAST_NAME))
+            editTextLastName.setText(getIntent().getStringExtra(Constants.LAST_NAME));
+        if (getIntent().getExtras().containsKey(Constants.EMAIL))
+            editTextEmail.setText(getIntent().getStringExtra(Constants.EMAIL));
     }
 
 
@@ -111,19 +82,24 @@ public class SignUpActivity extends AppCompatActivity
         String email = editTextEmail.getText().toString();
         String firstName = editTextFirstName.getText().toString();
         String lastName = editTextLastName.getText().toString();
-        String password  = editTextPassword.getText().toString();
+        String password = editTextPassword.getText().toString();
         String gender = spinngerGender.getSelectedItem().toString();
+        String profilePicture = "";
+        if (getIntent() != null
+                && getIntent().getExtras() != null
+                && getIntent().getExtras().containsKey(Constants.PROFILE_PICTURE))
+            profilePicture = getIntent().getStringExtra(Constants.PROFILE_PICTURE);
 
         // sign up
         progressBar.setVisibility(View.VISIBLE);
         AuthenticationAPIController controller = new AuthenticationAPIController(getApplicationContext());
-        controller.signUp(email, firstName, lastName, password, gender, profilepic , new LoginCallback()
+        controller.signUp(email, firstName, lastName, password, profilePicture,  gender, new LoginCallback()
         {
 
             @Override
             public void success(User user, String authenticationToken)
             {
-                // show succes
+                // show success
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), getString(R.string.success), Toast.LENGTH_SHORT).show();
 

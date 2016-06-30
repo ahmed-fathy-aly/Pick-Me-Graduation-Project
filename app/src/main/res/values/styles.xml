@@ -54,7 +54,7 @@
         <item name="colorButtonNormal">#287bbc</item>
         <item name="android:minWidth">88dp</item>
         <item name="android:height">48dp</item>
-        <item name="android:drawableLeft">@drawable/linkedin_logo</item>
+        <item name="android:drawableLeft">@drawable/logo_linkedin</item>
         <item name="android:drawablePadding">4dp</item>
         <item name="android:paddingLeft">16dp</item>
 

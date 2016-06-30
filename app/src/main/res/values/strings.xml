@@ -122,6 +122,7 @@
     <string name="contact_mail">pickemegradproject@gmail.com</string>
     <string name="search">Search</string>
     <string name="sent_a_location">sent a location</string>
+    <string name="sign_in_linked_in">Sign In with LinkedIn</string>
 
 
 </resources>

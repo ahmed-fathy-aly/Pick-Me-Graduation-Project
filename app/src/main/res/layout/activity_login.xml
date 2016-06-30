@@ -121,8 +121,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:theme="@style/linkedinButtonTheme"
-                    android:id="@+id/linkedin"
-                    android:text="SIgn In with LinkedIn"/>
+                    android:id="@+id/buttonLinkedInLogin"
+                    android:text="@string/sign_in_linked_in"/>
 
 
                 <ProgressBar

@@ -16,6 +16,11 @@ public class Constants
     public static final String USER_ID = "userId";
     public static final String GENDER_FEMALE_ = "Female";
     public static String dob = "1-3-2011";
+    public static final String EMAIL = "email";
+    public static final String FIRST_NAME = "firstName";
+    public static final String LAST_NAME = "lastName";
+    public static final String PROFILE_PICTURE = "profilePicture";
+
 
     /* image constants */
     public static final int IMAGE_LOAD_ANIMATION_DURATION = 1000;
