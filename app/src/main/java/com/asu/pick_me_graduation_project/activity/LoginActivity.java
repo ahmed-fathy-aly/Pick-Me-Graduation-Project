@@ -75,6 +75,9 @@ public class LoginActivity extends BaseActivity
     Button buttonFacebookLogin;
     @Bind(R.id.buttonGoogleSignIn)
     Button buttonGoogleSignIn;
+    @Bind(R.id.linkedin)
+    Button linkedin;
+
 
 
     /* fields */
@@ -140,6 +143,8 @@ public class LoginActivity extends BaseActivity
                 })
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
+
 
     }
 
@@ -250,6 +255,13 @@ public class LoginActivity extends BaseActivity
     void goToSignUp()
     {
         Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.linkedin)
+    void goToSignUp_wth_linked()
+    {
+        Intent intent = new Intent(this, linkedin.class);
         startActivity(intent);
     }
 }

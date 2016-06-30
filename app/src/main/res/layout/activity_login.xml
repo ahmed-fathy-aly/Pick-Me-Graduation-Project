@@ -117,6 +117,13 @@
                     android:text="@string/sign_google"
                     />
 
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:theme="@style/linkedinButtonTheme"
+                    android:id="@+id/linkedin"
+                    android:text="SIgn In with LinkedIn"/>
+
 
                 <ProgressBar
                     android:id="@+id/progressBar"
