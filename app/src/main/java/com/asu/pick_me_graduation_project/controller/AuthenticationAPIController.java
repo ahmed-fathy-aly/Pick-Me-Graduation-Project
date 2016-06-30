@@ -167,7 +167,9 @@ public class AuthenticationAPIController
      * the result will have the user details (the ones sent)and an authentication token
      * these results will be saved in the pereferences
      */
-    public void signUp(final String email, final String firstName, final String lastName, String password, final String gender, String profilepic ,final LoginCallback callback)
+    public void signUp(final String email, final String firstName, final String lastName
+            , String password, final String gender, String profilePicture
+            ,final LoginCallback callback)
     {
         // the request header
         String url = Constants.HOST
@@ -181,7 +183,7 @@ public class AuthenticationAPIController
         json.addProperty("password", password);
         json.addProperty("firstName", firstName);
         json.addProperty("lastName", lastName);
-        json.addProperty("profilePicture", profilepic);
+        json.addProperty("profilePicture", profilePicture);
         json.addProperty("gender", gender.equals(Constants.GENDER_MALE));
         String body = json.toString();
 
