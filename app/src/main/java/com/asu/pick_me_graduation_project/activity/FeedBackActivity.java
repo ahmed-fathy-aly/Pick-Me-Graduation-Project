@@ -117,6 +117,7 @@ public class FeedBackActivity extends AppCompatActivity {
      */
      List<Feedback> feedbackList=new ArrayList<>();
     Feedback.DriverSpecificFeedback driverFeedback;
+    Feedback.RouteFeedback roadFeedback;
     private void getFeedBackForm() {
 
 
@@ -177,6 +178,10 @@ public class FeedBackActivity extends AppCompatActivity {
 
         }
         RatingBar driving= (RatingBar) findViewById(R.id.ratingBar);
+        RatingBar traffic = (RatingBar) findViewById(R.id.ratingBar4);
+        roadFeedback.setTrafficGoddness(traffic.getNumStars());
+        RatingBar smoothness = (RatingBar)findViewById(R.id.ratingBar5);
+        roadFeedback.setRouteSmoothness(smoothness.getNumStars());
         driverFeedback.setDriving(driving.getNumStars());
         if(yesButton.isChecked()) {
             driverFeedback.setSameAc(true);
@@ -200,7 +205,7 @@ public class FeedBackActivity extends AppCompatActivity {
 
     void sendFeedback() {
         try {
-            controller.postFeedback(controller2.getTokken(), controller2.getCurrentUser().getUserId(), rideId, feedbackList, driverFeedback, new GenericSuccessCallback() {
+            controller.postFeedback(controller2.getTokken(), controller2.getCurrentUser().getUserId(), rideId, feedbackList, driverFeedback,roadFeedback ,new GenericSuccessCallback() {
                 @Override
                 public void success()
                 {
