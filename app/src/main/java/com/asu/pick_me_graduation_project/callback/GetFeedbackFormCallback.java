@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface GetFeedbackFormCallback
 {
-    void success(List<User> users, String riderId);
+    void success(List<User> users, User driver);
 
     void fail(String message);
 }

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/traffic"
+        android:textColor="@color/black"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="@string/heavy"/>
+
+        <com.github.ornolfr.ratingview.RatingView
+            android:id="@+id/ratingTraffic"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="5"
+            app:drawable_empty="@drawable/ic_star_empty"
+            app:drawable_filled="@drawable/ic_star_filled"
+            app:drawable_half="@drawable/ic_star_half"
+            app:drawable_size="24dp"
+            app:is_indicator="false"
+            app:max_count="5"
+            app:rating="5"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="@string/light"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/road"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/black"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="@string/rough"/>
+
+        <com.github.ornolfr.ratingview.RatingView
+            android:id="@+id/ratingRoad"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="5"
+            app:drawable_empty="@drawable/ic_star_empty"
+            app:drawable_filled="@drawable/ic_star_filled"
+            app:drawable_half="@drawable/ic_star_half"
+            app:drawable_size="24dp"
+            app:is_indicator="false"
+            app:max_count="5"
+            app:rating="5"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="@string/smooth"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

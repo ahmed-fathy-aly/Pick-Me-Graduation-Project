@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageViewUserPP"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_user_small"/>
+
+        <TextView
+            android:id="@+id/textViewUserName"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Passenger's Name"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:text="@string/driving"
+                android:textColor="@color/black"/>
+
+            <com.github.ornolfr.ratingview.RatingView
+                android:id="@+id/ratingDriving"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="5"
+                app:drawable_empty="@drawable/ic_star_empty"
+                app:drawable_filled="@drawable/ic_star_filled"
+                app:drawable_half="@drawable/ic_star_half"
+                app:drawable_size="24dp"
+                app:is_indicator="false"
+                app:max_count="5"
+                app:rating="5"/>
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/textViewSameCar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/same_car"
+            android:textColor="@color/black"/>
+
+
+            <RadioGroup
+                android:id="@+id/radioGroupSameCar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/radioButtonYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yes"/>
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/radioButtonNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No"/>
+
+            </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/what_difference"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"/>
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/checkboxCarModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Car model"/>
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/checkboxCarPlateNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Car plate number"/>
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/checkboxCarAc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AC"/>
+
+
+    </LinearLayout>
+</LinearLayout>
+
+
