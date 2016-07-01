@@ -5,8 +5,10 @@ import android.util.Log;
 
 import com.asu.pick_me_graduation_project.callback.GenericSuccessCallback;
 import com.asu.pick_me_graduation_project.callback.GetFeedbackFormCallback;
+import com.asu.pick_me_graduation_project.model.DrivingFeedback;
 import com.asu.pick_me_graduation_project.model.Feedback;
 import com.asu.pick_me_graduation_project.model.Ride;
+import com.asu.pick_me_graduation_project.model.RoadFeedback;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.github.kittinunf.fuel.Fuel;
@@ -117,64 +119,66 @@ public class FeedbackAPIController
      */
     public void postFeedback(String token,
                              String userId, String rideId,
-                             List<Feedback> feedbackList, Feedback.DriverSpecificFeedback driverfeedback, Feedback.RouteFeedback roadFeedback,
+                             List<Feedback> feedbackList, DrivingFeedback driverfeedback, RoadFeedback roadFeedback,
                              final GenericSuccessCallback callback)
     {
-        // TODO invoke callback on mock data
-        String url = "http://pick-me.azurewebsites.net/api/ride/post_feedback";
-        JSONObject json = new JSONObject();
-        JSONObject driverJason = new JSONObject();
+        // request headers
+        String url = Constants.HOST + "ride/post_feedback";
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + token);
         headers.put("Content-Type", "application/json");
-        Ride ride = new Ride();
-        ride.setId(rideId);
 
+        // request body
+        String body = "";
         try
         {
-            driverJason.put("fromUserId", userId);
-            driverJason.put("toUserId", ride.getDriver().getUserId());
-            driverJason.put("rideId", rideId);
-            driverJason.put("sameAC", driverfeedback.isSameAc());
-            driverJason.put("sameModel", driverfeedback.isSameModel());
-            driverJason.put("samePlateNumber", driverfeedback.isSamePlate());
-            driverJason.put("driving", driverfeedback.getDriving());
-            json.put("driverFeedback", driverJason);
 
-            JSONObject roadJason = new JSONObject();
-            roadJason.put("route", roadFeedback.getRouteSmoothness());
-            roadJason.put("traffic", roadFeedback.getTrafficGoodness());
-            json.put("roadFeedback", roadJason);
+            JSONObject json = new JSONObject();
 
-            JSONArray array = new JSONArray();
+            // ride id
+            json.put("rideId", rideId);
+
+            // driving feedback
+            if (driverfeedback != null)
+            {
+                JSONObject divingFeedbackJson = new JSONObject();
+                divingFeedbackJson.put("toUserId", driverfeedback.getUserId());
+                divingFeedbackJson.put("sameAC", driverfeedback.isSameAc());
+                divingFeedbackJson.put("sameModel", driverfeedback.isSameModel());
+                divingFeedbackJson.put("samePlateNumber", driverfeedback.isSamePlate());
+                divingFeedbackJson.put("driving", driverfeedback.getDriving());
+                json.put("driverFeedback", divingFeedbackJson);
+            }
+
+            // road feedback
+            JSONObject roadFeedbackJson = new JSONObject();
+            roadFeedbackJson.put("route", roadFeedback.getRouteSmoothness());
+            roadFeedbackJson.put("traffic", roadFeedback.getTrafficGoodness());
+            json.put("roadFeedback", roadFeedbackJson);
+
+            // user feedback
+            JSONArray userFeedbackJsonArray = new JSONArray();
             for (int i = 0; i < feedbackList.size(); i++)
             {
-
-                JSONObject json2 = new JSONObject();
+                JSONObject userFeedbackJson = new JSONObject();
                 Feedback feedback = feedbackList.get(i);
-                json2.put("fromUserId", userId);
-                try
-                {
-                    json2.put("toUserId", feedback.getUserId());
-                    // json2.put("rideId", rideId);
-                    json2.put("Punctuality", feedback.getPunctuality());
-                    json2.put("attitude", feedback.getAttitude());
-                    json2.put("comment", feedback.getComment());
 
-                    array.put(i, json2);
-                } catch (JSONException e)
-                {
-                    e.printStackTrace();
-                }
+                userFeedbackJson.put("toUserId", feedback.getUserId());
+                userFeedbackJson.put("Punctuality", feedback.getPunctuality());
+                userFeedbackJson.put("attitude", feedback.getAttitude());
+                userFeedbackJson.put("comment", feedback.getComment());
+
+                userFeedbackJsonArray.put(i, userFeedbackJson);
             }
-            json.put("userFeedback", array);
+            json.put("userFeedback", userFeedbackJsonArray);
+            body = json.toString();
+
         } catch (JSONException e)
         {
-
-
+            callback.fail(e.getMessage());
         }
-        String body = json.toString();
-        Log.e("Game", "body " + body);
+
+
         Fuel.post(url)
                 .header(headers)
                 .body(body, Charset.defaultCharset())
@@ -183,10 +187,10 @@ public class FeedbackAPIController
                     @Override
                     public void success(Request request, Response response, String s)
                     {
-                        Log.e("Game", "success " + s);
-                        JSONObject responses = new JSONObject();
                         try
                         {
+                            // check status
+                            JSONObject responses = new JSONObject(s);
                             int status = responses.getInt("status");
                             if (status == 0)
                             {
@@ -194,10 +198,11 @@ public class FeedbackAPIController
                                 callback.fail(message);
                                 return;
                             }
+
+                            // invoke callback
                             callback.success();
                         } catch (JSONException e2)
                         {
-                            // e2.printStackTrace();
                             callback.fail(e2.getMessage());
                             return;
                         }
@@ -206,12 +211,7 @@ public class FeedbackAPIController
                     @Override
                     public void failure(Request request, Response resp, FuelError fuelError)
                     {
-                        Log.e("Game", "error " + fuelError.getMessage());
-                        Log.e("Game", "request " + request.toString());
-                        Log.e("Game", "response" + resp.toString());
-
                         callback.fail(fuelError.getMessage());
-
                     }
                 });
 

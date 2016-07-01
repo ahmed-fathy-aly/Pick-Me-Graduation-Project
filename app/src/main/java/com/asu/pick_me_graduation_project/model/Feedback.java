@@ -10,7 +10,7 @@ public class Feedback
     String comment;
     int attitude;
     int punctuality;
-    DriverSpecificFeedback driverSpecificFeedback;
+    DrivingFeedback drivingFeedback;
 
     /* constructor */
     public Feedback()
@@ -58,92 +58,15 @@ public class Feedback
         this.punctuality = punctuality;
     }
 
-    public DriverSpecificFeedback getDriverSpecificFeedback()
+    public DrivingFeedback getDrivingFeedback()
     {
-        return driverSpecificFeedback;
+        return drivingFeedback;
     }
 
-    public void setDriverSpecificFeedback(DriverSpecificFeedback driverSpecificFeedback)
+    public void setDrivingFeedback(DrivingFeedback drivingFeedback)
     {
-        this.driverSpecificFeedback = driverSpecificFeedback;
+        this.drivingFeedback = drivingFeedback;
     }
 
 
-   public class DriverSpecificFeedback
-    {
-        int driving;
-        boolean sameCar;
-        boolean sameModel;
-        boolean samePlate;
-        boolean sameAc;
-
-        public int getDriving()
-        {
-            return driving;
-        }
-
-        public void setDriving(int driving)
-        {
-            this.driving = driving;
-        }
-
-        public boolean isSameCar()
-        {
-            return sameCar;
-        }
-
-        public void setSameCar(boolean sameCar)
-        {
-            this.sameCar = sameCar;
-        }
-
-        public boolean isSameModel()
-        {
-            return sameModel;
-        }
-
-        public void setSameModel(boolean sameModel)
-        {
-            this.sameModel = sameModel;
-        }
-
-        public boolean isSamePlate()
-        {
-            return samePlate;
-        }
-
-        public void setSamePlate(boolean samePlate)
-        {
-            this.samePlate = samePlate;
-        }
-
-        public boolean isSameAc()
-        {
-            return sameAc;
-        }
-
-        public void setSameAc(boolean sameAc)
-        {
-            this.sameAc = sameAc;
-        }
-    }
-    public class RouteFeedback
-    {
-        int trafficGoodness;
-        int routeSmoothness;
-
-        public void setTrafficGoddness(int goodness){trafficGoodness=goodness;}
-
-        public int getTrafficGoodness() {
-            return trafficGoodness;
-        }
-
-        public int getRouteSmoothness() {
-            return routeSmoothness;
-        }
-
-        public void setRouteSmoothness(int routeSmoothness) {
-            this.routeSmoothness = routeSmoothness;
-        }
-    }
 }

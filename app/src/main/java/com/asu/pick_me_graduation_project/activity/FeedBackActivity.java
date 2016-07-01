@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -21,11 +22,16 @@ import com.asu.pick_me_graduation_project.callback.GenericSuccessCallback;
 import com.asu.pick_me_graduation_project.callback.GetFeedbackFormCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.FeedbackAPIController;
+import com.asu.pick_me_graduation_project.model.DrivingFeedback;
 import com.asu.pick_me_graduation_project.model.Feedback;
+import com.asu.pick_me_graduation_project.model.RoadFeedback;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
+import com.github.ornolfr.ratingview.RatingView;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,14 +63,22 @@ public class FeedBackActivity extends AppCompatActivity
     RadioButton radioButtonYes;
     @Bind(R.id.radioButtonNo)
     RadioButton radioButtonNo;
+    @Bind(R.id.textViewWhatWasDifferent)
+    TextView textViewWhatWasDifferent;
     @Bind(R.id.feedbackLayout)
     LinearLayout feedbackLayout;
     @Bind(R.id.textViewSameCar)
     TextView textViewSameCar;
+    @Bind(R.id.ratingDriving)
+    RatingView ratingDriving;
+    @Bind(R.id.ratingRoad)
+    RatingView ratingRoad;
+    @Bind(R.id.ratingTraffic)
+    RatingView ratingTraffic;
 
     /* fields */
     private String rideId;
-    FeedbackAPIController controller = new FeedbackAPIController(this);
+    FeedbackAPIController controller;
 
 
     protected void onCreate(Bundle savedInstanceState)
@@ -89,15 +103,15 @@ public class FeedBackActivity extends AppCompatActivity
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId)
             {
-                if (checkedId == R.id.radioButtonYes)
+                if (checkedId == R.id.radioButtonNo)
                 {
-                    textViewSameCar.setVisibility(View.VISIBLE);
+                    textViewWhatWasDifferent.setVisibility(View.VISIBLE);
                     carModel.setVisibility(View.VISIBLE);
                     carPlateNo.setVisibility(View.VISIBLE);
                     carAc.setVisibility(View.VISIBLE);
                 } else
                 {
-                    textViewSameCar.setVisibility(View.GONE);
+                    textViewWhatWasDifferent.setVisibility(View.GONE);
                     carModel.setVisibility(View.GONE);
                     carPlateNo.setVisibility(View.GONE);
                     carAc.setVisibility(View.GONE);
@@ -106,6 +120,7 @@ public class FeedBackActivity extends AppCompatActivity
         });
 
         // get data
+        controller = new FeedbackAPIController(this);
         getFeedBackForm();
 
     }
@@ -118,68 +133,100 @@ public class FeedBackActivity extends AppCompatActivity
     void sendFeedback()
     {
         // gather the data
-        List<Feedback> feedbackList = new ArrayList<>();
-        Feedback.DriverSpecificFeedback driverFeedback = null;
-        Feedback.RouteFeedback roadFeedback = null;
+        DrivingFeedback drivingFeedback = gatherDrivingFeedback();
+        RoadFeedback roadFeedback = gatherRoadFeedback();
+        List<Feedback> feedbackList = gatherUserFeedback();
 
-        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.feedbackLayout);
-        for (int i = 0; i < linearLayout.getChildCount(); i++)
-        {
-            Feedback passengerFeedback = new Feedback();
-
-            View card = linearLayout.getChildAt(i);
-            passengerFeedback.setUserId(card.getTag().toString());
-            RatingBar atittude = (RatingBar) card.findViewById(R.id.ratingAttitude);
-            passengerFeedback.setAttitude(atittude.getNumStars());
-            RatingBar punctuality = (RatingBar) card.findViewById(R.id.ratingPunctuation);
-            passengerFeedback.setPunctuality(punctuality.getNumStars());
-            feedbackList.add(passengerFeedback);
-        }
-        RatingBar driving = (RatingBar) findViewById(R.id.ratingBar);
-        // RatingBar traffic = (RatingBar) findViewById(R.id.ratingBar4);
-        //   roadFeedback.setTrafficGoddness(traffic.getNumStars());
-        // RatingBar smoothness = (RatingBar) findViewById(R.id.ratingBar5);
-        // roadFeedback.setRouteSmoothness(smoothness.getNumStars());
-        driverFeedback.setDriving(driving.getNumStars());
-        if (radioButtonYes.isChecked())
-        {
-            driverFeedback.setSameAc(true);
-            driverFeedback.setSameModel(true);
-            driverFeedback.setSamePlate(true);
-
-        } else
-        {
-            CheckBox sameAc = (CheckBox) findViewById(R.id.checkboxCarAc);
-            driverFeedback.setSameAc(!(sameAc.isChecked()));
-            CheckBox sameModel = (CheckBox) findViewById(R.id.checkboxCarModel);
-            driverFeedback.setSameModel((!sameModel.isChecked()));
-            CheckBox samePlate = (CheckBox) findViewById(R.id.checkboxCarPlateNo);
-            driverFeedback.setSamePlate(!(samePlate.isChecked()));
-        }
-
+        // mae a POST request
+        progressBar.setVisibility(View.VISIBLE);
         controller.postFeedback(
                 new AuthenticationAPIController(this).getTokken()
                 , new AuthenticationAPIController(this).getCurrentUser().getUserId()
                 , rideId
                 , feedbackList
-                , driverFeedback
+                , drivingFeedback
                 , roadFeedback
                 , new GenericSuccessCallback()
                 {
                     @Override
                     public void success()
                     {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        finish();
                     }
 
                     @Override
                     public void fail(String message)
                     {
 
+                        progressBar.setVisibility(View.INVISIBLE);
+                        Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
                     }
                 });
 
     }
 
+    /**
+     * collects the user feedback from the feedback rows
+     */
+    private List<Feedback> gatherUserFeedback()
+    {
+        List<Feedback> feedbackList = new ArrayList<>();
+
+        for (int i = 0; i < feedbackLayout.getChildCount(); i++)
+        {
+            // reference the views in the row
+            View rowPassengerFeedback = feedbackLayout.getChildAt(i);
+            RatingView ratingAttitude = (RatingView) rowPassengerFeedback.findViewById(R.id.ratingAttitude);
+            RatingView ratingPunctuality = (RatingView) rowPassengerFeedback.findViewById(R.id.ratingPunctuation);
+            EditText editTextComment = (EditText) rowPassengerFeedback.findViewById(R.id.editTextComment);
+
+            // collect data
+            Feedback passengerFeedback = new Feedback();
+            passengerFeedback.setUserId((String) rowPassengerFeedback.getTag());
+            passengerFeedback.setAttitude((int) ratingAttitude.getRating());
+            passengerFeedback.setPunctuality((int) ratingPunctuality.getRating());
+            passengerFeedback.setComment(editTextComment.getText().toString());
+            feedbackList.add(passengerFeedback);
+        }
+
+        return feedbackList;
+    }
+
+    /**
+     * collects the road feedback from the view
+     */
+    private RoadFeedback gatherRoadFeedback()
+    {
+        RoadFeedback roadFeedback = new RoadFeedback();
+
+        roadFeedback.setRouteSmoothness((int) ratingRoad.getRating());
+        roadFeedback.setTrafficGoddness((int) ratingTraffic.getRating());
+
+        return  roadFeedback;
+    }
+
+    /**
+     * collects the driving feedback from the view
+     * @return  null if the current user is the driver
+     */
+    private DrivingFeedback gatherDrivingFeedback()
+    {
+        // if the current user is the driver then return null
+        if (driverCard.getVisibility() == View.GONE)
+            return  null;
+
+        DrivingFeedback drivingFeedback = new DrivingFeedback();
+
+        drivingFeedback.setUserId((String) driverCard.getTag());
+        drivingFeedback.setDriving((int) ratingDriving.getRating());
+        drivingFeedback.setSameCar(radioButtonYes.isChecked());
+        drivingFeedback.setSameAc(radioButtonYes.isChecked() || !carAc.isChecked());
+        drivingFeedback.setSameModel(radioButtonYes.isChecked() || !carModel.isChecked());
+        drivingFeedback.setSamePlate(radioButtonYes.isChecked() || !carPlateNo.isChecked());
+
+        return drivingFeedback;
+    }
 
     /**
      * - get the users of that ride
@@ -203,6 +250,7 @@ public class FeedBackActivity extends AppCompatActivity
                         String currentUserId = new AuthenticationAPIController(FeedBackActivity.this).getCurrentUser().getUserId();
                         boolean currentUserDriver = currentUserId.equals(driver.getUserId());
                         driverCard.setVisibility(currentUserDriver ? View.GONE : View.VISIBLE);
+                        driverCard.setTag(driver.getUserId());
 
                         // inflate driver user feedback
                         if (!currentUserDriver)
