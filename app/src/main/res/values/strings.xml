@@ -135,6 +135,7 @@
     <string name="traffic">Traffic</string>
     <string name="road">Road</string>
     <string name="view_feedback">View Feedback</string>
+    <string name="from">From</string>
 
 
 </resources>

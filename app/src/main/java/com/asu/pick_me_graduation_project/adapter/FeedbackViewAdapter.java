@@ -63,7 +63,7 @@ public class FeedbackViewAdapter extends RecyclerView.Adapter<FeedbackViewAdapte
 
         // from user
         User user = feedback.getFromUser();
-        holder.textViewUserName.setText(user.getFirstName() + " " + user.getLastName());
+        holder.textViewUserName.setText(context.getString(R.string.from) + " " + user.getFirstName() + " " + user.getLastName());
         if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
             Picasso.with(context).
                     load(user.getProfilePictureUrl())
