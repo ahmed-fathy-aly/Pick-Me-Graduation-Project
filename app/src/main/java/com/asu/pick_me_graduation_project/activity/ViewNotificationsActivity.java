@@ -193,6 +193,7 @@ public class ViewNotificationsActivity extends AppCompatActivity implements Noti
                     Log.e("Game", "error " + e.getMessage());
                     e.printStackTrace();
                 }
+                break;
 
             case "acceptedInCommnityNotification":
                 try
