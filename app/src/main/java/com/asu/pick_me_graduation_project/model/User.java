@@ -233,7 +233,6 @@ public class User implements Serializable
 
         } catch (Exception e)
         {
-            e.printStackTrace();
         }
         return user;
     }

@@ -64,7 +64,7 @@ public class RideDetailsFragment extends Fragment
 
     public RideDetailsFragment()
     {
-        // Required empty public constructor
+        setArguments(new Bundle());
     }
 
 
