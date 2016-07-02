@@ -1,5 +1,12 @@
 package com.asu.pick_me_graduation_project.model;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Calendar;
+
 /**
  * Created by ahmed on 6/14/2016.
  */
@@ -7,10 +14,12 @@ public class Feedback
 {
     /* fields */
     String userId;
+    String rideId;
     String comment;
     int attitude;
     int punctuality;
     DrivingFeedback drivingFeedback;
+    User fromUser;
 
     /* constructor */
     public Feedback()
@@ -69,4 +78,46 @@ public class Feedback
     }
 
 
+    public String getRideId()
+    {
+        return rideId;
+    }
+
+    public void setRideId(String rideId)
+    {
+        this.rideId = rideId;
+    }
+
+
+    public User getFromUser()
+    {
+        return fromUser;
+    }
+
+    public void setFromUser(User fromUser)
+    {
+        this.fromUser = fromUser;
+    }
+
+    /**
+     * parses from a json
+     */
+    public static Feedback fromJson(JSONObject jsonObject)
+    {
+        Feedback feedback = new Feedback();
+
+        try
+        {
+            feedback.setRideId(jsonObject.getString("rideId"));
+            feedback.setAttitude(jsonObject.getInt("attitude"));
+            feedback.setPunctuality(jsonObject.getInt("punctuality"));
+            feedback.setComment(jsonObject.getString("comment"));
+            feedback.setFromUser(User.fromJson(jsonObject.getJSONObject("fromUser")));
+        } catch (JSONException e)
+        {
+            Log.e("Game", "error parsing feedback " + e.getMessage());
+        }
+
+        return feedback;
+    }
 }

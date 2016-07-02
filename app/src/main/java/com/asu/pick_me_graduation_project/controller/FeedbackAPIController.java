@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.asu.pick_me_graduation_project.callback.GenericSuccessCallback;
+import com.asu.pick_me_graduation_project.callback.GetFeedbackCallback;
 import com.asu.pick_me_graduation_project.callback.GetFeedbackFormCallback;
 import com.asu.pick_me_graduation_project.model.DrivingFeedback;
 import com.asu.pick_me_graduation_project.model.Feedback;
@@ -54,6 +55,7 @@ public class FeedbackAPIController
         Ion.with(context)
                 .load("GET", url)
                 .addHeader("Authorization", "Bearer " + token)
+                .addHeader("Content-Type", "application/json")
                 .asString()
                 .setCallback(new FutureCallback<String>()
                 {
@@ -103,7 +105,6 @@ public class FeedbackAPIController
                             callback.success(passengers, driver);
                         } catch (Exception e2)
                         {
-                            Log.e("Game", "error parsing feedback response " + e2.getMessage());
                             callback.fail(e2.getMessage());
                         }
 
@@ -215,5 +216,82 @@ public class FeedbackAPIController
                     }
                 });
 
+    }
+
+    /**
+     * downloads the feedback for a specific user
+     */
+    public void getUserFeedback(String token, String userId, final GetFeedbackCallback callback)
+    {
+        String url = Constants.HOST + "ride/get_feedback?userId=" + userId;
+
+        Ion.with(context)
+                .load("GET", url)
+                .addHeader("Authorization", "Bearer " + token)
+                .addHeader("Content-Type", "application/json")
+                .asString()
+                .setCallback(new FutureCallback<String>()
+                {
+                    @Override
+                    public void onCompleted(Exception e, String result)
+                    {
+
+                        // check errors
+                        if (e != null)
+                        {
+                            callback.fail(e.getMessage());
+                            return;
+                        }
+
+                        Log.e("Game", "get feedback= " + result);
+
+                        //parse the  response
+                        try
+                        {
+
+                            // check the status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("feedback");
+                                callback.fail(message);
+                                return;
+                            }
+
+                            // parse the feedback list
+                            JSONObject feedbackJson = response.getJSONObject("feedback");
+                            HashMap<String , Feedback> userFeedbackMap = new HashMap<String, Feedback>();
+                            List<Feedback> feedbackList = new ArrayList<Feedback>();
+
+                            // user feedback
+                            JSONArray userFeedbackJson = feedbackJson.getJSONArray("userFeedback");
+                            for (int i = 0; i < userFeedbackJson.length(); i++)
+                            {
+                                Feedback feedback = Feedback.fromJson(userFeedbackJson.getJSONObject(i));
+                                String key = feedback.getRideId() + "." + feedback.getFromUser().getUserId();
+                                userFeedbackMap.put(key,feedback);
+                                feedbackList.add(feedback);
+                            }
+                            
+                            // driving feedback
+                            JSONArray drivingFeedbackJson = feedbackJson.getJSONArray("driverFeedback");
+                            for (int i = 0; i < drivingFeedbackJson.length(); i++)
+                            {
+                                DrivingFeedback drivingFeedback = DrivingFeedback.fromJson(drivingFeedbackJson.getJSONObject(i));
+                                String key = drivingFeedback.getRideId() + "." + drivingFeedback.getFromUser().getUserId();
+                                if (userFeedbackMap.containsKey(key))
+                                    userFeedbackMap.get(key).setDrivingFeedback(drivingFeedback);
+                            }
+
+                            callback.success(feedbackList);
+                        } catch (Exception e2)
+                        {
+                            Log.e("Game", "error parsing feedback response " + e2.getMessage());
+                            callback.fail(e2.getMessage());
+                        }
+
+                    }
+                });
     }
 }

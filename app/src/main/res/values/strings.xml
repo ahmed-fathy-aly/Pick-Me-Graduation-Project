@@ -123,7 +123,7 @@
     <string name="search">Search</string>
     <string name="sent_a_location">sent a location</string>
     <string name="sign_in_linked_in">Sign In with LinkedIn</string>
-    <string name="punctuation">Punctuation</string>
+    <string name="punctuation">Punctuality</string>
     <string name="attitude">Attitude</string>
     <string name="comment">Comment</string>
     <string name="same_car">Same car as described ?</string>
@@ -134,6 +134,7 @@
     <string name="smooth">Smooth</string>
     <string name="traffic">Traffic</string>
     <string name="road">Road</string>
+    <string name="view_feedback">View Feedback</string>
 
 
 </resources>

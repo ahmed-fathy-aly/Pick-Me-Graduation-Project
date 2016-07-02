@@ -1,5 +1,6 @@
 package com.asu.pick_me_graduation_project.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -88,7 +89,7 @@ public class FeedBackActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
 
-        // get data from intent (later)
+        // get data from intent
         rideId = getIntent().getStringExtra(Constants.RIDE_ID);
 
         // setup common views
@@ -165,6 +166,7 @@ public class FeedBackActivity extends AppCompatActivity
                 });
 
     }
+
 
     /**
      * collects the user feedback from the feedback rows
