@@ -113,6 +113,11 @@
         <activity android:name=".activity.MainActivity">
         </activity>
         <activity android:name=".activity.StartActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
          </activity>
         <activity
             android:name=".activity.SearchUsersActivity"
@@ -139,11 +144,7 @@
         <activity android:name=".activity.SearchRideActivity">
         </activity>
         <activity android:name=".activity.RideDetailsActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity android:name=".activity.SearchRideResults">
         </activity>

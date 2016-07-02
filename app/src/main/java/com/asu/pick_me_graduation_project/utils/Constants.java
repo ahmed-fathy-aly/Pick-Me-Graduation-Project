@@ -30,6 +30,7 @@ public class Constants
     public static final java.lang.String IS_COMMUNITY_ADMIN = "isCommunityAdmin";
 
     /* ride constants */
+    public static final String RIDE = "ride";
     public static final String RIDE_ID = "rideId";
     public static final String SEARCH_RIDE_PARAMS = "searchRideParams";
     public static final String RIDES_LIST = "ridesList";

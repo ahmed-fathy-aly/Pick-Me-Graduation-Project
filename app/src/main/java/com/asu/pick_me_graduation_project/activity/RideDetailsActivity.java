@@ -65,8 +65,7 @@ public class RideDetailsActivity extends BaseActivity
         setContentView(R.layout.activity_ride_details);
 
         // get ride id
-        //rideId = getIntent().getExtras().getString(Constants.RIDE_ID);
-        rideId = "74";
+        rideId = getIntent().getExtras().getString(Constants.RIDE_ID);
 
         // reference views
         ButterKnife.bind(this);
@@ -142,7 +141,7 @@ public class RideDetailsActivity extends BaseActivity
                 // setup view pager
                 rideDetailsPagerAdapter = new RideDetailsPagerAdapter(getSupportFragmentManager(), rideId, showRideRequests);
                 viewPager.setAdapter(rideDetailsPagerAdapter);
-                viewPager.setOffscreenPageLimit(3);
+                viewPager.setOffscreenPageLimit(0);
                 tabLayout.setupWithViewPager(viewPager);
 
                 // set the details
@@ -196,7 +195,7 @@ public class RideDetailsActivity extends BaseActivity
                 {
                     rideDetailsPagerAdapter = new RideDetailsPagerAdapter(getSupportFragmentManager(), rideId, showRideRequests);
                     viewPager.setAdapter(rideDetailsPagerAdapter);
-                    viewPager.setOffscreenPageLimit(3);
+                    viewPager.setOffscreenPageLimit(0);
                     tabLayout.setupWithViewPager(viewPager);
                 }
 
