@@ -28,6 +28,7 @@ public class Constants
     public static final java.lang.String COMMUNITY_ID = "communityId";
     public static final java.lang.String COMMUNITY_NAME = "communityName";
     public static final java.lang.String IS_COMMUNITY_ADMIN = "isCommunityAdmin";
+    public static final String DESCRIPTION = "description";
 
     /* ride constants */
     public static final String RIDE = "ride";
