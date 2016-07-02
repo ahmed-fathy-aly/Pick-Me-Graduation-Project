@@ -29,13 +29,11 @@ public class User implements Serializable
     String phoneNumber;
     String bio;
     CarDetails carDetails;
-    private int rate;
 
 
     boolean isAdmin;
 
     /* setters and getters */
-
 
 
     public double getLocationAltitude()
@@ -97,6 +95,7 @@ public class User implements Serializable
     {
         this.residence = residence;
     }
+
     public String getNo_of_rides()
     {
         return no_of_rides;
@@ -177,16 +176,6 @@ public class User implements Serializable
         this.carDetails = carDetails;
     }
 
-    public int getRate()
-    {
-        return rate;
-    }
-
-    public void setRate(int rate)
-    {
-        this.rate = rate;
-    }
-
     public boolean isAdmin()
     {
         return isAdmin;
@@ -221,22 +210,30 @@ public class User implements Serializable
             user.setFirstName(json.getString("firstName"));
             user.setLastName(json.getString("lastName"));
             user.setProfilePictureUrl(json.getString("profilePicture"));
-            user.setEmail(json.getString("email"));
-            user.setdob(json.getString("dob"));
-            user.setResidence(json.getString("residence"));
-            user.setNo_of_rides(json.getString("numberOfRides"));
-            user.setPoints(json.getString("points"));
+            if (!json.isNull("email"))
+                user.setEmail(json.getString("email"));
+            if (!json.isNull("dob"))
+                user.setdob(json.getString("dob"));
+            if (!json.isNull("residence"))
+                user.setResidence(json.getString("residence"));
+            if (!json.isNull("numberOfRides"))
+                user.setNo_of_rides(json.getString("numberOfRides"));
+            if (!json.isNull("points"))
+                user.setPoints(json.getString("points"));
             if (!json.isNull("gender"))
                 user.setGender(json.getBoolean("gender") ? Constants.GENDER_MALE : Constants.GENDER_FEMALE_);
             if (!json.isNull("isAdmin"))
                 user.setIsAdmin(json.getBoolean("isAdmin"));
-            user.setBio(json.getString("bio"));
-            user.setPhoneNumber(json.getString("phoneNumber"));
+            if (!json.isNull("bio"))
+                user.setBio(json.getString("bio"));
+            if (!json.isNull("phoneNumber"))
+                user.setPhoneNumber(json.getString("phoneNumber"));
             CarDetails carDetails = CarDetails.fromJson(json);
             user.setCarDetails(carDetails);
 
         } catch (Exception e)
         {
+            e.printStackTrace();
         }
         return user;
     }

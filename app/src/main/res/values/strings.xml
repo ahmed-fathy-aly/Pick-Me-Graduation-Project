@@ -110,7 +110,7 @@
     <string name="what_difference">what was different</string>
     <string name="if_no">If No...</string>
     <string name="was_it_the_same">was it the same as described in the ride details ?</string>
-    <string name="driving">Rate the driving</string>
+    <string name="driving">Driving</string>
     <string name="passenger">Rate this passenger</string>
     <string name="writeComment">Write a comment</string>
     <string name="feedback">Feedback</string>
@@ -123,6 +123,19 @@
     <string name="search">Search</string>
     <string name="sent_a_location">sent a location</string>
     <string name="sign_in_linked_in">Sign In with LinkedIn</string>
+    <string name="punctuation">Punctuality</string>
+    <string name="attitude">Attitude</string>
+    <string name="comment">Comment</string>
+    <string name="same_car">Same car as described ?</string>
+    <string name="crowded">Crowded</string>
+    <string name="heavy">Heavy</string>
+    <string name="light">Light</string>
+    <string name="rough">Rough</string>
+    <string name="smooth">Smooth</string>
+    <string name="traffic">Traffic</string>
+    <string name="road">Road</string>
+    <string name="view_feedback">View Feedback</string>
+    <string name="from">From</string>
 
 
 </resources>

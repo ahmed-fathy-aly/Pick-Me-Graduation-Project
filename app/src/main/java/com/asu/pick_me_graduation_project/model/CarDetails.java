@@ -89,10 +89,14 @@ public class CarDetails implements Serializable
 
         try
         {
-            carDetails.setPlateNumber(json.getString("carPlateNumber"));
-            carDetails.setModel(json.getString("carModel"));
-            carDetails.setYear(json.getString("carYear"));
-            carDetails.setConditioned(json.getBoolean("carAC"));
+            if (!json.isNull("carPlateNumber"))
+                carDetails.setPlateNumber(json.getString("carPlateNumber"));
+            if (!json.isNull("carModel"))
+                carDetails.setModel(json.getString("carModel"));
+            if (!json.isNull("carYear"))
+                carDetails.setYear(json.getString("carYear"));
+            if (!json.isNull("carAC"))
+                carDetails.setConditioned(json.getBoolean("carAC"));
         } catch (Exception e)
         {
 

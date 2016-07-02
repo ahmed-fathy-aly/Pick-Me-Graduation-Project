@@ -35,6 +35,7 @@ import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.github.florent37.materialimageloading.MaterialImageLoading;
+import com.github.ornolfr.ratingview.RatingView;
 import com.koushikdutta.ion.Ion;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -80,8 +81,6 @@ public class UserProfileActivity extends BaseActivity
     FloatingActionButton fab;
     @Bind(R.id.imageViewProfilePicture)
     ImageView imageViewProfilePicture;
-    @Bind(R.id.ratingBar)
-    RatingBar ratingBar;
     @Bind(R.id.scroll)
     NestedScrollView scroll;
     @Bind(R.id.app_bar_layout)
@@ -92,6 +91,7 @@ public class UserProfileActivity extends BaseActivity
     CollapsingToolbarLayout collapsingToolbar;
     @Bind(R.id.profileHeaderRoot)
     LinearLayout profileHeaderRoot;
+    @Bind(R.id.progressBar)
     ProgressBar progressBar;
 
     /* fields */
@@ -114,11 +114,7 @@ public class UserProfileActivity extends BaseActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        progressBar = (ProgressBar) toolbar.findViewById(R.id.progressBar);
 
-        Log.e("Game", "null?" + (progressBar == null));
-        // add a progress bar
-        //progressBar = addProgressBar(toolbar);
 
         // setup collapsing toolbar
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener()
@@ -172,6 +168,30 @@ public class UserProfileActivity extends BaseActivity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @OnClick(R.id.buttonViewFeedback)
+    void openFeedbackActivity()
+    {
+        Intent intent = new Intent(this, ViewFeedbackActivity.class);
+        intent.putExtra(Constants.USER_ID, userId);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.fab)
+    public void onClick()
+    {
+        if (userId.equals(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId()))
+        {
+            //  show the edit profile dialog if it's the profile of this user
+            //done by raafat
+            if (userId.equals(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId()))
+            {
+                editProfileFragment = new EditProfileFragment();
+                editProfileFragment.show(getSupportFragmentManager(), getString(R.string.title_edit_profile));
+            }
+        }
+    }
+
+
     /**
      * downloads the user's profile and shows it
      */
@@ -191,7 +211,6 @@ public class UserProfileActivity extends BaseActivity
 
                 //  set profile data to views
                 textViewUserName.setText( ValidationUtils.correct(user.getFirstName()) + " " + ValidationUtils.correct(user.getLastName()));
-                ratingBar.setRating(5);
                 textViewEmail.setText(ValidationUtils.correct(user.getEmail()));
                 textViewPhoneNumber.setText(ValidationUtils.correct(user.getPhoneNumber()));
                 Residence.setText(ValidationUtils.correct(user.getResidence()));
@@ -200,7 +219,6 @@ public class UserProfileActivity extends BaseActivity
                 String s= user.getdob().substring(0, user.getdob().indexOf('T'));
                 textViewAge.setText(ValidationUtils.correct(s));
                 textViewBio.setText(ValidationUtils.correct(user.getBio()));
-                ratingBar.setRating(5.0f);
                 if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
                     Picasso.with(getApplicationContext()).
                             load(user.getProfilePictureUrl())
@@ -249,20 +267,6 @@ public class UserProfileActivity extends BaseActivity
         });
     }
 
-    @OnClick(R.id.fab)
-    public void onClick()
-    {
-        if (userId.equals(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId()))
-        {
-            //  show the edit profile dialog if it's the profile of this user
-            //done by raafat
-            if (userId.equals(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId()))
-            {
-                editProfileFragment = new EditProfileFragment();
-                editProfileFragment.show(getSupportFragmentManager(), getString(R.string.title_edit_profile));
-            }
-        }
-    }
 
 
     @Override

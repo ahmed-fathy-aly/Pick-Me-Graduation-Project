@@ -86,12 +86,12 @@ public class UserApiController
                             JSONObject userJson = response.getJSONObject("user");
                             User user = User.fromJson(userJson);
 
-
                             // invoke callback
                             callback.success(user);
                         } catch (Exception e2)
                         {
                             Log.e("Game", "parsing failed " + e2.getMessage());
+                            e2.printStackTrace();
                             callback.fail(e2.getMessage());
                             return;
                         }

@@ -1,5 +1,12 @@
 package com.asu.pick_me_graduation_project.model;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Calendar;
+
 /**
  * Created by ahmed on 6/14/2016.
  */
@@ -7,10 +14,12 @@ public class Feedback
 {
     /* fields */
     String userId;
+    String rideId;
     String comment;
     int attitude;
     int punctuality;
-    DriverSpecificFeedback driverSpecificFeedback;
+    DrivingFeedback drivingFeedback;
+    User fromUser;
 
     /* constructor */
     public Feedback()
@@ -58,92 +67,57 @@ public class Feedback
         this.punctuality = punctuality;
     }
 
-    public DriverSpecificFeedback getDriverSpecificFeedback()
+    public DrivingFeedback getDrivingFeedback()
     {
-        return driverSpecificFeedback;
+        return drivingFeedback;
     }
 
-    public void setDriverSpecificFeedback(DriverSpecificFeedback driverSpecificFeedback)
+    public void setDrivingFeedback(DrivingFeedback drivingFeedback)
     {
-        this.driverSpecificFeedback = driverSpecificFeedback;
+        this.drivingFeedback = drivingFeedback;
     }
 
 
-   public class DriverSpecificFeedback
+    public String getRideId()
     {
-        int driving;
-        boolean sameCar;
-        boolean sameModel;
-        boolean samePlate;
-        boolean sameAc;
-
-        public int getDriving()
-        {
-            return driving;
-        }
-
-        public void setDriving(int driving)
-        {
-            this.driving = driving;
-        }
-
-        public boolean isSameCar()
-        {
-            return sameCar;
-        }
-
-        public void setSameCar(boolean sameCar)
-        {
-            this.sameCar = sameCar;
-        }
-
-        public boolean isSameModel()
-        {
-            return sameModel;
-        }
-
-        public void setSameModel(boolean sameModel)
-        {
-            this.sameModel = sameModel;
-        }
-
-        public boolean isSamePlate()
-        {
-            return samePlate;
-        }
-
-        public void setSamePlate(boolean samePlate)
-        {
-            this.samePlate = samePlate;
-        }
-
-        public boolean isSameAc()
-        {
-            return sameAc;
-        }
-
-        public void setSameAc(boolean sameAc)
-        {
-            this.sameAc = sameAc;
-        }
+        return rideId;
     }
-    public class RouteFeedback
+
+    public void setRideId(String rideId)
     {
-        int trafficGoodness;
-        int routeSmoothness;
+        this.rideId = rideId;
+    }
 
-        public void setTrafficGoddness(int goodness){trafficGoodness=goodness;}
 
-        public int getTrafficGoodness() {
-            return trafficGoodness;
+    public User getFromUser()
+    {
+        return fromUser;
+    }
+
+    public void setFromUser(User fromUser)
+    {
+        this.fromUser = fromUser;
+    }
+
+    /**
+     * parses from a json
+     */
+    public static Feedback fromJson(JSONObject jsonObject)
+    {
+        Feedback feedback = new Feedback();
+
+        try
+        {
+            feedback.setRideId(jsonObject.getString("rideId"));
+            feedback.setAttitude(jsonObject.getInt("attitude"));
+            feedback.setPunctuality(jsonObject.getInt("punctuality"));
+            feedback.setComment(jsonObject.getString("comment"));
+            feedback.setFromUser(User.fromJson(jsonObject.getJSONObject("fromUser")));
+        } catch (JSONException e)
+        {
+            Log.e("Game", "error parsing feedback " + e.getMessage());
         }
 
-        public int getRouteSmoothness() {
-            return routeSmoothness;
-        }
-
-        public void setRouteSmoothness(int routeSmoothness) {
-            this.routeSmoothness = routeSmoothness;
-        }
+        return feedback;
     }
 }
