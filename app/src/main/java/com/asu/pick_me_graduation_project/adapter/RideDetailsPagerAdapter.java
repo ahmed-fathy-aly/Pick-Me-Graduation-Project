@@ -11,6 +11,7 @@ import com.asu.pick_me_graduation_project.fragment.CommunityJoinRequestsFragment
 import com.asu.pick_me_graduation_project.fragment.CommunityPostsFragment;
 import com.asu.pick_me_graduation_project.fragment.JoinRideRequestsFragment;
 import com.asu.pick_me_graduation_project.fragment.MembersListFragment;
+import com.asu.pick_me_graduation_project.fragment.RideAnnouncmentsFragment;
 import com.asu.pick_me_graduation_project.fragment.RideDetailsFragment;
 import com.asu.pick_me_graduation_project.model.JoinRideRequest;
 import com.asu.pick_me_graduation_project.utils.Constants;
@@ -28,10 +29,11 @@ public class RideDetailsPagerAdapter extends FragmentPagerAdapter
     RideDetailsFragment rideDetailsFragment;
     MembersListFragment membersListFragment;
     JoinRideRequestsFragment joinRideRequestsFragment;
+    RideAnnouncmentsFragment rideAnnouncmentsFragment;
     private List<String> mFragmentTitleList = new ArrayList<>();
     private List<Fragment> mFragmentList = new ArrayList<>();
 
-    public RideDetailsPagerAdapter(FragmentManager fm, String rideId, boolean withJoinRequests)
+    public RideDetailsPagerAdapter(FragmentManager fm, String rideId, boolean isMember)
     {
         super(fm);
 
@@ -49,8 +51,13 @@ public class RideDetailsPagerAdapter extends FragmentPagerAdapter
         mFragmentTitleList.add("Members");
         mFragmentList.add(membersListFragment);
 
-        if (withJoinRequests)
+        if (isMember)
         {
+            rideAnnouncmentsFragment = new RideAnnouncmentsFragment();
+            rideAnnouncmentsFragment.setArguments(arguments);
+            mFragmentTitleList.add("Announcements");
+            mFragmentList.add(rideAnnouncmentsFragment);
+
             joinRideRequestsFragment = new JoinRideRequestsFragment();
             joinRideRequestsFragment.setArguments(arguments);
             mFragmentTitleList.add("Requests");
@@ -83,4 +90,8 @@ public class RideDetailsPagerAdapter extends FragmentPagerAdapter
 
     public RideDetailsFragment getRideDetailsFragment(){ return rideDetailsFragment;}
 
+    public RideAnnouncmentsFragment getRideAnnouncmentsFragment()
+    {
+        return  rideAnnouncmentsFragment;
+    }
 }

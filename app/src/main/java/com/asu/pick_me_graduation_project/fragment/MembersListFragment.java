@@ -34,6 +34,7 @@ public class MembersListFragment extends Fragment implements UsersAdapter.Listen
     /* UI */
     @Bind(R.id.listViewUsers)
     ListView listViewUsers;
+    private List<User> users;
 
     public MembersListFragment()
     {
@@ -53,6 +54,12 @@ public class MembersListFragment extends Fragment implements UsersAdapter.Listen
         adapterUsers.setListener(this);
         listViewUsers.setAdapter(adapterUsers);
 
+        // add data
+        if (users != null)
+        {
+            adapterUsers.addAll(users);
+            users = null;
+        }
         return view;
     }
 
@@ -82,10 +89,13 @@ public class MembersListFragment extends Fragment implements UsersAdapter.Listen
      */
     public void setMembers(List<User> users)
     {
-        adapterUsers.clear();
-        adapterUsers.addAll(users);
+        if (adapterUsers != null)
+        {
+            adapterUsers.clear();
+            adapterUsers.addAll(users);
+        } else
+            this.users = users;
     }
-
 
 
 }

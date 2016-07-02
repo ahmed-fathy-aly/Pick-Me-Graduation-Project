@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.asu.pick_me_graduation_project.activity.SearchRideResults;
+import com.asu.pick_me_graduation_project.callback.CreateAnnouncementCallback;
 import com.asu.pick_me_graduation_project.callback.GenericSuccessCallback;
 import com.asu.pick_me_graduation_project.callback.GetRideCallback;
 import com.asu.pick_me_graduation_project.callback.GetRideJoinRequestsCallback;
@@ -13,6 +14,7 @@ import com.asu.pick_me_graduation_project.model.Community;
 import com.asu.pick_me_graduation_project.model.JoinRideRequest;
 import com.asu.pick_me_graduation_project.model.Location;
 import com.asu.pick_me_graduation_project.model.Ride;
+import com.asu.pick_me_graduation_project.model.RideAnnouncment;
 import com.asu.pick_me_graduation_project.model.SearchRideParams;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
@@ -58,7 +60,7 @@ public class RidesAPIController
     }
 
     /* methods */
-       public void getMyRides(String token, String userId, final GetRidesCallback callback)
+    public void getMyRides(String token, String userId, final GetRidesCallback callback)
     {
         String url = Constants.HOST + "/ride/get_my_rides?postUserId=" + userId;
         Ion.with(context)
@@ -387,7 +389,6 @@ public class RidesAPIController
                 });
 
 
-
     }
 
     public void getRideJoinRequest(String token, String rideId, final GetRideJoinRequestsCallback callback)
@@ -503,5 +504,72 @@ public class RidesAPIController
                 });
 
 
+    }
+
+    /**
+     * makes a post request to make an announcement
+     */
+    public void postAnnouncement(String token, String rideId, String content, final CreateAnnouncementCallback callback)
+    {
+        // form the request
+        String url = Constants.HOST + "ride/post_ride_announcement";
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + token);
+        headers.put("Content-Type", "application/json");
+
+        JSONObject jsonObject = new JSONObject();
+        try
+        {
+            jsonObject.put("rideId", rideId);
+            jsonObject.put("content", content);
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        String body = jsonObject.toString();
+
+        // make the post
+        Fuel.post(url)
+                .header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new com.github.kittinunf.fuel.core.Handler<String>()
+                {
+                    @Override
+                    public void success(Request request, Response r, String s)
+                    {
+                        Log.e("Game", "request " + request.toString());
+                        Log.e("Game", "response" + r.toString());
+
+                        try
+                        {
+                            // check status
+                            JSONObject response = new JSONObject(s);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
+
+                            // parse the announcement
+                            JSONObject announcementJson = response.getJSONObject("newAnnouncement");
+                            RideAnnouncment announcement = RideAnnouncment.fromJson(announcementJson);
+                            callback.success(announcement);
+                        } catch (Exception e2)
+                        {
+                            Log.e("Game", "post announcement error " + e2.getMessage());
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+
+                    @Override
+                    public void failure(Request request, Response resp, FuelError fuelError)
+                    {
+                        callback.fail(fuelError.getMessage());
+                    }
+                });
     }
 }

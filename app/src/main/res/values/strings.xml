@@ -137,6 +137,8 @@
     <string name="view_feedback">View Feedback</string>
     <string name="from">From</string>
     <string name="notifications">Notifications</string>
+    <string name="make_an_announcment">Make an Announcement</string>
+    <string name="announcment">Announcement</string>
 
 
 </resources>

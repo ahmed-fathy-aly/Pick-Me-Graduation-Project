@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,7 +65,8 @@ public class RideDetailsActivity extends BaseActivity
         setContentView(R.layout.activity_ride_details);
 
         // get ride id
-        rideId = getIntent().getExtras().getString(Constants.RIDE_ID);
+        //rideId = getIntent().getExtras().getString(Constants.RIDE_ID);
+        rideId = "74";
 
         // reference views
         ButterKnife.bind(this);
@@ -74,7 +76,6 @@ public class RideDetailsActivity extends BaseActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         contoller = new RidesAPIController(this);
-
 
         // load data
         readRideFromDatabase();
