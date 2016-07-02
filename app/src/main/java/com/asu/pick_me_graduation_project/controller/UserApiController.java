@@ -64,7 +64,6 @@ public class UserApiController
                         // check failed
                         if (e != null)
                         {
-                            Log.e("Game", "error " + e.getMessage());
                             callback.fail(e.getMessage());
                             return;
                         }
@@ -89,10 +88,9 @@ public class UserApiController
 
                             // invoke callback
                             callback.success(user);
-                        } catch (Exception e2)
+                        } catch (JSONException e2)
+
                         {
-                            Log.e("Game", "parsing failed " + e2.getMessage());
-                            e2.printStackTrace();
                             callback.fail(e2.getMessage());
                             return;
                         }
