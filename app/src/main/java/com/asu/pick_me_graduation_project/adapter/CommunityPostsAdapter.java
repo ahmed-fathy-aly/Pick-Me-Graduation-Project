@@ -43,6 +43,16 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<CommunityPostsAd
         notifyDataSetChanged();
     }
 
+    /**
+     * add to the first position of the data
+     */
+    public void addFirst(CommunityPost post)
+    {
+        this.data.add(0, post);
+        notifyDataSetChanged();
+    }
+
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.row_community_post, parent, false);

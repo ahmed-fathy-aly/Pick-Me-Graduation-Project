@@ -30,6 +30,9 @@ import org.json.JSONObject;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,19 +41,22 @@ import java.util.Random;
 /**
  * Created by ahmed on 3/3/2016.
  */
-public class CommunityAPIController {
+public class CommunityAPIController
+{
     /* fields */
     Context context;
     private ResponseFuture<String> searchCommunitiesRequest;
 
-    public CommunityAPIController(Context context) {
+    public CommunityAPIController(Context context)
+    {
         this.context = context;
     }
 
     /**
      * makes a new community with that user as admin
      */
-    public void createCommunity(String token, final String name, final String description, final CreateCommunityCallback callback) {
+    public void createCommunity(String token, final String name, final String description, final CreateCommunityCallback callback)
+    {
 
         String url = Constants.HOST + "create_community";
 
@@ -71,11 +77,13 @@ public class CommunityAPIController {
                     @Override
                     public void success(Request request, Response r, String s)
                     {
-                        try {
+                        try
+                        {
                             // check status
                             JSONObject response = new JSONObject(s);
                             int status = response.getInt("status");
-                            if (status == 0) {
+                            if (status == 0)
+                            {
                                 String message = response.getString("message");
                                 callback.fail(message);
                                 return;
@@ -88,7 +96,8 @@ public class CommunityAPIController {
                             community.setIsMember(true);
                             // invoke callback
                             callback.success(community);
-                        } catch (Exception e2) {
+                        } catch (Exception e2)
+                        {
                             callback.fail(e2.getMessage());
                             return;
                         }
@@ -104,7 +113,8 @@ public class CommunityAPIController {
 
     }
 
-    public void getMyCommunities(String token, final GetCommunitiesCallback callback) {
+    public void getMyCommunities(String token, final GetCommunitiesCallback callback)
+    {
         Ion.with(context)
                 .load("GET", Constants.HOST + "get_my_communities")
                 .setHeader("Authorization", "Bearer " + token)
@@ -121,7 +131,6 @@ public class CommunityAPIController {
                             callback.fail(e.getMessage());
                             return;
                         }
-                        Log.e("Game", "my communities result = " + result);
                         // parse the response
                         try
                         {
@@ -157,7 +166,8 @@ public class CommunityAPIController {
                 });
     }
 
-    public void searchCommunities(String token, final String searchString, final GetCommunitiesCallback callback) {
+    public void searchCommunities(String token, final String searchString, final GetCommunitiesCallback callback)
+    {
         // cancel any previous request
         if (searchCommunitiesRequest != null)
             searchCommunitiesRequest.cancel();
@@ -182,7 +192,6 @@ public class CommunityAPIController {
                                 callback.fail(e.getMessage());
                             return;
                         }
-                        Log.e("Game", "search communities result = " + result);
 
                         // parse the response
                         try
@@ -222,7 +231,8 @@ public class CommunityAPIController {
     /**
      * gets the members who are in this community
      */
-    public void getCommunityMembers(String tokken, String userId, String communityId, final GetUsersCallback callback) {
+    public void getCommunityMembers(String tokken, String userId, String communityId, final GetUsersCallback callback)
+    {
         String url = Constants.HOST + "get_community_members?communityID=" + communityId;
         Ion.with(context)
                 .load("GET", url)
@@ -240,7 +250,6 @@ public class CommunityAPIController {
                             callback.fail(e.getMessage());
                             return;
                         }
-                        Log.e("Game", "get community members result = " + result);
 
                         // parse the response
                         try
@@ -281,29 +290,34 @@ public class CommunityAPIController {
     /**
      * downloads the community profile
      */
-    public void getCommunityProfile(String token, String communityId, final GetCommunityCallback callback) {
+    public void getCommunityProfile(String token, String communityId, final GetCommunityCallback callback)
+    {
         String url = Constants.HOST + "get_community_profile?communityID=" + communityId;
         Ion.with(context)
                 .load("GET", url)
                 .setHeader("Authorization", "Bearer " + token)
                 .asString()
-                .setCallback(new FutureCallback<String>() {
+                .setCallback(new FutureCallback<String>()
+                {
                     @Override
-                    public void onCompleted(Exception e, String result) {
+                    public void onCompleted(Exception e, String result)
+                    {
 
                         // check failed
-                        if (e != null) {
+                        if (e != null)
+                        {
                             callback.fail(e.getMessage());
                             return;
                         }
-                        Log.e("Game", "community profile result = " + result);
 
                         // parse the response
-                        try {
+                        try
+                        {
                             // check status
                             JSONObject response = new JSONObject(result);
                             int status = response.getInt("status");
-                            if (status == 0) {
+                            if (status == 0)
+                            {
                                 String message = response.getString("message");
                                 callback.fail(message);
                                 return;
@@ -312,7 +326,8 @@ public class CommunityAPIController {
                             // parse the community
                             Community community = Community.fromJson(response.getJSONObject("community"));
                             callback.success(community);
-                        } catch (Exception e2) {
+                        } catch (Exception e2)
+                        {
                             callback.fail(e2.getMessage());
                             return;
                         }
@@ -323,29 +338,35 @@ public class CommunityAPIController {
     /**
      * downloads the community's posts
      */
-    public void getCommunityPosts(String token, String communityId, final GetCommunityPostsCalback callback) {
+    public void getCommunityPosts(String token, String communityId, final GetCommunityPostsCalback callback)
+    {
         String url = Constants.HOST + "get_community_posts?communityID=" + communityId;
         Ion.with(context)
                 .load("GET", url)
                 .setHeader("Authorization", "Bearer " + token)
                 .asString()
-                .setCallback(new FutureCallback<String>() {
+                .setCallback(new FutureCallback<String>()
+                {
                     @Override
-                    public void onCompleted(Exception e, String result) {
+                    public void onCompleted(Exception e, String result)
+                    {
 
                         // check failed
-                        if (e != null) {
+                        if (e != null)
+                        {
                             callback.fail(e.getMessage());
                             return;
                         }
                         Log.e("Game", "community profile result = " + result);
 
                         // parse the response
-                        try {
+                        try
+                        {
                             // check status
                             JSONObject response = new JSONObject(result);
                             int status = response.getInt("status");
-                            if (status == 0) {
+                            if (status == 0)
+                            {
                                 String message = response.getString("message");
                                 callback.fail(message);
                                 return;
@@ -356,8 +377,20 @@ public class CommunityAPIController {
                             JSONArray postsJson = response.getJSONArray("posts");
                             for (int i = 0; i < postsJson.length(); i++)
                                 posts.add(CommunityPost.parseFromJson(postsJson.getJSONObject(i)));
+
+                            // sort by date, newest first
+                            Collections.sort(posts, new Comparator<CommunityPost>()
+                            {
+                                @Override
+                                public int compare(CommunityPost lhs, CommunityPost rhs)
+                                {
+                                    return rhs.getDate().compareTo(lhs.getDate());
+                                }
+                            });
+
                             callback.success(posts);
-                        } catch (Exception e2) {
+                        } catch (Exception e2)
+                        {
                             callback.fail(e2.getMessage());
                             return;
                         }
@@ -371,7 +404,8 @@ public class CommunityAPIController {
      * @param token
      * @param conentText
      */
-    public void createPost(String token, String communityId, String conentText, final CreatePostCallback callback) {
+    public void createPost(String token, String communityId, String conentText, final CreatePostCallback callback)
+    {
 
         String url = Constants.HOST + "make_community_post";
 
@@ -393,7 +427,6 @@ public class CommunityAPIController {
                     @Override
                     public void success(Request request, Response r, String s)
                     {
-                        Log.e("Game", "new post " + s);
                         try
                         {
                             // check status
@@ -426,7 +459,8 @@ public class CommunityAPIController {
 
     }
 
-    public void requestToJoinCommunity(String token, String communityId, final GenericSuccessCallback callback) {
+    public void requestToJoinCommunity(String token, String communityId, final GenericSuccessCallback callback)
+    {
         String url = Constants.HOST + "join_community";
 
         JsonObject json = new JsonObject();
@@ -474,8 +508,9 @@ public class CommunityAPIController {
                 });
     }
 
-    public void getCommunityRequests(String tokken, String userId, String communityId, final GetUsersCallback callback) {
-        String url =  Constants.HOST + "get_join_requests?communityId=" + communityId;
+    public void getCommunityRequests(String tokken, String userId, String communityId, final GetUsersCallback callback)
+    {
+        String url = Constants.HOST + "get_join_requests?communityId=" + communityId;
         Ion.with(context)
                 .load("GET", url)
                 .setHeader("Content-Type", "application/json")
@@ -492,7 +527,6 @@ public class CommunityAPIController {
                             callback.fail(e.getMessage());
                             return;
                         }
-                        Log.e("Game", "get community members result = " + result);
 
                         // parse the response
                         try
@@ -524,7 +558,6 @@ public class CommunityAPIController {
                         } catch (Exception e2)
                         {
                             callback.fail(e2.getMessage());
-                            Log.e("Game", "get members error " + e2.getMessage());
                             return;
                         }
                     }
@@ -532,7 +565,8 @@ public class CommunityAPIController {
     }
 
 
-    public void answerCommunityRequests(String token,String approval, final String userId, final String communityId, final GenericSuccessCallback callback) {
+    public void answerCommunityRequests(String token, String approval, final String userId, final String communityId, final GenericSuccessCallback callback)
+    {
 
         String url = Constants.HOST + "answer_join_request";
 
@@ -541,7 +575,6 @@ public class CommunityAPIController {
         json.addProperty("communityId", communityId);
         json.addProperty("approval", approval);
         String body = json.toString();
-        Log.e("Game", "body = " + body);
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + token);
         headers.put("Content-Type", "application/json");
@@ -554,7 +587,6 @@ public class CommunityAPIController {
                     @Override
                     public void success(Request request, Response r, String s)
                     {
-                        Log.e("Game", "success " + s);
                         try
                         {
                             // check status
@@ -579,9 +611,6 @@ public class CommunityAPIController {
                     @Override
                     public void failure(Request request, Response resp, FuelError fuelError)
                     {
-                        Log.e("Game", "error " + fuelError.getMessage());
-                        Log.e("Game", "request " + request.toString());
-                        Log.e("Game", "response" + resp.toString());
 
                         callback.fail(fuelError.getMessage());
                     }
@@ -601,7 +630,6 @@ public class CommunityAPIController {
         json.addProperty("communityId", communityId);
         json.addProperty("userId", userId);
         String body = json.toString();
-        Log.e("Game", "make admin body " + body);
 
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + token);
@@ -615,12 +643,13 @@ public class CommunityAPIController {
                     @Override
                     public void success(Request request, Response r, String s)
                     {
-                        Log.e("Game", "make admin result " + s);
-                        try {
+                        try
+                        {
                             // check status
                             JSONObject response = new JSONObject(s);
                             int status = response.getInt("status");
-                            if (status == 0) {
+                            if (status == 0)
+                            {
                                 String message = response.getString("message");
                                 callback.fail(message);
                                 return;
@@ -628,7 +657,8 @@ public class CommunityAPIController {
 
                             // invoke callback
                             callback.success();
-                        } catch (Exception e2) {
+                        } catch (Exception e2)
+                        {
                             callback.fail(e2.getMessage());
                             return;
                         }

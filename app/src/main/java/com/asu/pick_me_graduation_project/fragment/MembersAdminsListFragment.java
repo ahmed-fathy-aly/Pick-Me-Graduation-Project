@@ -22,6 +22,7 @@ import com.asu.pick_me_graduation_project.controller.CommunityAPIController;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.Bind;
@@ -45,6 +46,7 @@ public class MembersAdminsListFragment extends Fragment implements UsersAdminAda
 
     public MembersAdminsListFragment()
     {
+        setArguments(new Bundle());
     }
 
 
@@ -64,6 +66,11 @@ public class MembersAdminsListFragment extends Fragment implements UsersAdminAda
         adapterUsers = new UsersAdminAdapter(getContext(), isAdmin);
         adapterUsers.setListener(this);
         listViewUsers.setAdapter(adapterUsers);
+
+        // add data
+        List<User> users = getUsersFromArguments();
+        if (users != null)
+            adapterUsers.addAll(users);
 
         return view;
     }
@@ -115,15 +122,28 @@ public class MembersAdminsListFragment extends Fragment implements UsersAdminAda
     }
 
     /**
+     * @return null if no users in argument
+     */
+    private List<User> getUsersFromArguments()
+    {
+        if (getArguments() == null || !getArguments().containsKey(Constants.MEMBER_LIST))
+            return null;
+        return (List<User>) getArguments().getSerializable(Constants.MEMBER_LIST);
+    }
+
+    /**
      * shows the users in the list
      * clears the previous users if existing
      */
     public void setMembers(List<User> users)
     {
-        adapterUsers.clear();
-        adapterUsers.addAll(users);
+        getArguments().putSerializable(Constants.MEMBER_LIST, (Serializable) users);
+        if (adapterUsers != null)
+        {
+            adapterUsers.clear();
+            adapterUsers.addAll(users);
+        }
     }
-
 
 
 }
