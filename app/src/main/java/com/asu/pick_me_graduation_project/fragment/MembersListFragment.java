@@ -17,6 +17,7 @@ import com.asu.pick_me_graduation_project.adapter.UsersAdapter;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.Bind;
@@ -34,7 +35,6 @@ public class MembersListFragment extends Fragment implements UsersAdapter.Listen
     /* UI */
     @Bind(R.id.listViewUsers)
     ListView listViewUsers;
-    private List<User> users;
 
     public MembersListFragment()
     {
@@ -55,12 +55,20 @@ public class MembersListFragment extends Fragment implements UsersAdapter.Listen
         listViewUsers.setAdapter(adapterUsers);
 
         // add data
+        List<User> users = getUsersFromArguments();
         if (users != null)
-        {
             adapterUsers.addAll(users);
-            users = null;
-        }
         return view;
+    }
+
+    /**
+     * @return null if no users in argument
+     */
+    private List<User> getUsersFromArguments()
+    {
+        if (getArguments() == null || !getArguments().containsKey(Constants.MEMBER_LIST))
+            return null;
+        return (List<User>) getArguments().getSerializable(Constants.MEMBER_LIST);
     }
 
     @Override
@@ -89,12 +97,12 @@ public class MembersListFragment extends Fragment implements UsersAdapter.Listen
      */
     public void setMembers(List<User> users)
     {
+        getArguments().putSerializable(Constants.MEMBER_LIST, (Serializable) users);
         if (adapterUsers != null)
         {
             adapterUsers.clear();
             adapterUsers.addAll(users);
-        } else
-            this.users = users;
+        }
     }
 
 

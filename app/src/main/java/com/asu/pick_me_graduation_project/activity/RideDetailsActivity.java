@@ -141,7 +141,7 @@ public class RideDetailsActivity extends BaseActivity
                 // setup view pager
                 rideDetailsPagerAdapter = new RideDetailsPagerAdapter(getSupportFragmentManager(), rideId, showRideRequests);
                 viewPager.setAdapter(rideDetailsPagerAdapter);
-                viewPager.setOffscreenPageLimit(0);
+                viewPager.setOffscreenPageLimit(3);
                 tabLayout.setupWithViewPager(viewPager);
 
                 // set the details
@@ -195,7 +195,7 @@ public class RideDetailsActivity extends BaseActivity
                 {
                     rideDetailsPagerAdapter = new RideDetailsPagerAdapter(getSupportFragmentManager(), rideId, showRideRequests);
                     viewPager.setAdapter(rideDetailsPagerAdapter);
-                    viewPager.setOffscreenPageLimit(0);
+                    viewPager.setOffscreenPageLimit(3);
                     tabLayout.setupWithViewPager(viewPager);
                 }
 

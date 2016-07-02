@@ -76,10 +76,11 @@ public class RideDetailsFragment extends Fragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ride_details, container, false);
         ButterKnife.bind(this, view);
+
+        // update UI if we have a ride(setData called before onCreateView)
         Ride ride = getRideFromArguments();
         if (ride != null)
-        updateUI(ride);
-
+            updateUI(ride);
         return view;
     }
 

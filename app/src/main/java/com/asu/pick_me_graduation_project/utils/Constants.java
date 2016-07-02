@@ -34,6 +34,7 @@ public class Constants
     public static final String RIDE_ID = "rideId";
     public static final String SEARCH_RIDE_PARAMS = "searchRideParams";
     public static final String RIDES_LIST = "ridesList";
+    public static final String MEMBER_LIST = "memberList";
 
     /* notifications */
     public static final int NOTIFICATION_CHAT_ID_SUGGESTED_BY_OSSAMA_7ABIBY = 42;
