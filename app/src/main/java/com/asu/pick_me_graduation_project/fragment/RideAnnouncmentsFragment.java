@@ -5,10 +5,10 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Log;
@@ -18,26 +18,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 
 import com.asu.pick_me_graduation_project.R;
+import com.asu.pick_me_graduation_project.adapter.RideAnnoucementsAdapter;
 import com.asu.pick_me_graduation_project.callback.CreateAnnouncementCallback;
+import com.asu.pick_me_graduation_project.callback.GetAnnouncementsCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.RidesAPIController;
-import com.asu.pick_me_graduation_project.model.RideAnnouncment;
+import com.asu.pick_me_graduation_project.model.RideAnnouncement;
 import com.asu.pick_me_graduation_project.utils.Constants;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RideAnnouncmentsFragment extends Fragment
+public class RideAnnouncmentsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener
 {
-
-
-    /* fields */
-    private String rideId;
-    private RidesAPIController controller;
 
     /* views */
     @Bind(R.id.content)
@@ -46,6 +44,12 @@ public class RideAnnouncmentsFragment extends Fragment
     RecyclerView recyclerViewAnnoucnments;
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+
+    /* fields */
+    private String rideId;
+    private RidesAPIController controller;
+    private RideAnnoucementsAdapter adapterAnnouncements;
+
 
 
     /* life cycle methods */
@@ -81,11 +85,29 @@ public class RideAnnouncmentsFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_ride_announcments, container, false);
         ButterKnife.bind(this, view);
 
+        // setup recycler view
+        adapterAnnouncements = new RideAnnoucementsAdapter(getContext());
+        recyclerViewAnnoucnments.setAdapter(adapterAnnouncements);
+        recyclerViewAnnoucnments.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // setup swipe to refresh
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+        // download data
+        downloadAnnouncements();
 
         return view;
     }
 
+
     /* listener */
+
+    @Override
+    public void onRefresh()
+    {
+        downloadAnnouncements();
+    }
+
     @OnClick(R.id.fab)
     void openCreateAnnouncement()
     {
@@ -107,7 +129,7 @@ public class RideAnnouncmentsFragment extends Fragment
             public void onClick(DialogInterface dialog, int which)
             {
                 String content = editTextMessage.getText().toString();
-                makeAnAnnouncment(content);
+                postAnnouncement(content);
             }
         });
 
@@ -124,11 +146,71 @@ public class RideAnnouncmentsFragment extends Fragment
 
     }
 
+
+    /* methods */
+
+    /**
+     * downloads the announcements from the backend
+     */
+    private void downloadAnnouncements()
+    {
+        // show refreshing
+        if (!swipeRefreshLayout.isRefreshing())
+            swipeRefreshLayout.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    swipeRefreshLayout.setRefreshing(true);
+                }
+            });
+
+        // download the announcements
+        controller.getRideAnnouncements(
+                new AuthenticationAPIController(getContext()).getTokken()
+                , rideId
+                , new GetAnnouncementsCallback()
+                {
+                    @Override
+                    public void success(List<RideAnnouncement> announcmentList)
+                    {
+                        if (!isAdded())
+                            return;
+                        swipeRefreshLayout.post(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
+                        adapterAnnouncements.setData(announcmentList);
+                    }
+
+                    @Override
+                    public void fail(String message)
+                    {
+                        if (!isAdded())
+                            return;
+                        swipeRefreshLayout.post(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
+                        Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
+
+
     /**
      * make a post request to the backend
-     *
      */
-    private void makeAnAnnouncment(final String announcementContent)
+    private void postAnnouncement(final String announcementContent)
     {
         final ProgressDialog progressDialog = ProgressDialog.show(getContext(), "", getString(R.string.posting));
         controller.postAnnouncement(
@@ -138,10 +220,11 @@ public class RideAnnouncmentsFragment extends Fragment
                 , new CreateAnnouncementCallback()
                 {
                     @Override
-                    public void success(RideAnnouncment announcment)
+                    public void success(RideAnnouncement announcement)
                     {
                         progressDialog.dismiss();
-                        Log.e("Game", "succes " + announcment.getContent());
+                        Log.e("Game", "succes " + announcement.getContent());
+                        adapterAnnouncements.addToTop(announcement);
                     }
 
                     @Override
@@ -153,5 +236,5 @@ public class RideAnnouncmentsFragment extends Fragment
                 });
     }
 
-    /* methods */
+
 }

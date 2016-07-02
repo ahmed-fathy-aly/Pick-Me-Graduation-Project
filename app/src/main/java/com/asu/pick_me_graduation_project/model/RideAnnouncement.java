@@ -11,7 +11,7 @@ import java.util.Calendar;
 /**
  * Created by ahmed on 7/2/2016.
  */
-public class RideAnnouncment
+public class RideAnnouncement
 {
     /* fields */
     String id;
@@ -72,22 +72,23 @@ public class RideAnnouncment
     }
 
     /* methods */
-    public static RideAnnouncment fromJson(JSONObject jsonObject)
+    public static RideAnnouncement fromJson(JSONObject jsonObject)
     {
-        RideAnnouncment rideAnnouncment = new RideAnnouncment();
+        RideAnnouncement rideAnnouncement = new RideAnnouncement();
 
         try
         {
-            rideAnnouncment.setId(jsonObject.getString("id"));
-            rideAnnouncment.setRideId(jsonObject.getString("rideId"));
-            rideAnnouncment.setContent(jsonObject.getString("content"));
+            rideAnnouncement.setId(jsonObject.getString("id"));
+            rideAnnouncement.setRideId(jsonObject.getString("rideId"));
+            rideAnnouncement.setContent(jsonObject.getString("content"));
+            rideAnnouncement.setUser(User.fromJson(jsonObject.getJSONObject("user")));
             String dateStr = jsonObject.getString("date");
-            rideAnnouncment.setDate(TimeUtils.parseCalendar(dateStr));
+            rideAnnouncement.setDate(TimeUtils.parseCalendar(dateStr));
         } catch (Exception e)
         {
             Log.e("Game", "parsing announcment exception " + e.getMessage());
         }
 
-        return rideAnnouncment;
+        return rideAnnouncement;
     }
 }
