@@ -2,6 +2,7 @@ package com.asu.pick_me_graduation_project.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,11 +33,20 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     /* fields */
     List<Notification> data;
     Context context;
+    Listener listener;
 
     public NotificationsAdapter(Context context)
     {
         this.context = context;
         this.data = new ArrayList<>();
+    }
+
+    /**
+     * registers to be invoked for callbacks
+     */
+    public void setListener(Listener listener)
+    {
+        this.listener = listener;
     }
 
     /**
@@ -63,8 +73,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
         holder.textViewTitle.setText(ValidationUtils.correct(notification.getTitle()));
         holder.textViewMessage.setText(ValidationUtils.correct(notification.getMessage()));
-        holder.textViewDate.setText(TimeUtils.getUserFriendlyDate(context, notification.getDate()));
-        notification.setSeen(false);
         holder.imageViewNew.setVisibility(notification.isSeen() ? View.INVISIBLE : View.VISIBLE);
     }
 
@@ -81,8 +89,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         TextView textViewTitle;
         @Bind(R.id.textViewMessage)
         TextView textViewMessage;
-        @Bind(R.id.textViewDate)
-        TextView textViewDate;
         @Bind(R.id.imageViewNew)
         ImageView imageViewNew;
 
@@ -90,6 +96,20 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    if (listener != null )
+                        listener.onNotificationClick(data.get(getAdapterPosition()));
+                }
+            });
         }
+    }
+
+    public interface  Listener
+    {
+        void onNotificationClick(Notification notification);
     }
 }

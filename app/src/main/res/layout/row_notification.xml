@@ -2,6 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:background="?attr/selectableItemBackground"
+              android:clickable="true"
+              android:focusable="true"
               android:minHeight="72dp"
               android:orientation="horizontal"
               android:paddingLeft="16dp"
@@ -9,34 +12,21 @@
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
-        <LinearLayout
+
+        <TextView
+            android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:text="Title"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp"/>
 
-            <TextView
-                android:id="@+id/textViewTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Title"
-                android:textColor="@color/primary_text"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:id="@+id/textViewDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2 days ago"
-                android:layout_marginLeft="16dp"
-                android:textColor="@color/secondary_text"
-                android:textSize="16sp"/>
-
-        </LinearLayout>
 
         <TextView
             android:id="@+id/textViewMessage"

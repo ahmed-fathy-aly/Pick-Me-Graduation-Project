@@ -97,6 +97,8 @@ public class Notification
     /* methods */
     public static Notification fromJson(JSONObject jsonObject)
     {
+        Log.e("Game", jsonObject.toString());
+
         Notification notification = new Notification();
 
         try
@@ -106,16 +108,22 @@ public class Notification
                 notification.setTitle(jsonObject.getString("title"));
             if (!jsonObject.isNull("message"))
                 notification.setMessage(jsonObject.getString("message"));
-            notification.setId(jsonObject.getString("id"));
             if (!jsonObject.isNull("isSeen"))
                 notification.setSeen(jsonObject.getBoolean("isSeen"));
+            if (!jsonObject.isNull("type"))
+                notification.setType(jsonObject.getString("type"));
+            if (!jsonObject.isNull("extras"))
+            {
+                String extras= jsonObject.getString("extras").replace("\\", "");
+                    notification.setExtras(extras);
+                Log.e("Game", "extras " + extras );
+            }
+            Log.e("Game", "extras = " + notification.extras);
             if (!jsonObject.isNull("date"))
             {
                 String dateString = jsonObject.getString("date");
                 notification.setDate(TimeUtils.parseCalendar(dateString));
             }
-            if (!jsonObject.isNull("type"))
-                notification.setType(jsonObject.getString("type"));
         } catch (Exception e)
         {
             Log.e("Game", "error prasing notification " + e.getMessage());
