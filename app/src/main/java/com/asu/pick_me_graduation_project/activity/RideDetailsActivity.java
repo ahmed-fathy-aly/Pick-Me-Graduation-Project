@@ -65,8 +65,7 @@ public class RideDetailsActivity extends BaseActivity
         setContentView(R.layout.activity_ride_details);
 
         // get ride id
-        //rideId = getIntent().getExtras().getString(Constants.RIDE_ID);
-        rideId = "74";
+        rideId = getIntent().getExtras().getString(Constants.RIDE_ID);
 
         // reference views
         ButterKnife.bind(this);

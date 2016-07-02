@@ -14,6 +14,7 @@ import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController
 import com.asu.pick_me_graduation_project.model.Location;
 import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.model.User;
+import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.ContactUserView;
 import com.asu.pick_me_graduation_project.view.GenericMapsView;
@@ -32,6 +33,7 @@ import butterknife.ButterKnife;
  */
 public class RideDetailsFragment extends Fragment
 {
+    /* UI */
     @Bind(R.id.contactUserView)
     ContactUserView contactUserView;
     @Bind(R.id.mapsView)
@@ -60,8 +62,6 @@ public class RideDetailsFragment extends Fragment
     View layoutCarDetails;
 
 
-    /* UI */
-
     public RideDetailsFragment()
     {
         // Required empty public constructor
@@ -72,21 +72,43 @@ public class RideDetailsFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ride_details, container, false);
         ButterKnife.bind(this, view);
+
+        // update UI if we have a ride(setData called before onCreateView)
+        Ride ride = getRideFromArguments();
+        if (ride != null)
+            updateUI(ride);
         return view;
     }
 
     /**
-     * updates the UI with this ride
+     * @return null if the ride is not in the arguments
+     */
+    private Ride getRideFromArguments()
+    {
+        if (getArguments() == null || !getArguments().containsKey(Constants.RIDE))
+            return null;
+        return (Ride) getArguments().getSerializable(Constants.RIDE);
+    }
+
+    /**
+     * saves the ride and updates the UI with this ride
      */
     public void setData(Ride ride)
     {
-        if (!isAdded())
-            return;
+        getArguments().putSerializable(Constants.RIDE, ride);
+        if (isAdded())
+            updateUI(ride);
+    }
 
-        User user = new AuthenticationAPIController(getActivity()).getCurrentUser();
+    /**
+     * must be called with ride not null
+     */
+    private void updateUI(Ride ride)
+    {
 
         // time
         String currentUserId = new AuthenticationAPIController(getContext()).getCurrentUser().getUserId();
@@ -134,8 +156,7 @@ public class RideDetailsFragment extends Fragment
             textViewCarPlateNumber.setText(ValidationUtils.correct(ride.getRideDetails().getCarDetails().getPlateNumber()));
             checkBoxAirConditioned.setVisibility(ride.getRideDetails().getCarDetails().isConditioned() ? View.VISIBLE : View.GONE);
             checkBoxAirConditioned.setChecked(ride.getRideDetails().getCarDetails().isConditioned());
-        }
-        else
+        } else
             layoutCarDetails.setVisibility(View.GONE);
     }
 

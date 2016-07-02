@@ -55,7 +55,7 @@
                         android:hint="E-Mail"
                         android:inputType="textEmailAddress"
                         android:paddingLeft="15dp"
-                        android:text="test@mail.com">
+                        android:text="test2@mail.com">
                     </EditText>
 
                     <EditText

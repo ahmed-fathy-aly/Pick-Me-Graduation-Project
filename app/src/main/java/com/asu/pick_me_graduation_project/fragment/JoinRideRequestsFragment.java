@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class JoinRideRequestsFragment extends Fragment implements JoinRideRequestAdapter.Listener
+public class JoinRideRequestsFragment extends Fragment implements JoinRideRequestAdapter.Listener, SwipeRefreshLayout.OnRefreshListener
 {
     /* UI */
     @Bind(R.id.content)
@@ -49,7 +49,7 @@ public class JoinRideRequestsFragment extends Fragment implements JoinRideReques
 
     public JoinRideRequestsFragment()
     {
-        // Required empty public constructor
+
     }
 
 
@@ -72,12 +72,21 @@ public class JoinRideRequestsFragment extends Fragment implements JoinRideReques
         adapter.setListener(this);
         recyclerViewJoinRideRequests.setAdapter(adapter);
         recyclerViewJoinRideRequests.setLayoutManager(new LinearLayoutManager(getContext()));
-        swipeRefreshLayout.setEnabled(false);
+
+        // setup swipe to refresh
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         // load data
         loadData();
 
         return view;
+    }
+
+
+    @Override
+    public void onRefresh()
+    {
+        loadData();
     }
 
     /**
@@ -105,15 +114,33 @@ public class JoinRideRequestsFragment extends Fragment implements JoinRideReques
                     @Override
                     public void success(List<JoinRideRequest> requests)
                     {
-                        swipeRefreshLayout.setRefreshing(false);
-                        Log.e("Game", "got requests " + requests.size());
+                        if (!isAdded())
+                            return;
+                        swipeRefreshLayout.post(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
                         adapter.setData(requests);
                     }
 
                     @Override
                     public void fail(String error)
                     {
-                        swipeRefreshLayout.setRefreshing(false);
+
+                        if (!isAdded())
+                            return;
+                        swipeRefreshLayout.post(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
                         Snackbar.make(content, error, Snackbar.LENGTH_SHORT).show();
                     }
                 });
@@ -151,4 +178,5 @@ public class JoinRideRequestsFragment extends Fragment implements JoinRideReques
                 }
         );
     }
+
 }
