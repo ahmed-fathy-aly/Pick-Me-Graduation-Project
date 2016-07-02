@@ -33,12 +33,15 @@ import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController
 import com.asu.pick_me_graduation_project.controller.UserApiController;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.asu.pick_me_graduation_project.utils.TimeUtils;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.github.florent37.materialimageloading.MaterialImageLoading;
 import com.github.ornolfr.ratingview.RatingView;
 import com.koushikdutta.ion.Ion;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import java.util.Calendar;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -179,7 +182,9 @@ public class UserProfileActivity extends BaseActivity
     @OnClick(R.id.fab)
     public void onClick()
     {
-        if (userId.equals(new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId()))
+        String currentUserId = new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId();
+        boolean sameUser = currentUserId.equals(userId);
+        if (sameUser)
         {
             //  show the edit profile dialog if it's the profile of this user
             //done by raafat
@@ -189,6 +194,13 @@ public class UserProfileActivity extends BaseActivity
                 editProfileFragment.show(getSupportFragmentManager(), getString(R.string.title_edit_profile));
             }
         }
+        else
+        {
+            Intent chatIntent = new Intent(this, ChatActivity.class);
+            chatIntent.putExtra(Constants.USER_ID, userId);
+            startActivity(chatIntent);
+        }
+
     }
 
 
@@ -216,8 +228,13 @@ public class UserProfileActivity extends BaseActivity
                 Residence.setText(ValidationUtils.correct(user.getResidence()));
                 no_of_rides.setText(ValidationUtils.correct(user.getNo_of_rides()));
                 points.setText(ValidationUtils.correct(user.getPoints()));
-                String s= user.getdob().substring(0, user.getdob().indexOf('T'));
-                textViewAge.setText(ValidationUtils.correct(s));
+                if (user.getdob() != null && user.getdob().length() > 0)
+                {
+                    Calendar calendar = TimeUtils.parseCalendar(user.getdob());
+                    int age = TimeUtils.getAge(calendar);
+                    textViewAge.setText(age + "");
+
+                }
                 textViewBio.setText(ValidationUtils.correct(user.getBio()));
                 if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
                     Picasso.with(getApplicationContext()).

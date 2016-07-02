@@ -18,6 +18,7 @@ import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.future.ResponseFuture;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.Charset;
@@ -63,7 +64,6 @@ public class UserApiController
                         // check failed
                         if (e != null)
                         {
-                            Log.e("Game", "error " + e.getMessage());
                             callback.fail(e.getMessage());
                             return;
                         }
@@ -88,10 +88,9 @@ public class UserApiController
 
                             // invoke callback
                             callback.success(user);
-                        } catch (Exception e2)
+                        } catch (JSONException e2)
+
                         {
-                            Log.e("Game", "parsing failed " + e2.getMessage());
-                            e2.printStackTrace();
                             callback.fail(e2.getMessage());
                             return;
                         }
@@ -171,7 +170,7 @@ public class UserApiController
     /**
      * seraches for all users having that substring
      */
-    public void searchusers(final String searchString, final GetUsersCallback callback)
+    public void serachUsers(final String searchString, final GetUsersCallback callback)
     {
         // cancel any previous request
         if (searchUsersRequest != null)
@@ -190,6 +189,8 @@ public class UserApiController
             @Override
             public void onCompleted(Exception e, String result)
             {
+
+
                 // check failed
                 if (e != null)
                 {
@@ -197,7 +198,6 @@ public class UserApiController
                         callback.fail(e.getMessage());
                     return;
                 }
-                Log.e("Game", "search result = " + result);
 
                 // parse the response
                 try
@@ -213,23 +213,24 @@ public class UserApiController
                     }
 
                     // parse user
-                    JSONArray usersJson = response.getJSONArray("users");
                     List<User> usersList = new ArrayList<User>();
+                    JSONArray usersJson = response.getJSONArray("users");
                     for (int i = 0; i < usersJson.length(); i++)
                     {
                         JSONObject userJson = usersJson.getJSONObject(i);
                         User user = User.fromJson(userJson);
                         usersList.add(user);
-
                     }
 
                     // invoke callback
                     callback.success(usersList);
-                } catch (Exception e2)
+                } catch (JSONException e2)
                 {
                     callback.fail(e2.getMessage());
                     return;
                 }
+
+
             }
         });
     }

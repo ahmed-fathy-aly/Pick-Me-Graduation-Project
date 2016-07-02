@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -103,12 +104,14 @@ public class SearchUsersActivity extends BaseActivity implements UsersAdapter.Li
     private void searchUsers(String searchString)
     {
         progressBar.setVisibility(View.VISIBLE);
-        controller.searchusers(searchString, new GetUsersCallback()
+        controller.serachUsers(searchString, new GetUsersCallback()
         {
             @Override
             public void success(List<User> users)
             {
                 progressBar.setVisibility(View.INVISIBLE);
+
+                Log.e("Game", "users count = " + users.size());
 
                 // set new date to list
                 membersListFragment.setMembers(users);
@@ -117,7 +120,7 @@ public class SearchUsersActivity extends BaseActivity implements UsersAdapter.Li
             @Override
             public void fail(String message)
             {
-                if (message==null)
+                if (message == null)
                     return;
                 progressBar.setVisibility(View.INVISIBLE);
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class MembersListFragment extends Fragment implements UsersAdapter.Listen
 
     public MembersListFragment()
     {
+        setArguments(new Bundle());
     }
 
 
@@ -97,6 +99,7 @@ public class MembersListFragment extends Fragment implements UsersAdapter.Listen
      */
     public void setMembers(List<User> users)
     {
+
         getArguments().putSerializable(Constants.MEMBER_LIST, (Serializable) users);
         if (adapterUsers != null)
         {

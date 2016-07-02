@@ -15,14 +15,17 @@ import java.util.TimeZone;
 /**
  * Created by ahmed on 4/10/2016.
  */
-public class TimeUtils {
+public class TimeUtils
+{
 
     /**
      * parses a string like 2016-04-10T14:32:36.857
      */
-    public static Calendar parseCalendar(String dateStr) {
+    public static Calendar parseCalendar(String dateStr)
+    {
 
-        try {
+        try
+        {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
             if (!dateStr.contains("."))
                 dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -30,8 +33,9 @@ public class TimeUtils {
             Date date = dateFormat.parse(dateStr);
             Calendar c = new GregorianCalendar();
             c.setTime(date);
-            return  c;
-        } catch (ParseException e) {
+            return c;
+        } catch (ParseException e)
+        {
             e.printStackTrace();
             return Calendar.getInstance();
         }
@@ -42,7 +46,8 @@ public class TimeUtils {
     /**
      * converts the calendar to something like "4 days ago"
      */
-    public static String getUserFriendlyDate(Context context, Calendar date) {
+    public static String getUserFriendlyDate(Context context, Calendar date)
+    {
         return DateUtils.getRelativeTimeSpanString(context, date.getTimeInMillis()).toString();
     }
 
@@ -80,5 +85,18 @@ public class TimeUtils {
             e.printStackTrace();
         }
         return new GregorianCalendar();
+    }
+
+    /**
+     * computes the age of this date of birth
+     */
+    public static int getAge(Calendar calendar)
+    {
+        Calendar now = Calendar.getInstance();
+        int years = now.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
+        calendar.add(Calendar.YEAR, years);
+        if (calendar.compareTo(now) < 0)
+            years++;
+        return years;
     }
 }
