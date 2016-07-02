@@ -12,6 +12,8 @@ import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -236,6 +238,16 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 else
                     rides.add(ride);
             } while (cursor.moveToNext());
+
+        // sort
+        Collections.sort(rides, new Comparator<Ride>()
+        {
+            @Override
+            public int compare(Ride lhs, Ride rhs)
+            {
+                return rhs.getTime().compareTo(lhs.getTime());
+            }
+        });
         return rides;
     }
 

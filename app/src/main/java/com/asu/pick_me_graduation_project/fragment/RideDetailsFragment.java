@@ -83,7 +83,10 @@ public class RideDetailsFragment extends Fragment
      */
     public void setData(Ride ride)
     {
-        User user = new AuthenticationAPIController(getContext()).getCurrentUser();
+        if (!isAdded())
+            return;
+
+        User user = new AuthenticationAPIController(getActivity()).getCurrentUser();
 
         // time
         String currentUserId = new AuthenticationAPIController(getContext()).getCurrentUser().getUserId();

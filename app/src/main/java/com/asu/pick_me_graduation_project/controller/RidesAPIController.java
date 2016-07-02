@@ -1,29 +1,25 @@
 package com.asu.pick_me_graduation_project.controller;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 
-import com.asu.pick_me_graduation_project.activity.SearchRideResults;
+import com.asu.pick_me_graduation_project.callback.CreateAnnouncementCallback;
 import com.asu.pick_me_graduation_project.callback.GenericSuccessCallback;
+import com.asu.pick_me_graduation_project.callback.GetAnnouncementsCallback;
 import com.asu.pick_me_graduation_project.callback.GetRideCallback;
 import com.asu.pick_me_graduation_project.callback.GetRideJoinRequestsCallback;
 import com.asu.pick_me_graduation_project.callback.GetRidesCallback;
 import com.asu.pick_me_graduation_project.model.Community;
 import com.asu.pick_me_graduation_project.model.JoinRideRequest;
-import com.asu.pick_me_graduation_project.model.Location;
 import com.asu.pick_me_graduation_project.model.Ride;
+import com.asu.pick_me_graduation_project.model.RideAnnouncement;
 import com.asu.pick_me_graduation_project.model.SearchRideParams;
-import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.TimeUtils;
 import com.github.kittinunf.fuel.Fuel;
 import com.github.kittinunf.fuel.core.FuelError;
 import com.github.kittinunf.fuel.core.Request;
 import com.github.kittinunf.fuel.core.Response;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -32,16 +28,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.Charset;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Created by ahmed on 5/2/2016.
@@ -58,7 +50,7 @@ public class RidesAPIController
     }
 
     /* methods */
-       public void getMyRides(String token, String userId, final GetRidesCallback callback)
+    public void getMyRides(String token, String userId, final GetRidesCallback callback)
     {
         String url = Constants.HOST + "/ride/get_my_rides?postUserId=" + userId;
         Ion.with(context)
@@ -96,7 +88,7 @@ public class RidesAPIController
                             for (int i = 0; i < ridesJson.length(); i++)
                                 rides.add(Ride.fromJson(ridesJson.getJSONObject(i)));
 
-                            // sort by data
+                            // sort by date
                             Collections.sort(rides, new Comparator<Ride>()
                             {
                                 @Override
@@ -387,7 +379,6 @@ public class RidesAPIController
                 });
 
 
-
     }
 
     public void getRideJoinRequest(String token, String rideId, final GetRideJoinRequestsCallback callback)
@@ -502,6 +493,143 @@ public class RidesAPIController
                     }
                 });
 
+
+    }
+
+    /**
+     * makes a post request to make an announcement
+     */
+    public void postAnnouncement(String token, String rideId, String content, final CreateAnnouncementCallback callback)
+    {
+        // form the request
+        String url = Constants.HOST + "ride/post_ride_announcement";
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + token);
+        headers.put("Content-Type", "application/json");
+
+        JSONObject jsonObject = new JSONObject();
+        try
+        {
+            jsonObject.put("rideId", rideId);
+            jsonObject.put("content", content);
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        String body = jsonObject.toString();
+
+        // make the post
+        Fuel.post(url)
+                .header(headers)
+                .body(body, Charset.defaultCharset())
+                .responseString(new com.github.kittinunf.fuel.core.Handler<String>()
+                {
+                    @Override
+                    public void success(Request request, Response r, String s)
+                    {
+                        Log.e("Game", "request " + request.toString());
+                        Log.e("Game", "response" + r.toString());
+
+                        try
+                        {
+                            // check status
+                            JSONObject response = new JSONObject(s);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("message");
+                                callback.fail(message);
+                                return;
+                            }
+
+                            // parse the announcement
+                            JSONObject announcementJson = response.getJSONObject("newAnnouncement");
+                            RideAnnouncement announcement = RideAnnouncement.fromJson(announcementJson);
+                            callback.success(announcement);
+                        } catch (Exception e2)
+                        {
+                            Log.e("Game", "post announcement error " + e2.getMessage());
+                            callback.fail(e2.getMessage());
+                            return;
+                        }
+                    }
+
+                    @Override
+                    public void failure(Request request, Response resp, FuelError fuelError)
+                    {
+                        callback.fail(fuelError.getMessage());
+                    }
+                });
+    }
+
+    /**
+     * makes a get request to download the ride announcements sorted newest first
+     */
+    public void getRideAnnouncements(String token, String rideId, final GetAnnouncementsCallback callback)
+    {
+        String url = Constants.HOST + "ride/get_ride_announcements?rideId=" + rideId;
+
+        Ion.with(context)
+                .load("GET", url)
+                .addHeader("Authorization", "Bearer " + token)
+                .addHeader("Content-Type", "application/json")
+                .asString()
+                .setCallback(new FutureCallback<String>()
+                {
+                    @Override
+                    public void onCompleted(Exception e, String result)
+                    {
+
+                        // check errors
+                        if (e != null)
+                        {
+                            callback.fail(e.getMessage());
+                            return;
+                        }
+
+                        Log.e("Game", "get announcements = " + result);
+
+                        //parse the  response
+                        try
+                        {
+
+                            // check the status
+                            JSONObject response = new JSONObject(result);
+                            int status = response.getInt("status");
+                            if (status == 0)
+                            {
+                                String message = response.getString("feedback");
+                                callback.fail(message);
+                                return;
+                            }
+
+                            // parse the announcements
+                            JSONArray announcementsJson = response.getJSONArray("announcements");
+                            List<RideAnnouncement> announcmentList = new ArrayList<RideAnnouncement>();
+                            for (int i = 0; i < announcementsJson.length(); i++)
+                                announcmentList.add(RideAnnouncement.fromJson(announcementsJson.getJSONObject(i)));
+
+                            // sort by date
+                            Collections.sort(announcmentList, new Comparator<RideAnnouncement>()
+                            {
+                                @Override
+                                public int compare(RideAnnouncement lhs, RideAnnouncement rhs)
+                                {
+                                    return rhs.getDate().compareTo(lhs.getDate());
+                                }
+                            });
+
+                            // invoke callback
+                            callback.success(announcmentList);
+                        } catch (Exception e2)
+                        {
+                            Log.e("Game", "error parsing announcements " + e2.getMessage());
+                            callback.fail(e2.getMessage());
+                        }
+
+                    }
+                });
 
     }
 }
