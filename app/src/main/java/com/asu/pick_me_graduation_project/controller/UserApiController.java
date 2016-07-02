@@ -49,7 +49,7 @@ public class UserApiController
      */
     public void getProfile(String userId, final GetProfileCallback callback)
     {
-        String url = Constants.HOST +  "get_profile"
+        String url = Constants.HOST + "get_profile"
                 + "?userId=" + userId;
         Ion.with(context)
                 .load("GET", url)
@@ -118,7 +118,6 @@ public class UserApiController
         json.addProperty("profilePicture", user.getProfilePictureUrl());
 
 
-
         String body = json.toString();
 
         Map<String, String> headers = new HashMap<>();
@@ -128,16 +127,20 @@ public class UserApiController
         Fuel.put(url)
                 .header(headers)
                 .body(body, Charset.defaultCharset())
-                .responseString(new com.github.kittinunf.fuel.core.Handler<String>() {
+                .responseString(new com.github.kittinunf.fuel.core.Handler<String>()
+                {
                     @Override
-                    public void success(Request request, Response r, String s) {
+                    public void success(Request request, Response r, String s)
+                    {
                         Log.e("Game", "edit profile result = " + s);
 
-                        try {
+                        try
+                        {
                             // check status
                             JSONObject response = new JSONObject(s);
                             int status = response.getInt("status");
-                            if (status == 0) {
+                            if (status == 0)
+                            {
                                 String message = response.getString("message");
                                 callback.fail(message);
                                 return;
@@ -149,14 +152,16 @@ public class UserApiController
 
                             // invoke callback
                             callback.success(user);
-                        } catch (Exception e2) {
+                        } catch (Exception e2)
+                        {
                             callback.fail(e2.getMessage());
                             return;
                         }
                     }
 
                     @Override
-                    public void failure(Request request, Response resp, FuelError fuelError) {
+                    public void failure(Request request, Response resp, FuelError fuelError)
+                    {
                         callback.fail(fuelError.getMessage());
                     }
                 });
@@ -228,6 +233,5 @@ public class UserApiController
             }
         });
     }
-
 
 }

@@ -22,7 +22,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ViewFeedbackActivity extends AppCompatActivity
+public class ViewFeedbackActivity extends BaseActivity
 {
     /* UI */
     @Bind(R.id.progressBar)
