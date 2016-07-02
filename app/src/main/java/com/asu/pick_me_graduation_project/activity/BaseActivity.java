@@ -104,7 +104,8 @@ public class BaseActivity extends AppCompatActivity
                 , new PrimaryDrawerItem().withIdentifier(4).withName("Messages").withIcon(R.drawable.ic_chat_bubble_outline_black_48dp)
                 , new PrimaryDrawerItem().withIdentifier(5).withName("Communities").withIcon(R.drawable.ic_people_outline_black_48dp)
                 , new PrimaryDrawerItem().withIdentifier(6).withName("My Rides").withIcon(R.drawable.ic_directions_car_black_24dp)
-                , new PrimaryDrawerItem().withIdentifier(7).withName("Contact Us").withIcon(R.drawable.ic_mail_outline_black_24dp)
+                , new PrimaryDrawerItem().withIdentifier(7).withName("Notifications").withIcon(R.drawable.ic_notifications_none_black_24dp)
+                , new PrimaryDrawerItem().withIdentifier(8).withName("Contact Us").withIcon(R.drawable.ic_mail_outline_black_24dp)
                 , new DividerDrawerItem()
                 , new PrimaryDrawerItem().withIdentifier(10).withName("Log Out").withIcon(R.drawable.ic_exit_to_app_black_48dp));
 
@@ -139,7 +140,12 @@ public class BaseActivity extends AppCompatActivity
                     } else if (id == 6)
                     {
                         intent.setClass(activity, MyRidesActivity.class);
-                    } else if (id == 7)
+                    }
+                    else  if (id == 7)
+                    {
+                        intent.setClass(activity, ViewNotificationsActivity.class);
+                    }
+                    else if (id == 8)
                     {
                         // make a send email intent
                         intent.setAction(Intent.ACTION_SENDTO);

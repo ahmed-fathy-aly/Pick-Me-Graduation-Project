@@ -21,7 +21,6 @@ public class Constants
     public static final String LAST_NAME = "lastName";
     public static final String PROFILE_PICTURE = "profilePicture";
 
-
     /* image constants */
     public static final int IMAGE_LOAD_ANIMATION_DURATION = 1000;
 
@@ -41,6 +40,7 @@ public class Constants
     public static final int NOTIFICATION_ACCEPTED_IN_RIDE = 11;
     public static final int NOTIFICATION_COMMUNITY_REQUESTS = 13;
     public static final int NOTIFICATION_COMMUNITY_UPDATE = 15;
+    public static final int NOTIFICATION_SEND_FEEDBACK = 17;
 
     /**
      * uses the Noob multiplier to get a unique notification for each type and each object of that type

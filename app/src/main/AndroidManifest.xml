@@ -153,6 +153,8 @@
         </activity>
         <activity android:name=".activity.ViewFeedbackActivity">
         </activity>
+        <activity android:name=".activity.ViewNotificationsActivity">
+        </activity>
     </application>
 
 </manifest>

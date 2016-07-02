@@ -103,9 +103,8 @@ public class MyGcmListenerService extends GcmListenerService
                     String currentChatUser = ((MyApplication) getApplication()).currentChat;
                     if (currentChatUser != null && currentChatUser.equals(otherUserid))
                         showNotification = false;
-                } catch (JSONException e)
+                } catch (Exception e)
                 {
-                    Log.e("Game", "error " + e.getMessage());
                     e.printStackTrace();
                 }
                 break;
@@ -126,9 +125,8 @@ public class MyGcmListenerService extends GcmListenerService
 
                     // unique notification
                     notificationId = Constants.getNotificationId(Constants.NOTIFICATION_JOIN_RIDE_ID, rideId);
-                } catch (JSONException e)
+                } catch (Exception e)
                 {
-                    Log.e("Game", "error " + e.getMessage());
                     e.printStackTrace();
                 }
                 break;
@@ -149,7 +147,10 @@ public class MyGcmListenerService extends GcmListenerService
                     PendingIntent pendingIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), feedbackIntent, 0);
                     mBuilder.setContentIntent(pendingIntent);
 
-                } catch (JSONException e)
+                    // unique notification
+                    notificationId = Constants.getNotificationId(Constants.NOTIFICATION_SEND_FEEDBACK, rideId);
+
+                } catch (Exception e)
                 {
                     e.printStackTrace();
                 }
@@ -170,7 +171,7 @@ public class MyGcmListenerService extends GcmListenerService
 
                     // unique notification
                     notificationId = Constants.getNotificationId(Constants.NOTIFICATION_ACCEPTED_IN_RIDE, rideId);
-                } catch (JSONException e)
+                } catch (Exception e)
                 {
                     Log.e("Game", "error " + e.getMessage());
                     e.printStackTrace();
@@ -194,9 +195,8 @@ public class MyGcmListenerService extends GcmListenerService
 
                     // unique notification
                     notificationId = Constants.getNotificationId(Constants.NOTIFICATION_COMMUNITY_REQUESTS, communityId);
-                } catch (JSONException e)
+                } catch (Exception e)
                 {
-                    Log.e("Game", "error " + e.getMessage());
                     e.printStackTrace();
                 }
 
@@ -206,21 +206,18 @@ public class MyGcmListenerService extends GcmListenerService
                     // parse the data
                     JSONObject communityJson = new JSONObject(data);
                     String communityId = communityJson.getString("communityId");
-                    boolean isAdmin = communityJson.getBoolean("isAdmin");
 
                     // set the pending intent
                     Intent communityRequestsIntent = new Intent(this, CommunityProfileActivity.class);
                     communityRequestsIntent.putExtra(Constants.COMMUNITY_ID, communityId);
-                    communityRequestsIntent.putExtra(Constants.IS_COMMUNITY_ADMIN, isAdmin);
+                    communityRequestsIntent.putExtra(Constants.IS_COMMUNITY_ADMIN, false);
                     PendingIntent pendingIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), communityRequestsIntent, 0);
                     mBuilder.setContentIntent(pendingIntent);
 
                     // unique notification
                     notificationId = Constants.getNotificationId(Constants.NOTIFICATION_COMMUNITY_UPDATE, communityId);
-                } catch (JSONException e)
+                } catch (Exception e)
                 {
-                    Log.e("Game", "error " + e.getMessage());
-                    e.printStackTrace();
                 }
                 break;
 
