@@ -14,6 +14,7 @@ public class RideDetails implements Serializable
     boolean ladiesOnly;
     CarDetails carDetails;
     List<Community> filteredCommunities;
+    private boolean disabledWelcomed;
 
     /* Constructor */
     public  RideDetails()
@@ -70,5 +71,15 @@ public class RideDetails implements Serializable
     public void setFilteredCommunities(List<Community> filteredCommunities)
     {
         this.filteredCommunities = filteredCommunities;
+    }
+
+    public void setDisabledWelcomed(boolean disabledWelcomed)
+    {
+        this.disabledWelcomed = disabledWelcomed;
+    }
+
+    public boolean isDisabledWelcomed()
+    {
+        return disabledWelcomed;
     }
 }

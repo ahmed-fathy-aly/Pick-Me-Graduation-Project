@@ -8,6 +8,7 @@ import com.asu.pick_me_graduation_project.callback.GetProfileCallback;
 import com.asu.pick_me_graduation_project.callback.GetUsersCallback;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.asu.pick_me_graduation_project.utils.TimeUtils;
 import com.github.kittinunf.fuel.Fuel;
 import com.github.kittinunf.fuel.core.FuelError;
 import com.github.kittinunf.fuel.core.Request;
@@ -108,14 +109,16 @@ public class UserApiController
         json.addProperty("bio", user.getBio());
         json.addProperty("firstName", user.getFirstName());
         json.addProperty("lastName", user.getLastName());
-        json.addProperty("dob", user.getdob());
+        if (user.getdob() != null)
+            json.addProperty("dob", TimeUtils.convertToBackendTime2(user.getdob()));
         json.addProperty("residence", user.getResidence());
-        //json.addProperty("carAc", user.getCarDetails().isConditioned());
+        json.addProperty("carAc", user.getCarDetails().isConditioned() + "");
         json.addProperty("carModel", user.getCarDetails().getModel());
-        json.addProperty("caryear", user.getCarDetails().getYear());
+        if (user.getCarDetails().getYear() != null)
+            json.addProperty("caryear", user.getCarDetails().getYear());
         json.addProperty("carPlateNumber", user.getCarDetails().getPlateNumber());
         json.addProperty("profilePicture", user.getProfilePictureUrl());
-
+        json.addProperty("phoneNumber", user.getPhoneNumber());
 
         String body = json.toString();
 
@@ -132,20 +135,22 @@ public class UserApiController
                     public void success(Request request, Response r, String s)
                     {
                         Log.e("Game", "edit profile result = " + s);
+                        Log.e("Game", "request " + request.toString());
+                        Log.e("Game", "response" + r.toString());
 
                         try
                         {
                             // check status
                             JSONObject response = new JSONObject(s);
                             int status = response.getInt("status");
-                            if (status == 0)
+                            if (status != 1)
                             {
                                 String message = response.getString("message");
                                 callback.fail(message);
                                 return;
                             }
 
-                            // parse community
+                            // parse the user
                             JSONObject userJson = response.getJSONObject("user");
                             User user = User.fromJson(userJson);
 

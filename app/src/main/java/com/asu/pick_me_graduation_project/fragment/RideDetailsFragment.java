@@ -58,6 +58,8 @@ public class RideDetailsFragment extends Fragment
     TextView textViewNoSmoking;
     @Bind(R.id.textViewLadiesOnly)
     TextView textViewLadiesOnly;
+    @Bind(R.id.textViewDisabledWelcomed)
+    TextView textViewDisabledWelcomed;
     @Bind(R.id.layoutCarDetails)
     View layoutCarDetails;
 
@@ -146,6 +148,7 @@ public class RideDetailsFragment extends Fragment
         textViewFreeSeats.setText(freeSeats);
         textViewNoSmoking.setVisibility(ride.getRideDetails().isNoSmoking() ? View.VISIBLE : View.GONE);
         textViewLadiesOnly.setVisibility(ride.getRideDetails().isLadiesOnly() ? View.VISIBLE : View.GONE);
+        textViewDisabledWelcomed.setVisibility(ride.getRideDetails().isDisabledWelcomed() ? View.VISIBLE : View.GONE);
 
         // car details
         if (ride.getRideDetails().getCarDetails() != null)

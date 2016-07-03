@@ -9,13 +9,12 @@ public class Constants
 {
 
     /* API constants */
-    public static String HOST = "http://pick-me.azurewebsites.net/api/";
+    public static String HOST = "https://pick-me.azurewebsites.net/api/";
 
     /* user constants */
     public static final String GENDER_MALE = "Male";
     public static final String USER_ID = "userId";
     public static final String GENDER_FEMALE_ = "Female";
-    public static String dob = "1-3-2011";
     public static final String EMAIL = "email";
     public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";
@@ -44,6 +43,10 @@ public class Constants
     public static final int NOTIFICATION_COMMUNITY_REQUESTS = 13;
     public static final int NOTIFICATION_COMMUNITY_UPDATE = 15;
     public static final int NOTIFICATION_SEND_FEEDBACK = 17;
+    public static final int NOTIFICATION_RIDE_ANNOUNCEMENT_SUGGESTED_BY_EMAN = 19;
+
+    /* ads */
+    public static final boolean ENABLE_ADS = false;
 
     /**
      * uses the Noob multiplier to get a unique notification for each type and each object of that type

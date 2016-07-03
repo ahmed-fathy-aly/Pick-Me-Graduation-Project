@@ -2,6 +2,7 @@ package asu.com.pick_me_graduation_project;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
+import android.util.Log;
 
 import com.asu.pick_me_graduation_project.database.DatabaseHelper;
 import com.asu.pick_me_graduation_project.model.Location;
@@ -15,6 +16,8 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -93,6 +96,8 @@ public class DatabaseTest extends ApplicationTestCase<Application>
         ride1.setTime(TimeUtils.getDatabaseTime("11 06 2016 10 30 00"));
         ride1.setLocations(Arrays.asList(location1, location2));
         RideDetails rideDetails1 = new RideDetails();
+        rideDetails1.setDisabledWelcomed(true);
+        rideDetails1.setNumberOfFreeSeats(5);
         ride1.setRideDetails(rideDetails1);
 
         Ride ride2 = new Ride();
@@ -112,7 +117,7 @@ public class DatabaseTest extends ApplicationTestCase<Application>
         databaseHelper.clearTables();
 
         // insert rides
-        databaseHelper.insertRides(Arrays.asList(ride1, ride2));
+        databaseHelper.insertRides(Arrays.asList(ride2, ride1));
 
         // get 1 ride
         Ride ride = databaseHelper.getRide(1);
@@ -122,7 +127,7 @@ public class DatabaseTest extends ApplicationTestCase<Application>
         List<Ride> rides = databaseHelper.getAllRides();
         List<Ride> expectedRides = Arrays.asList(ride1, ride2);
         assertEquals(rides.size(), expectedRides.size());
-        for (int i = 0; i < rides.size(); i++)
+          for (int i = 0; i < rides.size(); i++)
             assertSameRide(rides.get(i), expectedRides.get(i));
 
         // close the database
@@ -145,7 +150,7 @@ public class DatabaseTest extends ApplicationTestCase<Application>
                         "      },\n" +
                         "      \"notes\": \"bla bla blaa at bla bla\",\n" +
                         "      \"description\": \"To A new brave world\",\n" +
-                        "      \"time\": \"2016-11-30T12:00:00\",\n" +
+                        "      \"time\": \"2016-11-30T15:00:00\",\n" +
                         "      \"ac\": true,\n" +
                         "      \"ladiesOnly\": false,\n" +
                         "      \"noSmoking\": true,\n" +
@@ -188,7 +193,7 @@ public class DatabaseTest extends ApplicationTestCase<Application>
                         "      },\n" +
                         "      \"notes\": \"bla bla blaa at bla bla\",\n" +
                         "      \"description\": \"To A new brave world\",\n" +
-                        "      \"time\": \"2016-11-30T12:00:00\",\n" +
+                        "      \"time\": \"2016-11-29T14:00:00\",\n" +
                         "      \"ac\": true,\n" +
                         "      \"ladiesOnly\": false,\n" +
                         "      \"noSmoking\": true,\n" +
@@ -231,7 +236,7 @@ public class DatabaseTest extends ApplicationTestCase<Application>
                         "      },\n" +
                         "      \"notes\": \"bla bla blaa at bla bla\",\n" +
                         "      \"description\": \"To A new brave world\",\n" +
-                        "      \"time\": \"2016-11-30T12:00:00\",\n" +
+                        "      \"time\": \"2016-11-28T13:00:00\",\n" +
                         "      \"ac\": true,\n" +
                         "      \"ladiesOnly\": false,\n" +
                         "      \"noSmoking\": true,\n" +
@@ -272,6 +277,14 @@ public class DatabaseTest extends ApplicationTestCase<Application>
             List<Ride> expectedRides = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++)
                 expectedRides.add(Ride.fromJson(jsonArray.getJSONObject(i)));
+            Collections.sort(expectedRides, new Comparator<Ride>()
+            {
+                @Override
+                public int compare(Ride lhs, Ride rhs)
+                {
+                    return rhs.getTime().compareTo(lhs.getTime());
+                }
+            });
 
             // create database
             DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
@@ -285,7 +298,7 @@ public class DatabaseTest extends ApplicationTestCase<Application>
             // read rides
             List<Ride> resultRides = databaseHelper.getAllRides();
             assertEquals(expectedRides.size(), resultRides.size());
-            for (int i = 0 ; i < expectedRides.size(); i++)
+            for (int i = 0; i < expectedRides.size(); i++)
                 assertSameRide(expectedRides.get(i), resultRides.get(i));
 
             // close the database
@@ -299,6 +312,7 @@ public class DatabaseTest extends ApplicationTestCase<Application>
 
 
     }
+
     private void assertSameRide(Ride ride1, Ride ride2)
     {
         // same details
@@ -308,15 +322,15 @@ public class DatabaseTest extends ApplicationTestCase<Application>
         assertEquals(ride1.getRideDetails().getNumberOfFreeSeats(), ride2.getRideDetails().getNumberOfFreeSeats());
         assertEquals(ride1.getRideDetails().isNoSmoking(), ride2.getRideDetails().isNoSmoking());
         assertEquals(ride1.getRideDetails().isLadiesOnly(), ride2.getRideDetails().isLadiesOnly());
+        assertEquals(ride1.getRideDetails().isDisabledWelcomed(), ride2.getRideDetails().isDisabledWelcomed());
 
         // same driver
         assertSameUser(ride1.getDriver(), ride2.getDriver());
 
         // same locations
         assertEquals(ride1.getLocations().size(), ride2.getLocations().size());
-        for (int i = 0;i< ride1.getLocations().size(); i++)
+        for (int i = 0; i < ride1.getLocations().size(); i++)
             assertSameLocation(ride1.getLocations().get(i), ride1.getLocations().get(i));
-
 
     }
 

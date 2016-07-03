@@ -42,6 +42,8 @@
                     android:orientation="vertical"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
                     android:elevation="4dp"
 
                     >
@@ -87,6 +89,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
+                        android:minHeight="20dp"
                         android:entries="@array/genders"
                         />
 

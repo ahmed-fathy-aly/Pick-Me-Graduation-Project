@@ -2,6 +2,7 @@ package com.asu.pick_me_graduation_project.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -9,38 +10,38 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.SharedElementCallback;
-import android.support.v4.view.ViewCompat;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.callback.EditProfileCallback;
 import com.asu.pick_me_graduation_project.callback.GetProfileCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.UserApiController;
+import com.asu.pick_me_graduation_project.events.UpdateUserProfileEvent;
 import com.asu.pick_me_graduation_project.model.CarDetails;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.asu.pick_me_graduation_project.utils.TimeUtils;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.CarDetailsView;
 import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.Picasso;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
-import java.util.List;
+import java.util.Calendar;
 import java.util.Random;
 
 import butterknife.Bind;
@@ -84,10 +85,11 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
     @Bind(R.id.Residence)
     EditText Residence;
     @Bind(R.id.dob)
-    EditText Age;
+    EditText editTextDOB;
 
     /* fields */
     private Uri imageUri;
+    private Calendar chosenDateOfBirth;
 
 
     @Override
@@ -120,14 +122,6 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
 
         // load data
         loadProfile();
-        Age.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialog(v);
-
-
-            }
-        });
         return editProfileDialog;
     }
 
@@ -168,7 +162,7 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
         if (requestCode == Crop.REQUEST_PICK && resultCode == Activity.RESULT_OK)
         {
             // crop the picked image
-            Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped" +  new Random(1000000)));
+            Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped" + new Random(1000000)));
             Crop.of(result.getData(), destination).asSquare().start(getActivity());
         } else if (requestCode == Crop.REQUEST_CROP && resultCode == Activity.RESULT_OK)
         {
@@ -188,35 +182,72 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
         Crop.pickImage(getActivity());
     }
 
+    @OnClick(R.id.dob)
+    void openDatePickerDialog()
+    {
+        // listener for when the user picks a time
+        DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener()
+        {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
+            {
+                // update the edit text and save the chosen time
+                editTextDOB.setText(dayOfMonth + "-" + monthOfYear + "-" + year);
+                chosenDateOfBirth = Calendar.getInstance();
+                chosenDateOfBirth.set(Calendar.YEAR, year);
+                chosenDateOfBirth.set(Calendar.MONTH, monthOfYear);
+                chosenDateOfBirth.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            }
+        };
+
+        // show the picker dialog
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getContext()
+                , listener
+                , now.get(Calendar.YEAR)
+                , now.get(Calendar.MONTH)
+                , now.get(Calendar.DAY_OF_MONTH)
+        );
+        datePickerDialog.show();
+    }
+
+
+    /* methods */
+
     /**
      * gather user's entered data and upload to backend
      */
     private void editProfile()
     {
         // gather data
-        User user = new AuthenticationAPIController(getContext()).getCurrentUser();
-        user.setFirstName(Name.getText().toString());
-        user.setLastName(Lastname.getText().toString());
-        user.setEmail(Email.getText().toString());
-        user.setResidence(Residence.getText().toString());
-        user.setdob(Constants.dob);
-        user.setPhoneNumber(Phonenumber.getText().toString());
-        user.setBio(Bio.getText().toString());
+        User userToBeEdited = new AuthenticationAPIController(getContext()).getCurrentUser();
+        userToBeEdited.setFirstName(Name.getText().toString());
+        userToBeEdited.setLastName(Lastname.getText().toString());
+        userToBeEdited.setEmail(Email.getText().toString());
+        userToBeEdited.setResidence(Residence.getText().toString());
+        userToBeEdited.setdob(chosenDateOfBirth);
+        userToBeEdited.setPhoneNumber(Phonenumber.getText().toString());
+        userToBeEdited.setBio(Bio.getText().toString());
         CarDetails carDetails = carDetailsView.getCarDetails();
-        user.setCarDetails(carDetails);
+        userToBeEdited.setCarDetails(carDetails);
 
         // make a progress dialog
         final ProgressDialog progressDialog = ProgressDialog.show(getContext(), "", "Updating...", false, false);
 
         // upload user data
         final UserApiController controller = new UserApiController(getContext());
-        controller.editProfile(user
+        controller.editProfile(userToBeEdited
                 , new AuthenticationAPIController(getContext()).getTokken()
-                ,new EditProfileCallback()
+                , new EditProfileCallback()
         {
             @Override
             public void success(User user)
             {
+                if (!isAdded())
+                    return;
+
+                Log.e("Game", "edit success " + user.getdob());
                 // close progress dialog
                 if (progressDialog.isShowing())
                     progressDialog.dismiss();
@@ -224,21 +255,24 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
                 // update user data in preferences
                 AuthenticationAPIController controller1 = new AuthenticationAPIController(getContext());
                 controller1.updateUser(user);
+
+                // notify the profile activity to update itself
+                EventBus.getDefault().post(new UpdateUserProfileEvent(user.getUserId()));
+
                 editProfileDialog.dismiss();
             }
 
             @Override
             public void fail(String message)
             {
+                Log.e("Game", "edit faield " + message);
                 if (progressDialog.isShowing())
                     progressDialog.dismiss();
-                Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-
-    /* methods */
 
     /**
      * downloads the user's profile and shows it
@@ -259,18 +293,15 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
                 Lastname.setText(ValidationUtils.correct(user.getLastName()));
                 Email.setText(ValidationUtils.correct(user.getEmail()));
                 Residence.setText(ValidationUtils.correct(user.getResidence()));
-                //String s= user.getdob().substring(0, user.getdob().indexOf('T'));
-                Age.setText("pick your date of birth");
                 Phonenumber.setText(ValidationUtils.correct(user.getPhoneNumber()));
+                if (user.getdob() != null)
+                    editTextDOB.setText(TimeUtils.getUserFriendlyDOB(user.getdob()));
                 Bio.setText(ValidationUtils.correct(user.getBio()));
                 if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
-
                     Picasso.with(getContext()).
                             load(user.getProfilePictureUrl())
                             .placeholder(R.drawable.ic_user_large)
                             .into(ProfilePic);
-
-
                 carDetailsView.setCarDetails(user.getCarDetails());
 
             }
@@ -287,8 +318,4 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
         });
     }
 
-    public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DataPickerFragment();
-        newFragment.show(getChildFragmentManager(), "datePicker");
-    }
 }

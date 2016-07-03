@@ -139,6 +139,8 @@
     <string name="notifications">Notifications</string>
     <string name="make_an_announcment">Make an Announcement</string>
     <string name="announcment">Announcement</string>
+    <string name="disabled_welcomed">Disabled Welcomed</string>
+    <string name="bio">Bio</string>
 
 
 </resources>

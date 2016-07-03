@@ -42,19 +42,17 @@
                     android:elevation="4dp"
                     android:orientation="vertical"
                     android:padding="15dp"
-
-
                     >
-
 
                     <EditText
                         android:id="@+id/editTextUserEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_mail_outline_gray_24dp"
                         android:ems="10"
+                        android:gravity="left|center_vertical"
                         android:hint="E-Mail"
                         android:inputType="textEmailAddress"
-                        android:paddingLeft="15dp"
                         android:text="test2@mail.com">
                     </EditText>
 
@@ -62,11 +60,12 @@
                         android:id="@+id/editTextPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_lock_outline_gray_24dp"
                         android:ems="10"
-                        android:gravity="left"
+                        android:gravity="left|center_vertical"
                         android:hint="Password"
                         android:inputType="textPassword"
-                        android:paddingLeft="15dp"
+
                         android:text="incorrect"/>
 
                 </LinearLayout>
@@ -95,7 +94,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_margin="10dp"
+                    android:layout_margin="4dp"
                     android:text="@string/or"
                     android:textColor="@color/primary_dark"
                     android:textSize="20sp"/>
@@ -105,24 +104,24 @@
                     android:id="@+id/buttonFacebookLogin"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:theme="@style/facebookButtonTheme"
                     android:text="@string/sign_facebook"
+                    android:theme="@style/facebookButtonTheme"
                     />
 
                 <Button
                     android:id="@+id/buttonGoogleSignIn"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:theme="@style/googleButtonTheme"
                     android:text="@string/sign_google"
+                    android:theme="@style/googleButtonTheme"
                     />
 
                 <Button
+                    android:id="@+id/buttonLinkedInLogin"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:theme="@style/linkedinButtonTheme"
-                    android:id="@+id/buttonLinkedInLogin"
-                    android:text="@string/sign_in_linked_in"/>
+                    android:text="@string/sign_in_linked_in"
+                    android:theme="@style/linkedinButtonTheme"/>
 
 
                 <ProgressBar

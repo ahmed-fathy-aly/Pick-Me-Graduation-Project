@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.services.RegisterGcmIntentService;
+import com.asu.pick_me_graduation_project.utils.Constants;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.iid.InstanceID;
@@ -50,9 +51,12 @@ public class MainActivity extends BaseActivity
 
     private void loadAd()
     {
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-    }
+        if (Constants.ENABLE_ADS)
+        {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
+        }
 
     @OnClick(R.id.buttonPostRide)
     void openPostRide()

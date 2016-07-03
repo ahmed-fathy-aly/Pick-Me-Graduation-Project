@@ -15,6 +15,8 @@ import com.asu.pick_me_graduation_project.model.CarDetails;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -109,13 +111,21 @@ public class CarDetailsView extends LinearLayout
 
         carDetails.setModel(editTextCarModel.getText().toString());
         carDetails.setPlateNumber(editTextCarPlate.getText().toString());
-        carDetails.setYear(editTextcarYear.getText().toString());
+        try
+        {
+            int carYear = Integer.parseInt(editTextcarYear.getText().toString());
+            carDetails.setYear(editTextcarYear.getText().toString());
+        } catch (Exception e)
+        {
+            carDetails.setYear(null);
+        }
         carDetails.setConditioned(checkBoxAirConditioned.isChecked());
         return carDetails;
     }
 
     /**
      * checks that all the car details werer entered
+     *
      * @return
      */
     public boolean checkDataEntered()

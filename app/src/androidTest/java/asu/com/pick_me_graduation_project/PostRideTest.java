@@ -48,7 +48,7 @@ public class PostRideTest
     double destinationLongitude = 31.2785737;
     int year = 2017;
     int month = 1;
-    int day = 25;
+    int day = 27;
     int hour = 6;
     int minutes = 0;
     String currentTime = TimeUtils.convertToDatabaseTime(Calendar.getInstance());
@@ -58,6 +58,7 @@ public class PostRideTest
     String carModel = "bmw";
     String carYear = "2016";
     String carplate = "abc123";
+    boolean disabledPrefered = false;
 
     @Rule
     public ActivityTestRule<MainActivity> dashBoardActivityRule = new ActivityTestRule<>(
@@ -71,7 +72,7 @@ public class PostRideTest
         MainActivity mainActivity = dashBoardActivityRule.launchActivity(intent);
 
         // open the post ride activity
-        onView(withText(R.string.post_ride))
+        onView(withId(R.id.buttonPostRide))
                 .perform(click());
         Thread.sleep(2000);
 
@@ -117,6 +118,9 @@ public class PostRideTest
                 .perform(scrollTo(), replaceText(notes));
         onView(withHint(R.string.free_seats))
                 .perform(scrollTo(), replaceText(freeSeats));
+        if (disabledPrefered)
+            onView(withText(R.string.disabled_welcomed))
+                    .perform(click());
 
         // car details
         onView(withHint(R.string.model))

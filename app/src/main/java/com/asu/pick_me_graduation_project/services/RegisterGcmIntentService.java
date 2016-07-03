@@ -57,12 +57,12 @@ public class RegisterGcmIntentService extends IntentService
     /**
      * uploads the token to the backend
      */
-    private void sendTokenToBackend(String gcmToken)
+    private void sendTokenToBackend(final String gcmToken)
     {
         // form the request
         String url = Constants.HOST + "notifications/set_notificationsToken";
 
-        String token = new AuthenticationAPIController(this).getTokken();
+        final String token = new AuthenticationAPIController(this).getTokken();
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + token);
         headers.put("Content-Type", "application/json");
@@ -86,6 +86,8 @@ public class RegisterGcmIntentService extends IntentService
                     @Override
                     public void success(Request request, Response response, String s)
                     {
+                        PreferencesUtils.setAuthToken(getApplicationContext(), token);
+                        Log.e("Game", "token sent " + gcmToken);
                     }
 
                     @Override

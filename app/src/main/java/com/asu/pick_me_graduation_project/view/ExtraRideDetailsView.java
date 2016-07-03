@@ -28,6 +28,8 @@ public class ExtraRideDetailsView extends LinearLayout
     CheckBox checkBoxLadiesOnly;
     @Bind(R.id.editTextNotes)
     EditText editTextNotes;
+    @Bind(R.id.checkBoxDisabledWelcomed)
+    CheckBox checkBoxDisabledWelcomed;
 
     /* Constructors */
 
@@ -73,6 +75,7 @@ public class ExtraRideDetailsView extends LinearLayout
         }
         ride.getRideDetails().setNoSmoking(checkBoxNoSmoking.isChecked());
         ride.getRideDetails().setLadiesOnly(checkBoxLadiesOnly.isChecked());
+        ride.getRideDetails().setDisabledWelcomed(checkBoxDisabledWelcomed.isChecked());
     }
 
     /**

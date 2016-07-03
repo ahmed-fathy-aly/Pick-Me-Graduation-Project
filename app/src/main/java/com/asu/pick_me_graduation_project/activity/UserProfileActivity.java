@@ -31,6 +31,9 @@ import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.callback.GetProfileCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.UserApiController;
+import com.asu.pick_me_graduation_project.events.NewMessageEvent;
+import com.asu.pick_me_graduation_project.events.UpdateUserProfileEvent;
+import com.asu.pick_me_graduation_project.model.ChatMessage;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.TimeUtils;
@@ -40,6 +43,10 @@ import com.github.ornolfr.ratingview.RatingView;
 import com.koushikdutta.ion.Ion;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
 
@@ -141,6 +148,18 @@ public class UserProfileActivity extends BaseActivity
         // load data
         loadProfile();
 
+        // register to profile update events
+        EventBus.getDefault().register(this);
+
+
+    }
+
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -163,6 +182,7 @@ public class UserProfileActivity extends BaseActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -193,8 +213,7 @@ public class UserProfileActivity extends BaseActivity
                 editProfileFragment = new EditProfileFragment();
                 editProfileFragment.show(getSupportFragmentManager(), getString(R.string.title_edit_profile));
             }
-        }
-        else
+        } else
         {
             Intent chatIntent = new Intent(this, ChatActivity.class);
             chatIntent.putExtra(Constants.USER_ID, userId);
@@ -222,18 +241,16 @@ public class UserProfileActivity extends BaseActivity
                 appBarLayout.setExpanded(true, true);
 
                 //  set profile data to views
-                textViewUserName.setText( ValidationUtils.correct(user.getFirstName()) + " " + ValidationUtils.correct(user.getLastName()));
+                textViewUserName.setText(ValidationUtils.correct(user.getFirstName()) + " " + ValidationUtils.correct(user.getLastName()));
                 textViewEmail.setText(ValidationUtils.correct(user.getEmail()));
                 textViewPhoneNumber.setText(ValidationUtils.correct(user.getPhoneNumber()));
                 Residence.setText(ValidationUtils.correct(user.getResidence()));
                 no_of_rides.setText(ValidationUtils.correct(user.getNo_of_rides()));
                 points.setText(ValidationUtils.correct(user.getPoints()));
-                if (user.getdob() != null && user.getdob().length() > 0)
+                if (user.getdob() != null)
                 {
-                    Calendar calendar = TimeUtils.parseCalendar(user.getdob());
-                    int age = TimeUtils.getAge(calendar);
+                    int age = TimeUtils.getAge(user.getdob());
                     textViewAge.setText(age + "");
-
                 }
                 textViewBio.setText(ValidationUtils.correct(user.getBio()));
                 if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
@@ -285,7 +302,6 @@ public class UserProfileActivity extends BaseActivity
     }
 
 
-
     @Override
     public void onBackPressed()
     {
@@ -299,5 +315,15 @@ public class UserProfileActivity extends BaseActivity
             }
         }, 300);
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(UpdateUserProfileEvent updateUserProfileEvent)
+    {
+        // check it's for this user
+        if (!updateUserProfileEvent.getUserId().equals(userId))
+            return;
+
+        loadProfile();
     }
 }

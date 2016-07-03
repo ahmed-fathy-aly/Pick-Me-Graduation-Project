@@ -39,6 +39,7 @@ public class RideDetailsActivity extends BaseActivity
 {
     /* constants */
     public static final String SWITCH_TO_REQUEST_TAB = "switchToRequestsTab";
+    public static final String SWITCH_TO_ANNOUNCEMENTS_TAB = "switchToAnnouncementsTab";
 
     /* UI */
     @Bind(R.id.toolbar)
@@ -132,28 +133,8 @@ public class RideDetailsActivity extends BaseActivity
                     loadRideFromBackend();
                     return;
                 }
-                RideDetailsActivity.this.ride = data;
 
-                // check if we should show the ride join request
-                String currentUserId = new AuthenticationAPIController(RideDetailsActivity.this).getCurrentUser().getUserId();
-                boolean showRideRequests = currentUserId.equals(ride.getDriver().getUserId());
-
-                // setup view pager
-                rideDetailsPagerAdapter = new RideDetailsPagerAdapter(getSupportFragmentManager(), rideId, showRideRequests);
-                viewPager.setAdapter(rideDetailsPagerAdapter);
-                viewPager.setOffscreenPageLimit(3);
-                tabLayout.setupWithViewPager(viewPager);
-
-                // set the details
-                rideDetailsPagerAdapter.getRideDetailsFragment().setData(ride);
-
-                // add the members to the fragment
-                rideDetailsPagerAdapter.getMembersListFragment().setMembers(ride.getMembers());
-
-                // check if should open the requests tab
-                if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean(SWITCH_TO_REQUEST_TAB, false))
-                    if (viewPager.getChildCount() == 3)
-                        viewPager.setCurrentItem(2, true);
+                onRideLoaded(data);
 
                 // now load from backend
                 loadRideFromBackend();
@@ -184,26 +165,7 @@ public class RideDetailsActivity extends BaseActivity
             public void success(Ride ride)
             {
                 progressBar.setVisibility(View.INVISIBLE);
-                RideDetailsActivity.this.ride = ride;
-
-                // check if we should show the ride join request
-                String currentUserId = new AuthenticationAPIController(RideDetailsActivity.this).getCurrentUser().getUserId();
-                boolean showRideRequests = currentUserId.equals(ride.getDriver().getUserId());
-
-                // setup view pager
-                if (rideDetailsPagerAdapter == null)
-                {
-                    rideDetailsPagerAdapter = new RideDetailsPagerAdapter(getSupportFragmentManager(), rideId, showRideRequests);
-                    viewPager.setAdapter(rideDetailsPagerAdapter);
-                    viewPager.setOffscreenPageLimit(3);
-                    tabLayout.setupWithViewPager(viewPager);
-                }
-
-                // set the details
-                rideDetailsPagerAdapter.getRideDetailsFragment().setData(ride);
-
-                // add the members to the fragment
-                rideDetailsPagerAdapter.getMembersListFragment().setMembers(ride.getMembers());
+                onRideLoaded(ride);
             }
 
             @Override
@@ -214,6 +176,41 @@ public class RideDetailsActivity extends BaseActivity
                 Snackbar.make(content, error, Snackbar.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /**
+     * called after the ride was loaded from either the backend or database
+     */
+    private void onRideLoaded(Ride ride)
+    {
+        this.ride = ride;
+
+        // check if we should show the ride join request
+        String currentUserId = new AuthenticationAPIController(RideDetailsActivity.this).getCurrentUser().getUserId();
+        boolean showRideRequests = currentUserId.equals(ride.getDriver().getUserId());
+
+        // setup view pager
+        if (rideDetailsPagerAdapter == null)
+        {
+            rideDetailsPagerAdapter = new RideDetailsPagerAdapter(getSupportFragmentManager(), rideId, showRideRequests);
+            viewPager.setAdapter(rideDetailsPagerAdapter);
+            viewPager.setOffscreenPageLimit(3);
+            tabLayout.setupWithViewPager(viewPager);
+        }
+
+        // set the details
+        rideDetailsPagerAdapter.getRideDetailsFragment().setData(ride);
+
+        // add the members to the fragment
+        rideDetailsPagerAdapter.getMembersListFragment().setMembers(ride.getMembers());
+
+        // check if should open a specific tab
+        if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean(SWITCH_TO_REQUEST_TAB, false))
+            if (viewPager.getChildCount() >= 4)
+                viewPager.setCurrentItem(3, true);
+        if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean(SWITCH_TO_ANNOUNCEMENTS_TAB, false))
+            if (viewPager.getChildCount() >= 3)
+                viewPager.setCurrentItem(2, true);
     }
 
 

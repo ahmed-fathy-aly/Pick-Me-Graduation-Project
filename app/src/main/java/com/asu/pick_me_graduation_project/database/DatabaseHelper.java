@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.asu.pick_me_graduation_project.model.Location;
 import com.asu.pick_me_graduation_project.model.Ride;
@@ -24,7 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 {
     /* general constants */
     public static String DATABASE_NAME = "pickMeDatabase";
-    public static int DATABASE_VERSION = 8;
+    public static int DATABASE_VERSION = 11;
 
     /* users table */
     public static String USER_TABLE = "userTable";
@@ -51,7 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
     public static String FREE_SEATS = "freeSeats";
     public static String NO_SMOKING = "noSmoking";
     public static String LADIES_ONLY = "ladiesOnly";
-
+    public static String DIABLED_WELCOMED = "disabledWelcomed";
 
     public DatabaseHelper(Context context)
     {
@@ -90,7 +91,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + NOTES + " TEXT ,"
                         + FREE_SEATS + " INT ,"
                         + NO_SMOKING + " INT ,"
-                        + LADIES_ONLY + " INT"
+                        + LADIES_ONLY + " INT ,"
+                        + DIABLED_WELCOMED + " INT"
                         + " )";
         db.execSQL(createUserTable);
         db.execSQL(createLocationsTable);
@@ -189,13 +191,17 @@ public class DatabaseHelper extends SQLiteOpenHelper
         if (cursor.moveToFirst())
         {
             ride.setId("" + cursor.getInt(cursor.getColumnIndex(ID)));
+            Log.e("Game", "database read time string = " + cursor.getString(cursor.getColumnIndex(TIME_STR)));
             ride.setTime(TimeUtils.getDatabaseTime(cursor.getString(cursor.getColumnIndex(TIME_STR))));
+            Log.e("Game", "database read time= " + TimeUtils.convertToDatabaseTime(ride.getTime()));
+
             ride.setDescription(cursor.getString(cursor.getColumnIndex(DESCRIPTION)));
             ride.setNotes(cursor.getString(cursor.getColumnIndex(NOTES)));
             RideDetails rideDetails = new RideDetails();
             rideDetails.setNoSmoking(cursor.getInt(cursor.getColumnIndex(NO_SMOKING)) == 1);
             rideDetails.setNumberOfFreeSeats(cursor.getInt(cursor.getColumnIndex(FREE_SEATS)));
             rideDetails.setLadiesOnly(cursor.getInt(cursor.getColumnIndex(LADIES_ONLY)) == 1);
+            rideDetails.setDisabledWelcomed(cursor.getInt(cursor.getColumnIndex(DIABLED_WELCOMED)) == 1);
             ride.setRideDetails(rideDetails);
             driverId = cursor.getInt(cursor.getColumnIndex(DRIVER_ID));
         } else
@@ -220,6 +226,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
     /**
      * returns all the rides in the database
+     * sorted by time, newest first
      */
     public List<Ride> getAllRides()
     {
@@ -248,6 +255,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 return rhs.getTime().compareTo(lhs.getTime());
             }
         });
+
         return rides;
     }
 
@@ -298,7 +306,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
     private void insertRideDetails(Ride ride, SQLiteDatabase database)
     {
-        String keysString = String.format(" ( %s , %s, %s, %s , %s , %s , %s , %s ) "
+        String keysString = String.format(" ( %s , %s, %s, %s , %s , %s , %s , %s, %s ) "
                 , ID
                 , DRIVER_ID
                 , DESCRIPTION
@@ -306,8 +314,9 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 , TIME_STR
                 , FREE_SEATS
                 , NO_SMOKING
-                , LADIES_ONLY);
-        String valuesString = String.format(" ( %d, %d, \"%s\" , \"%s\", \"%s\",  %d , %d , %d ) ",
+                , LADIES_ONLY
+                , DIABLED_WELCOMED);
+        String valuesString = String.format(" ( %d, %d, \"%s\" , \"%s\", \"%s\",  %d , %d , %d, %d ) ",
                 Integer.parseInt(ride.getId())
                 , Integer.parseInt(ride.getDriver().getUserId())
                 , ride.getDescription()
@@ -316,6 +325,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 , ride.getRideDetails().getNumberOfFreeSeats()
                 , ride.getRideDetails().isNoSmoking() ? 1 : 0
                 , ride.getRideDetails().isLadiesOnly() ? 1 : 0
+                ,ride.getRideDetails().isDisabledWelcomed() ? 1 : 0
         );
         String insertRide =
                 "INSERT INTO " + RIDE_TABLE

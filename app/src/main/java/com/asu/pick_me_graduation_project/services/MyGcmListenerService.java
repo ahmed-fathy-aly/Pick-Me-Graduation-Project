@@ -178,6 +178,29 @@ public class MyGcmListenerService extends GcmListenerService
                 }
                 break;
 
+            case "rideAnnouncement":
+                try
+                {
+                    // parse the data
+                    JSONObject rideJson = new JSONObject(data);
+                    String rideId = rideJson.getString("rideId");
+
+                    // set the pending intent
+                    Intent rideDetailsIntent = new Intent(this, RideDetailsActivity.class);
+                    rideDetailsIntent.putExtra(Constants.RIDE_ID, rideId);
+                    rideDetailsIntent.putExtra(RideDetailsActivity.SWITCH_TO_ANNOUNCEMENTS_TAB, true);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), rideDetailsIntent, 0);
+                    mBuilder.setContentIntent(pendingIntent);
+
+                    // unique notification
+                    notificationId = Constants.getNotificationId(Constants.NOTIFICATION_RIDE_ANNOUNCEMENT_SUGGESTED_BY_EMAN, rideId);
+                } catch (Exception e)
+                {
+                    Log.e("Game", "error " + e.getMessage());
+                    e.printStackTrace();
+                }
+                break;
+
             case "communityRequestNotification":
                 try
                 {
@@ -199,6 +222,7 @@ public class MyGcmListenerService extends GcmListenerService
                 {
                     e.printStackTrace();
                 }
+                break;
 
             case "communityUpdateNotification":
                 try
@@ -220,6 +244,7 @@ public class MyGcmListenerService extends GcmListenerService
                 {
                 }
                 break;
+
 
             case "updateMyRides":
                 startService(new Intent(this, GetMyRidesService.class));

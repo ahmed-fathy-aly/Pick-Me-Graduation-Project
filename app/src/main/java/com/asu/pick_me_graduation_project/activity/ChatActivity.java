@@ -307,8 +307,6 @@ public class ChatActivity extends BaseActivity
         // add the message to the adapter if it's not there
         ChatMessage newMessage = newMessageEvent.getChatMessage();
         addMessage(newMessage);
-
-
     }
 
     private void addMessage(ChatMessage newMessage)
