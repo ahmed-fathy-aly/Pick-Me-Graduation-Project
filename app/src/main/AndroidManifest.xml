@@ -36,7 +36,7 @@
             android:value="@integer/google_play_services_version"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/maps_debug_api_key"/>
+            android:value="@string/maps_release_api_key"/>
 
         <!-- adds stuff -->
         <activity

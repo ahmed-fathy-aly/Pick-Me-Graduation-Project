@@ -9,7 +9,7 @@ public class Constants
 {
 
     /* API constants */
-    public static String HOST = "http://pick-me.azurewebsites.net/api/";
+    public static String HOST = "https://pick-me.azurewebsites.net/api/";
 
     /* user constants */
     public static final String GENDER_MALE = "Male";
