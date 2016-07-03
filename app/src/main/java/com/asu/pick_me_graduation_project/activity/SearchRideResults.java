@@ -77,7 +77,7 @@ public class SearchRideResults extends AppCompatActivity implements RideListFrag
         rideListFragment.setData(searchRideParams.getResult());
 
         // load interstitial ad (currently disabled)
-        if (false)
+        if (Constants.ENABLE_ADS)
             loadAd();
     }
 

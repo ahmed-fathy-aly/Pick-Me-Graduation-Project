@@ -1,16 +1,24 @@
 package com.asu.pick_me_graduation_project.activity;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.asu.pick_me_graduation_project.R;
+import com.asu.pick_me_graduation_project.callback.CreateCommunityCallback;
 import com.asu.pick_me_graduation_project.callback.GetCommunitiesCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.CommunityAPIController;
@@ -103,7 +111,7 @@ public class CommunitiesActivity extends BaseActivity
     {
         progressBar.setVisibility(View.VISIBLE);
         controller.searchCommunities(new AuthenticationAPIController(this).getTokken()
-                ,searchString
+                , searchString
                 , new GetCommunitiesCallback()
         {
             @Override
@@ -159,9 +167,75 @@ public class CommunitiesActivity extends BaseActivity
     @OnClick(R.id.fab)
     public void onClick()
     {
-        // open the create community fragment
-        CreateCommunityFragment createCommunityFragment = new CreateCommunityFragment();
-        createCommunityFragment.show(getSupportFragmentManager(), getString(R.string.title_create_community));
+        // create the dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.title_create_community));
+
+        // Set up the input
+        View view = LayoutInflater.from(this).inflate(R.layout.fragment_create_community, null);
+        final EditText editTextCommunityName = (EditText) view.findViewById(R.id.editTextCommunityName);
+        final EditText editTextCommunityDescription = (EditText) view.findViewById(R.id.editTextCommunityDescription);
+        builder.setView(view);
+
+        // Set up the buttons
+        builder.setPositiveButton(getString(R.string.create), new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                String name = editTextCommunityName.getText().toString();
+                String description = editTextCommunityDescription.getText().toString();
+                createCommunity(name, description);
+            }
+
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.cancel();
+            }
+        });
+
+        // show the dialog
+        builder.show();
+
+    }
+
+    /**
+     * asks the backend to create a new community
+     */
+    private void createCommunity(String name, String description)
+    {
+        final ProgressDialog progressDialog = ProgressDialog.show(this, "", getString(R.string.creating_community));
+        controller.createCommunity(
+                new AuthenticationAPIController(this).getTokken(),
+                name,
+                description,
+                new CreateCommunityCallback()
+                {
+                    @Override
+                    public void success(Community community)
+                    {
+                        progressDialog.dismiss();
+
+                        // show succes
+                        Toast.makeText(CommunitiesActivity.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+
+                        // add the new community
+                        communitiesListFragment.addCommunity(community);
+                    }
+
+                    @Override
+                    public void fail(String message)
+                    {
+                        // show error
+                        progressDialog.dismiss();
+                        Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
     }
 
 }

@@ -1,44 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
+    android:id="@+id/content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="20.0dip"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:id="@+id/content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:padding="20.0dip">
 
     <LinearLayout
-        android:orientation="vertical"
         android:id="@+id/topLL"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true">
-        <EditText android:textSize="18.0sp"
-                  android:gravity="center"
-                  android:id="@+id/comm_name"
-                  android:padding="10.0dip"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_marginTop="10.0dip"
-                  android:hint="@string/comm_name"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/editTextCommunityName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/comm_name"
             />
 
         <EditText
-            android:id="@+id/comm_desc"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:minHeight="200.0dip"
-            android:singleLine="false"
+            android:id="@+id/editTextCommunityDescription"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:hint="@string/description"
             />
     </LinearLayout>
-    <LinearLayout
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:id="@+id/buttonsLL"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20.0dip"
-        android:layout_below="@+id/topLL"></LinearLayout>
-</RelativeLayout>
+
+</LinearLayout>

@@ -14,7 +14,6 @@ import android.widget.ListView;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.activity.CommunityProfileActivity;
-import com.asu.pick_me_graduation_project.activity.CreateCommunityFragment;
 import com.asu.pick_me_graduation_project.adapter.CommunitiesAdapter;
 import com.asu.pick_me_graduation_project.callback.GenericSuccessCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
@@ -28,7 +27,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * A simple {@link Fragment} subclass.
  */
 public class CommunitiesListFragment extends android.support.v4.app.Fragment implements CommunitiesAdapter.Listener
 {
@@ -49,7 +47,8 @@ public class CommunitiesListFragment extends android.support.v4.app.Fragment imp
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         controller = new CommunityAPIController(getContext());
 
@@ -89,16 +88,19 @@ public class CommunitiesListFragment extends android.support.v4.app.Fragment imp
         controller.requestToJoinCommunity(
                 new AuthenticationAPIController(getContext()).getTokken()
                 , community.getId()
-                , new GenericSuccessCallback() {
+                , new GenericSuccessCallback()
+                {
 
                     @Override
-                    public void success() {
+                    public void success()
+                    {
                         Snackbar.make(content, getString(R.string.sent), Snackbar.LENGTH_SHORT).show();
                         adapterCommunities.markRequestSent(community.getId());
                     }
 
                     @Override
-                    public void fail(String message) {
+                    public void fail(String message)
+                    {
                         Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
                     }
                 }
@@ -129,4 +131,11 @@ public class CommunitiesListFragment extends android.support.v4.app.Fragment imp
         adapterCommunities.addAll(communityList);
     }
 
+    /**
+     * adds a new community to the list
+     */
+    public void addCommunity(Community community)
+    {
+        adapterCommunities.addAll(community);
+    }
 }

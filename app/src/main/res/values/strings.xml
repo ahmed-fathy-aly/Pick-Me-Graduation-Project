@@ -33,7 +33,7 @@
     <string name="transition_user_list_to_profile_name">transitionUserListToProfileName</string>
     <string name="transition_fab_to_edit">transitionFabToEdit</string>
     <string name="title_messages">Messages</string>
-    <string name="title_create_community">Communities</string>
+    <string name="title_create_community">Create a Community</string>
     <string name="create">Create</string>
     <string name="title_communities">Communities</string>
     <string name="message_hint">Write a message...</string>
