@@ -3,10 +3,14 @@ package com.asu.pick_me_graduation_project.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.asu.pick_me_graduation_project.R;
@@ -63,8 +67,10 @@ public class RideDetailsFragment extends Fragment
     TextView textViewDisabledWelcomed;
     @Bind(R.id.layoutCarDetails)
     View layoutCarDetails;
-
-
+    @Bind(R.id.scrollView)
+    ScrollView scrollView;
+    @Bind(R.id.cardViewMaps)
+    CardView cardViewMaps;
     public RideDetailsFragment()
     {
         setArguments(new Bundle());
@@ -136,6 +142,7 @@ public class RideDetailsFragment extends Fragment
                     , new LatLng(location.getLatitude(), location.getLongitude()));
         }
         mapsView.fitMarkers();
+        mapsView.setScrollable(false);
 
         // route
         List<LatLng> latLngs = new ArrayList<>();
@@ -169,6 +176,7 @@ public class RideDetailsFragment extends Fragment
         } else
             layoutCarDetails.setVisibility(View.GONE);
     }
+
 
     @Override
     public void onDestroyView()

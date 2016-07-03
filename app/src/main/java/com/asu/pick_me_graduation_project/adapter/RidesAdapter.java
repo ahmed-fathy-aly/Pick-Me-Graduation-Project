@@ -112,6 +112,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
 
         // locations;
         holder.mapsView.reset();
+
         List<Integer> markersAddingOrder = LocationUtils.getMarkerAddingOrder(ride.getLocations().size());
         for (int i : markersAddingOrder)
         {
@@ -170,7 +171,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
             super(view);
             ButterKnife.bind(this, view);
             mapsView.setCenterMarkerShown(false);
-
+            mapsView.setScrollable(false);
 
             buttonRequestToJoin.setOnClickListener(new DebouncingOnClickListener()
             {
