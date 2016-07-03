@@ -44,6 +44,10 @@ public class Constants
     public static final int NOTIFICATION_COMMUNITY_REQUESTS = 13;
     public static final int NOTIFICATION_COMMUNITY_UPDATE = 15;
     public static final int NOTIFICATION_SEND_FEEDBACK = 17;
+    public static final int NOTIFICATION_RIDE_ANNOUNCEMENT_SUGGESTED_BY_EMAN = 19;
+
+    /* ads */
+    public static final boolean ENABLE_ADS = false;
 
     /**
      * uses the Noob multiplier to get a unique notification for each type and each object of that type
