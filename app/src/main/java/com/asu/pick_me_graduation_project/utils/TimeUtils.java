@@ -51,6 +51,14 @@ public class TimeUtils
         return DateUtils.getRelativeTimeSpanString(context, date.getTimeInMillis()).toString();
     }
 
+
+    public static String getUserFriendlyDOB(Calendar dob)
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return formatter.format(dob.getTime());
+    }
+
     /**
      * converts to something like 6/20/2016 05:00:00 AM
      */
@@ -61,6 +69,15 @@ public class TimeUtils
         return formatter.format(time.getTime()).replace("am", "AM").replace("pm", "PM");
     }
 
+    /**
+     * converts to something like 6/20/2016 05:00:00 AM
+     */
+    public static String convertToBackendTime2(Calendar time)
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return formatter.format(time.getTime());
+    }
     /**
      * converts to a string like 11 05 2017 10 30 00
      */
@@ -103,4 +120,5 @@ public class TimeUtils
             years++;
         return years;
     }
+
 }

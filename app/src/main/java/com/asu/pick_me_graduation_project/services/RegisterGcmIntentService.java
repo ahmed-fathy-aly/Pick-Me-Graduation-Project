@@ -57,7 +57,7 @@ public class RegisterGcmIntentService extends IntentService
     /**
      * uploads the token to the backend
      */
-    private void sendTokenToBackend(String gcmToken)
+    private void sendTokenToBackend(final String gcmToken)
     {
         // form the request
         String url = Constants.HOST + "notifications/set_notificationsToken";
@@ -87,7 +87,7 @@ public class RegisterGcmIntentService extends IntentService
                     public void success(Request request, Response response, String s)
                     {
                         PreferencesUtils.setAuthToken(getApplicationContext(), token);
-                        Log.e("Game", "token sent " + token);
+                        Log.e("Game", "token sent " + gcmToken);
                     }
 
                     @Override

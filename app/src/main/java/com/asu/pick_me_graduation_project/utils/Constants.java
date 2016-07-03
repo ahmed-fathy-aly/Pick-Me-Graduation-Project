@@ -15,7 +15,6 @@ public class Constants
     public static final String GENDER_MALE = "Male";
     public static final String USER_ID = "userId";
     public static final String GENDER_FEMALE_ = "Female";
-    public static String dob = "1-3-2011";
     public static final String EMAIL = "email";
     public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";

@@ -3,10 +3,12 @@ package com.asu.pick_me_graduation_project.model;
 import android.util.Log;
 
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.asu.pick_me_graduation_project.utils.TimeUtils;
 
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 /**
  * Created by ahmed on 2/7/2016.
@@ -18,7 +20,7 @@ public class User implements Serializable
     String firstName;
     String email;
     String lastName;
-    String dob;
+    Calendar dob;
     String residence;
     String points;
     String no_of_rides;
@@ -76,12 +78,12 @@ public class User implements Serializable
         this.lastName = lastName;
     }
 
-    public String getdob()
+    public Calendar getdob()
     {
         return dob;
     }
 
-    public void setdob(String dob)
+    public void setdob(Calendar dob)
     {
         this.dob = dob;
     }
@@ -213,7 +215,10 @@ public class User implements Serializable
             if (!json.isNull("email"))
                 user.setEmail(json.getString("email"));
             if (!json.isNull("dob"))
-                user.setdob(json.getString("dob"));
+            {
+                String dobString = json.getString("dob");
+                user.setdob(TimeUtils.parseCalendar(dobString));
+            }
             if (!json.isNull("residence"))
                 user.setResidence(json.getString("residence"));
             if (!json.isNull("numberOfRides"))

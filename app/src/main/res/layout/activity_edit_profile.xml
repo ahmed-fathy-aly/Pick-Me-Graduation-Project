@@ -37,12 +37,6 @@
 
             </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/ProfilePic"
-                android:layout_margin="10.0dip"
-                android:orientation="vertical">
 
                 <EditText
                     android:id="@+id/Name"
@@ -80,14 +74,10 @@
 
 
 
-            </LinearLayout>
             <EditText
                 android:id="@+id/dob"
                 android:layout_width="fill_parent"
                 android:layout_height="50.0dip"
-                android:layout_marginLeft="10.0dip"
-                android:layout_marginRight="10.0dip"
-                android:drawableLeft="@drawable/calendar1"
                 android:drawablePadding="10.0dip"
                 android:drawableRight="@drawable/star_red"
                 android:hint="Date Of Birth"
@@ -100,15 +90,12 @@
                 android:id="@+id/Email"
                 android:layout_width="fill_parent"
                 android:layout_height="50.0dip"
-                android:layout_marginLeft="10.0dip"
-                android:layout_marginRight="10.0dip"
-                android:drawableLeft="@drawable/envelop_purple"
-                android:drawablePadding="10.0dip"
                 android:drawableRight="@drawable/star_red"
                 android:hint="@string/email"
                 android:inputType="textWebEmailAddress|textCapSentences"
                 android:maxLength="30"
                 android:paddingRight="10.0dip"/>
+
 
             <include layout="@layout/phonenumber"/>
 
