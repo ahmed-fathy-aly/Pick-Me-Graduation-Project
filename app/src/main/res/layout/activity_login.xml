@@ -53,8 +53,7 @@
                         android:ems="10"
                         android:gravity="left|center_vertical"
                         android:hint="E-Mail"
-                        android:inputType="textEmailAddress"
-                        android:text="test2@mail.com">
+                        android:inputType="textEmailAddress">
                     </EditText>
 
                     <EditText
@@ -65,9 +64,7 @@
                         android:ems="10"
                         android:gravity="left|center_vertical"
                         android:hint="Password"
-                        android:inputType="textPassword"
-
-                        android:text="incorrect"/>
+                        android:inputType="textPassword"/>
 
                 </LinearLayout>
 
