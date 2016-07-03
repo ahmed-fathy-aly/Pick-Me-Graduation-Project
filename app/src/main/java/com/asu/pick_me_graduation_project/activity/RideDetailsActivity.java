@@ -187,12 +187,13 @@ public class RideDetailsActivity extends BaseActivity
 
         // check if we should show the ride join request
         String currentUserId = new AuthenticationAPIController(RideDetailsActivity.this).getCurrentUser().getUserId();
-        boolean showRideRequests = currentUserId.equals(ride.getDriver().getUserId());
+        boolean isDriver = currentUserId.equals(ride.getDriver().getUserId());
+        boolean isMember = ride.containsMember(currentUserId);
 
         // setup view pager
         if (rideDetailsPagerAdapter == null)
         {
-            rideDetailsPagerAdapter = new RideDetailsPagerAdapter(getSupportFragmentManager(), rideId, showRideRequests);
+            rideDetailsPagerAdapter = new RideDetailsPagerAdapter(getSupportFragmentManager(), rideId, isMember, isDriver);
             viewPager.setAdapter(rideDetailsPagerAdapter);
             viewPager.setOffscreenPageLimit(3);
             tabLayout.setupWithViewPager(viewPager);

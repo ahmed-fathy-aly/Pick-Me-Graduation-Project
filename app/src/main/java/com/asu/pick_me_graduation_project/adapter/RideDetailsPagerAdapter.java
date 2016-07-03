@@ -33,7 +33,7 @@ public class RideDetailsPagerAdapter extends FragmentPagerAdapter
     private List<String> mFragmentTitleList = new ArrayList<>();
     private List<Fragment> mFragmentList = new ArrayList<>();
 
-    public RideDetailsPagerAdapter(FragmentManager fm, String rideId, boolean isMember)
+    public RideDetailsPagerAdapter(FragmentManager fm, String rideId, boolean isMember, boolean isAdmin)
     {
         super(fm);
 
@@ -57,7 +57,10 @@ public class RideDetailsPagerAdapter extends FragmentPagerAdapter
             rideAnnouncmentsFragment.setArguments(arguments);
             mFragmentTitleList.add("Announcements");
             mFragmentList.add(rideAnnouncmentsFragment);
+        }
 
+        if (isAdmin)
+        {
             joinRideRequestsFragment = new JoinRideRequestsFragment();
             joinRideRequestsFragment.setArguments(arguments);
             mFragmentTitleList.add("Requests");
@@ -88,10 +91,13 @@ public class RideDetailsPagerAdapter extends FragmentPagerAdapter
         return membersListFragment;
     }
 
-    public RideDetailsFragment getRideDetailsFragment(){ return rideDetailsFragment;}
+    public RideDetailsFragment getRideDetailsFragment()
+    {
+        return rideDetailsFragment;
+    }
 
     public RideAnnouncmentsFragment getRideAnnouncmentsFragment()
     {
-        return  rideAnnouncmentsFragment;
+        return rideAnnouncmentsFragment;
     }
 }
