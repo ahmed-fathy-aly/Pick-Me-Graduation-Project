@@ -15,6 +15,7 @@ import com.asu.pick_me_graduation_project.model.Location;
 import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.asu.pick_me_graduation_project.utils.LocationUtils;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.ContactUserView;
 import com.asu.pick_me_graduation_project.view.GenericMapsView;
@@ -120,19 +121,14 @@ public class RideDetailsFragment extends Fragment
         // map
         mapsView.reset();
         mapsView.setCenterMarkerShown(false);
-        for (int i = 0; i < ride.getLocations().size(); i++)
+        List<Integer> markersAddingOrder = LocationUtils.getMarkerAddingOrder(ride.getLocations().size());
+        for (int i : markersAddingOrder)
         {
             Location location = ride.getLocations().get(i);
+            boolean uniqueUser = location.getUser().getUserId().equals(currentUserId);
+            float color = LocationUtils.getMarkerColor(i, ride.getLocations().size(), uniqueUser);
             String userName = ValidationUtils.correct(location.getUser().getFirstName())
                     + " " + ValidationUtils.correct(location.getUser().getLastName());
-            float color = BitmapDescriptorFactory.HUE_ORANGE;
-            if (location.getId().equals(currentUserId))
-                color = BitmapDescriptorFactory.HUE_CYAN;
-            if (i == 0)
-                color = BitmapDescriptorFactory.HUE_GREEN;
-            else if (i == ride.getLocations().size() - 1)
-                color = BitmapDescriptorFactory.HUE_RED;
-
             mapsView.addMarker(
                     i + ""
                     , userName
