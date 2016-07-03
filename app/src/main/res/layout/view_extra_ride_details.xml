@@ -43,7 +43,12 @@
         android:text="@string/ladies_only"
         android:textSize="15.0sp"/>
 
-
+    <CheckBox
+        android:id="@+id/checkBoxDisabledWelcomed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/disabled_welcomed"
+        android:textSize="15.0sp"/>
 
 
 </LinearLayout>

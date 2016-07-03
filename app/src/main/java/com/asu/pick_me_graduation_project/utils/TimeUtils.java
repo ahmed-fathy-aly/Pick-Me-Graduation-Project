@@ -57,6 +57,7 @@ public class TimeUtils
     public static String convertToBackendTime(Calendar time)
     {
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         return formatter.format(time.getTime()).replace("am", "AM").replace("pm", "PM");
     }
 
@@ -65,7 +66,8 @@ public class TimeUtils
      */
     public static String convertToDatabaseTime(Calendar time)
     {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy hh mm ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy HH mm ss");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         return formatter.format(time.getTime());
     }
 
@@ -74,12 +76,14 @@ public class TimeUtils
      */
     public static Calendar getDatabaseTime(String timeStr)
     {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy hh mm ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy HH mm ss");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         try
         {
             Date date = formatter.parse(timeStr);
             Calendar c = new GregorianCalendar();
             c.setTime(date);
+            return c;
         } catch (ParseException e)
         {
             e.printStackTrace();

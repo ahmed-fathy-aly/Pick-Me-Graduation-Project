@@ -159,6 +159,8 @@ public class Ride implements Serializable
                 ride.getRideDetails().setLadiesOnly(jsonObject.getBoolean("ladiesOnly"));
             if (!jsonObject.isNull("noSmoking"))
                 ride.getRideDetails().setNoSmoking(jsonObject.getBoolean("noSmoking"));
+            if (!jsonObject.isNull("disabledWelcomed"))
+                ride.getRideDetails().setDisabledWelcomed(jsonObject.getBoolean("disabledWelcomed"));
             if (!jsonObject.isNull("numberOfFreeSeats"))
                 ride.getRideDetails().setNumberOfFreeSeats(jsonObject.getInt("numberOfFreeSeats"));
 

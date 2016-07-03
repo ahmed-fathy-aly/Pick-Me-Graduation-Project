@@ -208,6 +208,7 @@ public class RidesAPIController
             json.put("numberOfFreeSeats", ride.getRideDetails().getNumberOfFreeSeats());
             json.put("ladiesOnly", ride.getRideDetails().isLadiesOnly());
             json.put("noSmoking", ride.getRideDetails().isNoSmoking());
+            json.put("disabledWelcomed", ride.getRideDetails().isDisabledWelcomed());
             json.put("ac", ride.getRideDetails().getCarDetails().isConditioned());
             json.put("carModel", ride.getRideDetails().getCarDetails().getModel());
             json.put("caryear", ride.getRideDetails().getCarDetails().getYear());
