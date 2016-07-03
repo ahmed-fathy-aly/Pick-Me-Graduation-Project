@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.asu.pick_me_graduation_project"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest
+    package="com.asu.pick_me_graduation_project"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -100,61 +101,112 @@
             android:exported="false"/>
 
         <!-- activities -->
-        <activity android:name=".activity.LoginActivity"
-                  android:windowSoftInputMode="stateHidden|adjustResize"
-            >
+        <activity
+            android:name=".activity.LoginActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.UserProfileActivity"
-            android:label="@string/title_profile">
+            android:configChanges="orientation"
+            android:label="@string/title_profile"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.SignUpActivity">
+        <activity
+            android:name=".activity.SignUpActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.BaseActivity">
+        <activity
+            android:name=".activity.BaseActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.MainActivity">
+        <activity
+            android:name=".activity.MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.StartActivity">
+        <activity
+            android:name=".activity.StartActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-         </activity>
+        </activity>
         <activity
             android:name=".activity.SearchUsersActivity"
-            android:label="@string/title_search_users">
+            android:configChanges="orientation"
+            android:label="@string/title_search_users"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.RecentChatsActivity"
-            android:label="@string/title_messages">
+            android:configChanges="orientation"
+            android:label="@string/title_messages"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.CommunitiesActivity"
-            android:label="@string/title_communities">
+            android:configChanges="orientation"
+            android:label="@string/title_communities"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.ChatActivity">
+        <activity
+            android:name=".activity.ChatActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.CommunityProfileActivity">
+        <activity
+            android:name=".activity.CommunityProfileActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.PostRideActivity"
-            android:label="@string/post_ride">
+            android:configChanges="orientation"
+            android:label="@string/post_ride"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.MyRidesActivity">
+        <activity
+            android:name=".activity.MyRidesActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.SearchRideActivity">
+        <activity
+            android:name=".activity.SearchRideActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.RideDetailsActivity">
+        <activity
+            android:name=".activity.RideDetailsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".activity.SearchRideResults">
+        <activity
+            android:name=".activity.SearchRideResults"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.FeedBackActivity">
+        <activity
+            android:name=".activity.FeedBackActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.ViewFeedbackActivity">
+        <activity
+            android:name=".activity.ViewFeedbackActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.ViewNotificationsActivity">
+        <activity
+            android:name=".activity.ViewNotificationsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 
