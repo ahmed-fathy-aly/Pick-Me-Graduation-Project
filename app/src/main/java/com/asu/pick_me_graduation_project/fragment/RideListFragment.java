@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.activity.RideDetailsActivity;
 import com.asu.pick_me_graduation_project.adapter.RidesAdapter;
+import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.model.RideDetails;
 import com.asu.pick_me_graduation_project.utils.Constants;
@@ -55,7 +56,8 @@ public class RideListFragment extends Fragment implements RidesAdapter.Listener
         View view = inflater.inflate(R.layout.fragment_ride_list, container, false);
 
         // setup recycler view
-        adapter = new RidesAdapter(getContext(), getFragmentManager());
+        String currentUserId = new AuthenticationAPIController(getContext()).getCurrentUser().getUserId();
+        adapter = new RidesAdapter(getContext(), getFragmentManager(), currentUserId);
         adapter.setListener(this);
         if (data != null)
             adapter.setData(data);

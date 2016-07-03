@@ -15,6 +15,7 @@ import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.model.Location;
 import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.model.User;
+import com.asu.pick_me_graduation_project.utils.LocationUtils;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.GenericMapsView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -41,12 +42,14 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
     private Context context;
     Listener listener;
     private boolean requestToJoinVisibility;
+    private String currentUserId;
 
-    public RidesAdapter(Context context, FragmentManager fragmentManager)
+    public RidesAdapter(Context context, FragmentManager fragmentManager, String currentUserId)
     {
         this.context = context;
         this.data = new ArrayList<>();
         this.fragmentManager = fragmentManager;
+        this.currentUserId = currentUserId;
     }
 
     /**
@@ -109,18 +112,15 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
 
         // locations;
         holder.mapsView.reset();
-        for (int i = 0; i < ride.getLocations().size(); i++)
+
+        List<Integer> markersAddingOrder = LocationUtils.getMarkerAddingOrder(ride.getLocations().size());
+        for (int i : markersAddingOrder)
         {
             Location location = ride.getLocations().get(i);
+            boolean uniqueUser = location.getUser().getUserId().equals(currentUserId) || location.getId().equals("-1");
+            float color = LocationUtils.getMarkerColor(i, ride.getLocations().size(), uniqueUser);
             String userName = ValidationUtils.correct(location.getUser().getFirstName())
                     + " " + ValidationUtils.correct(location.getUser().getLastName());
-            float color = BitmapDescriptorFactory.HUE_ORANGE;
-            if (location.getId().equals("-1"))
-                color = BitmapDescriptorFactory.HUE_CYAN;
-            else if (i == 0)
-                color = BitmapDescriptorFactory.HUE_GREEN;
-            else if (i == ride.getLocations().size() - 1)
-                color = BitmapDescriptorFactory.HUE_RED;
             holder.mapsView.addMarker(
                     i + ""
                     , userName
@@ -171,7 +171,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
             super(view);
             ButterKnife.bind(this, view);
             mapsView.setCenterMarkerShown(false);
-
+            mapsView.setScrollable(false);
 
             buttonRequestToJoin.setOnClickListener(new DebouncingOnClickListener()
             {

@@ -3,10 +3,14 @@ package com.asu.pick_me_graduation_project.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.asu.pick_me_graduation_project.R;
@@ -15,6 +19,7 @@ import com.asu.pick_me_graduation_project.model.Location;
 import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.asu.pick_me_graduation_project.utils.LocationUtils;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.ContactUserView;
 import com.asu.pick_me_graduation_project.view.GenericMapsView;
@@ -62,8 +67,10 @@ public class RideDetailsFragment extends Fragment
     TextView textViewDisabledWelcomed;
     @Bind(R.id.layoutCarDetails)
     View layoutCarDetails;
-
-
+    @Bind(R.id.scrollView)
+    ScrollView scrollView;
+    @Bind(R.id.cardViewMaps)
+    CardView cardViewMaps;
     public RideDetailsFragment()
     {
         setArguments(new Bundle());
@@ -118,17 +125,24 @@ public class RideDetailsFragment extends Fragment
         contactUserView.setData(ride.getDriver(), canChat);
 
         // map
-        // locations
         mapsView.reset();
-        for (Location location : ride.getLocations())
+        mapsView.setCenterMarkerShown(false);
+        List<Integer> markersAddingOrder = LocationUtils.getMarkerAddingOrder(ride.getLocations().size());
+        for (int i : markersAddingOrder)
         {
+            Location location = ride.getLocations().get(i);
+            boolean uniqueUser = location.getUser().getUserId().equals(currentUserId);
+            float color = LocationUtils.getMarkerColor(i, ride.getLocations().size(), uniqueUser);
+            String userName = ValidationUtils.correct(location.getUser().getFirstName())
+                    + " " + ValidationUtils.correct(location.getUser().getLastName());
             mapsView.addMarker(
-                    location.getId()
-                    , ""
-                    , BitmapDescriptorFactory.HUE_ORANGE
+                    i + ""
+                    , userName
+                    , color
                     , new LatLng(location.getLatitude(), location.getLongitude()));
         }
         mapsView.fitMarkers();
+        mapsView.setScrollable(false);
 
         // route
         List<LatLng> latLngs = new ArrayList<>();
@@ -162,6 +176,7 @@ public class RideDetailsFragment extends Fragment
         } else
             layoutCarDetails.setVisibility(View.GONE);
     }
+
 
     @Override
     public void onDestroyView()

@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -71,6 +72,7 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
     boolean goToMyLocation = false;
     boolean fitMarkers = false;
     private LatLng locationToBeMoved;
+    private boolean isScrollable = true;
 
     public GenericMapsView(Context context)
     {
@@ -104,8 +106,6 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
         // init map view
         mapView.onCreate(new Bundle());
         mapView.getMapAsync(this);
-
-
     }
 
 
@@ -123,6 +123,7 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.getUiSettings().setScrollGesturesEnabled(isScrollable);
 
         // zoom to my location
         if (goToMyLocation)
@@ -138,7 +139,7 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
             locationToBeMoved = null;
         }
 
-        // unadded markers
+        // un added markers
         for (String id : unaddedMarkers.keySet())
             markers.put(id, googleMap.addMarker(unaddedMarkers.get(id)));
         unaddedMarkers.clear();
@@ -151,8 +152,6 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
         }
 
         mapView.onResume();
-        mapView.setDrawingCacheEnabled(true);
-
     }
 
 
@@ -177,6 +176,15 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
 
     /* public methods */
 
+
+    public void setScrollable(boolean isScrollable)
+    {
+        if (googleMap != null)
+            googleMap.getUiSettings().setScrollGesturesEnabled(isScrollable);
+        else
+            this.isScrollable = isScrollable;
+    }
+
     /**
      * zooms to my current location
      */
@@ -187,6 +195,7 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
         else
             goToMyLocation = true;
     }
+
 
     private void goToMyLocationNow()
     {
@@ -358,4 +367,5 @@ public class GenericMapsView extends FrameLayout implements OnMapReadyCallback
     {
         googleMap.snapshot(callback);
     }
+
 }

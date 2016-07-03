@@ -120,6 +120,37 @@ public class Ride implements Serializable
     }
 
     /* methods */
+
+    /**
+     * gathers all the users that have locations in the ride
+     */
+    public List<User> getMembers()
+    {
+        HashSet<String> ids = new HashSet<>();
+        List<User> memberList = new ArrayList<>();
+
+        for (Location location : locations)
+            if (!ids.contains(location.getUser().getUserId()))
+            {
+                ids.add(location.getUser().getUserId());
+                memberList.add(location.getUser());
+            }
+
+        return memberList;
+    }
+
+    /**
+     * @return whether that used id is among the members list
+     */
+    public boolean containsMember(String currentUserId)
+    {
+        List<User> members = getMembers();
+        for (User member : members)
+            if (member.getUserId().equals(currentUserId))
+                return true;
+        return false;
+    }
+
     public static Ride fromJson(JSONObject jsonObject)
     {
         Ride ride = new Ride();
@@ -176,24 +207,6 @@ public class Ride implements Serializable
             Log.e("Game", "parse ride exception " + e.getMessage());
         }
         return ride;
-    }
-
-    /**
-     * gathers all the users that have locations in the ride
-     */
-    public List<User> getMembers()
-    {
-        HashSet<String> ids = new HashSet<>();
-        List<User> memberList = new ArrayList<>();
-
-        for (Location location : locations)
-            if (!ids.contains(location.getUser().getUserId()))
-            {
-                ids.add(location.getUser().getUserId());
-                memberList.add(location.getUser());
-            }
-
-        return memberList;
     }
 
 }
