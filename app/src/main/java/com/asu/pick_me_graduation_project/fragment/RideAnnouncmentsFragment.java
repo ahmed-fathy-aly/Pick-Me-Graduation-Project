@@ -27,6 +27,7 @@ import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController
 import com.asu.pick_me_graduation_project.controller.RidesAPIController;
 import com.asu.pick_me_graduation_project.model.RideAnnouncement;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.github.kittinunf.fuel.Fuel;
 
 import java.util.List;
 
@@ -143,7 +144,6 @@ public class RideAnnouncmentsFragment extends Fragment implements SwipeRefreshLa
         });
 
         builder.show();
-
     }
 
 
