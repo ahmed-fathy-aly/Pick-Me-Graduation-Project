@@ -41,12 +41,14 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
     private Context context;
     Listener listener;
     private boolean requestToJoinVisibility;
+    private String currentUserId;
 
-    public RidesAdapter(Context context, FragmentManager fragmentManager)
+    public RidesAdapter(Context context, FragmentManager fragmentManager, String currentUserId)
     {
         this.context = context;
         this.data = new ArrayList<>();
         this.fragmentManager = fragmentManager;
+        this.currentUserId = currentUserId;
     }
 
     /**
@@ -115,9 +117,9 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
             String userName = ValidationUtils.correct(location.getUser().getFirstName())
                     + " " + ValidationUtils.correct(location.getUser().getLastName());
             float color = BitmapDescriptorFactory.HUE_ORANGE;
-            if (location.getId().equals("-1"))
+            if (location.getId().equals("-1") || location.getUser().getUserId().equals(currentUserId))
                 color = BitmapDescriptorFactory.HUE_CYAN;
-            else if (i == 0)
+            if (i == 0)
                 color = BitmapDescriptorFactory.HUE_GREEN;
             else if (i == ride.getLocations().size() - 1)
                 color = BitmapDescriptorFactory.HUE_RED;

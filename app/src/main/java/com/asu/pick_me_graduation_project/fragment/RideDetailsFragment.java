@@ -118,14 +118,25 @@ public class RideDetailsFragment extends Fragment
         contactUserView.setData(ride.getDriver(), canChat);
 
         // map
-        // locations
         mapsView.reset();
-        for (Location location : ride.getLocations())
+        mapsView.setCenterMarkerShown(false);
+        for (int i = 0; i < ride.getLocations().size(); i++)
         {
+            Location location = ride.getLocations().get(i);
+            String userName = ValidationUtils.correct(location.getUser().getFirstName())
+                    + " " + ValidationUtils.correct(location.getUser().getLastName());
+            float color = BitmapDescriptorFactory.HUE_ORANGE;
+            if (location.getId().equals(currentUserId))
+                color = BitmapDescriptorFactory.HUE_CYAN;
+            if (i == 0)
+                color = BitmapDescriptorFactory.HUE_GREEN;
+            else if (i == ride.getLocations().size() - 1)
+                color = BitmapDescriptorFactory.HUE_RED;
+
             mapsView.addMarker(
-                    location.getId()
-                    , ""
-                    , BitmapDescriptorFactory.HUE_ORANGE
+                    i + ""
+                    , userName
+                    , color
                     , new LatLng(location.getLatitude(), location.getLongitude()));
         }
         mapsView.fitMarkers();
