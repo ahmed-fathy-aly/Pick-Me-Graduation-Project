@@ -115,7 +115,7 @@ public class UserApiController
         if (user.getCarDetails().getYear() != null)
             json.addProperty("caryear", user.getCarDetails().getYear());
         json.addProperty("carPlateNumber", user.getCarDetails().getPlateNumber());
-        json.addProperty("profilePicture", user.getProfilePictureUrl());
+       // json.addProperty("profilePicture", user.getProfilePictureUrl());
         json.addProperty("phoneNumber", user.getPhoneNumber());
 
         String body = json.toString();
