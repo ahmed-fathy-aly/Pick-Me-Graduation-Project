@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="@string/to_all"/>
+                android:text="@string/publicCommunities"/>
 
             <RadioButton
                 android:id="@+id/radioButtonOnlyThese"
