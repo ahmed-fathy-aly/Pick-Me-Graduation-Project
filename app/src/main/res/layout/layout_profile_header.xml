@@ -21,7 +21,6 @@
 
         <com.pkmmte.view.CircularImageView
             android:id="@+id/imageViewProfilePicture"
-            android:transitionName="@string/transition_user_list_to_profile_picture"
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:src="@drawable/ic_user_large"

@@ -1,6 +1,7 @@
 package com.asu.pick_me_graduation_project.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,6 @@ public class UsersAdapter extends ArrayAdapter<User>
                     .placeholder(R.drawable.ic_user_small)
                     .into(imageViewPP);
 
-
         // add listenrs
         final View finalView = view;
         view.setOnClickListener(new View.OnClickListener()
@@ -78,7 +78,6 @@ public class UsersAdapter extends ArrayAdapter<User>
 
         return view;
     }
-
 
 
     public interface Listener
