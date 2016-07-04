@@ -80,7 +80,7 @@ public class ChatActivity extends BaseActivity
         name = (TextView) findViewById(R.id.receiverName);
         image = (ImageView) findViewById(R.id.receiverPP);
         User u = new User();
-        // u.setFirstName();
+
         // setup common views
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

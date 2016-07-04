@@ -93,7 +93,7 @@ public class ChooseRouteFragment extends Fragment
             return;
 
         // add a marker
-        genericMapsView.addMarker("Source", "Source", BitmapDescriptorFactory.HUE_ORANGE, latLng);
+        genericMapsView.addMarker("Source", "Source", BitmapDescriptorFactory.HUE_GREEN, latLng);
 
         // change check color
         imageViewCheckSource.setImageResource(R.drawable.ic_check_green);
@@ -112,7 +112,7 @@ public class ChooseRouteFragment extends Fragment
             return;
 
         // add a marker
-        genericMapsView.addMarker("Destination", "Destination", BitmapDescriptorFactory.HUE_GREEN, latLng);
+        genericMapsView.addMarker("Destination", "Destination", BitmapDescriptorFactory.HUE_RED, latLng);
 
         // change check color
         imageViewCheckDestination.setImageResource(R.drawable.ic_check_green);

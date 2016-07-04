@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="12dp">
 
             <TextView
                 android:id="@+id/textViewDescription"
@@ -74,7 +74,7 @@
             android:id="@+id/requestToJoinFrame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:padding="4dp"
             >
             <Button
                 android:id="@+id/buttonRequestToJoin"

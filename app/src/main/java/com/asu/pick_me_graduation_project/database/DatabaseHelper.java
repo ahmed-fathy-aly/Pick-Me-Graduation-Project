@@ -191,10 +191,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
         if (cursor.moveToFirst())
         {
             ride.setId("" + cursor.getInt(cursor.getColumnIndex(ID)));
-            Log.e("Game", "database read time string = " + cursor.getString(cursor.getColumnIndex(TIME_STR)));
             ride.setTime(TimeUtils.getDatabaseTime(cursor.getString(cursor.getColumnIndex(TIME_STR))));
-            Log.e("Game", "database read time= " + TimeUtils.convertToDatabaseTime(ride.getTime()));
-
             ride.setDescription(cursor.getString(cursor.getColumnIndex(DESCRIPTION)));
             ride.setNotes(cursor.getString(cursor.getColumnIndex(NOTES)));
             RideDetails rideDetails = new RideDetails();

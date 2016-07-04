@@ -22,10 +22,12 @@ import com.squareup.picasso.Picasso;
 public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
 {
     Listener listener2;
+    String currentUserId;
 
-    public RecentMessagesAdapter(Context context, int resource)
+    public RecentMessagesAdapter(Context context, int resource, String currentUserId)
     {
         super(context, resource);
+        this.currentUserId = currentUserId;
     }
 
     /**
@@ -49,9 +51,11 @@ public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
         TextView LastMSg = (TextView) view.findViewById(R.id.LastMsg);
         final ImageView imageViewPPChat = (ImageView) view.findViewById(R.id.imageViewPPChat);
         final ChatMessage message = getItem(position);
-        User user = message.getTo();
+        User otherUser = message.getFrom();
+        if (otherUser.getUserId().equals(currentUserId))
+            otherUser = message.getTo();
 
-        // TODO - add listener
+        //  add listener
         final View finalView = view;
         view.setOnClickListener(new View.OnClickListener()
         {
@@ -66,15 +70,15 @@ public class RecentMessagesAdapter extends ArrayAdapter<ChatMessage>
         // set data
 
 
-        UserName.setText(user.getFirstName() + " " + user.getLastName());
+        UserName.setText(otherUser.getFirstName() + " " + otherUser.getLastName());
         // date.setText((CharSequence) message.getDate().toString());
         long now = System.currentTimeMillis();
         date.setText(DateUtils.getRelativeTimeSpanString(getContext(), message.getDate().getTimeInMillis()));
         // set LastMsg
         LastMSg.setText(getItem(position).getContent());
-        if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
+        if (ValidationUtils.notEmpty(otherUser.getProfilePictureUrl()))
             Picasso.with(getContext()).
-                    load(user.getProfilePictureUrl())
+                    load(otherUser.getProfilePictureUrl())
                     .placeholder(R.drawable.ic_user_small)
                     .into(imageViewPPChat, new Callback()
                     {

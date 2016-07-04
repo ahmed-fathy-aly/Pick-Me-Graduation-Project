@@ -118,7 +118,7 @@ public class RideAnnouncmentsFragment extends Fragment implements SwipeRefreshLa
 
         // Set up the input
         final EditText editTextMessage = new EditText(getContext());
-        editTextMessage.setInputType(InputType.TYPE_CLASS_TEXT);
+        editTextMessage.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         editTextMessage.setHint(getString(R.string.announcment));
         editTextMessage.setGravity(Gravity.CENTER_VERTICAL);
         builder.setView(editTextMessage);

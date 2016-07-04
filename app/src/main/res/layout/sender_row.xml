@@ -48,7 +48,7 @@
                 android:background="@drawable/rounded_corner_forchat2"
                 android:gravity="right"
                 android:minHeight="6dp"
-                android:text="this is the reply for you"
+                android:text="hi ossama .\nI'm mahmoud raafat from your section."
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 />

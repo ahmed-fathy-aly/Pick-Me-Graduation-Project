@@ -97,6 +97,7 @@ public class RidesAPIController
                                     return rhs.getTime().compareTo(lhs.getTime());
                                 }
                             });
+
                             callback.success(rides);
                         } catch (Exception e2)
                         {

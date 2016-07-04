@@ -6,10 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.model.User;
+import com.asu.pick_me_graduation_project.utils.ValidationUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +65,11 @@ public class CommunityRequestsAdapter extends RecyclerView.Adapter< CommunityReq
             //holder.textViewContent.setText(post.getContent());
             final User user = data.get(position);
             holder.textView.setText(user.getFirstName() + " " + user.getLastName());
+            if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
+                Picasso.with(context).
+                        load(user.getProfilePictureUrl())
+                        .placeholder(R.drawable.ic_user_small)
+                        .into(holder.imageViewPP);
 
             // / holder.textView.setText(TimeUtils.getUserFriendlyDate(context, post.getDate()));
         }
@@ -75,8 +83,8 @@ public class CommunityRequestsAdapter extends RecyclerView.Adapter< CommunityReq
         {
             @Bind(R.id.textView)
             TextView textView;
-            // @Bind(R.id.imageViewPP)
-            // TextView imageViewPP;
+            @Bind(R.id.imageViewPP)
+            ImageView imageViewPP;
             @Bind(R.id.buttonaccept)
             Button acceptButton;
             @Bind(R.id.buttondecline)

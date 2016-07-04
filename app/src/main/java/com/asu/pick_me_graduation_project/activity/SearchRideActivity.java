@@ -33,7 +33,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SearchRideActivity extends AppCompatActivity
+public class SearchRideActivity extends BaseActivity
 {
 
     /* UI */

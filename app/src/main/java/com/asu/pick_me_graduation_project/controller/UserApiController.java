@@ -1,7 +1,6 @@
 package com.asu.pick_me_graduation_project.controller;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.asu.pick_me_graduation_project.callback.EditProfileCallback;
 import com.asu.pick_me_graduation_project.callback.GetProfileCallback;
@@ -70,7 +69,6 @@ public class UserApiController
                         }
 
                         // parse the response
-                        Log.e("Game", "get profile result = " + result);
                         try
                         {
                             // check status
@@ -134,10 +132,6 @@ public class UserApiController
                     @Override
                     public void success(Request request, Response r, String s)
                     {
-                        Log.e("Game", "edit profile result = " + s);
-                        Log.e("Game", "request " + request.toString());
-                        Log.e("Game", "response" + r.toString());
-
                         try
                         {
                             // check status
@@ -184,7 +178,6 @@ public class UserApiController
         String url = Constants.HOST + "search_for_user"
                 + "?searchString=" + searchString
                 + "&count=-1";
-        Log.e("Game", "searching for " + url);
         searchUsersRequest = Ion.with(context)
                 .load("GET", url)
                 .setHeader("Content-Type", "application/json")

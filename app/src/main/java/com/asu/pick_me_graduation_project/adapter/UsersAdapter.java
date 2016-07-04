@@ -14,8 +14,11 @@ import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.CircleTransform;
 import com.github.florent37.materialimageloading.MaterialImageLoading;
+import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -48,7 +51,7 @@ public class UsersAdapter extends ArrayAdapter<User>
 
         // reference views
         TextView textViewUsername = (TextView) view.findViewById(R.id.textViewUserName);
-        final ImageView imageViewPP = (ImageView) view.findViewById(R.id.imageViewPP);
+        final CircleImageView imageViewPP = (CircleImageView) view.findViewById(R.id.imageViewPP);
 
         // set data
         final User user = getItem(position);

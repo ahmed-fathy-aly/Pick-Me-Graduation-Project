@@ -35,7 +35,7 @@ import java.util.SortedMap;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ViewNotificationsActivity extends AppCompatActivity implements NotificationsAdapter.Listener
+public class ViewNotificationsActivity extends BaseActivity implements NotificationsAdapter.Listener
 {
 
     /* UI */

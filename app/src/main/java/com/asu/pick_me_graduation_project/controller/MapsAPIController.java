@@ -1,6 +1,7 @@
 package com.asu.pick_me_graduation_project.controller;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.asu.pick_me_graduation_project.callback.GetRouteCallback;
 import com.google.android.gms.maps.model.LatLng;
@@ -72,6 +73,7 @@ public class MapsAPIController
         strb.append("http://maps.googleapis.com/maps/api/directions/json");
         strb.append("?origin=" + latlngs.get(0).latitude + "," + latlngs.get(0).longitude);
         strb.append("&destination=" + latlngs.get(latlngs.size() - 1).latitude + "," + latlngs.get(latlngs.size() - 1).longitude);
+
         if (latlngs.size() > 2)
         {
             strb.append("&waypoints=");
@@ -79,7 +81,7 @@ public class MapsAPIController
             {
                 if (i != 1)
                     strb.append("|");
-                strb.append("via:" + latlngs.get(i).latitude + "," + latlngs.get(i).longitude);
+                strb.append(latlngs.get(i).latitude + "," + latlngs.get(i).longitude);
             }
         }
 
