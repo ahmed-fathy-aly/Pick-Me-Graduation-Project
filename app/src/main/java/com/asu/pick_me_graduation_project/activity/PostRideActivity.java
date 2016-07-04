@@ -65,7 +65,7 @@ public class PostRideActivity extends BaseActivity
             @Override
             public void onPageSelected(int position)
             {
-                buttonNextOrSubmit.setText(getString(position == 0 ? R.string.next :  R.string.post));
+                buttonNextOrSubmit.setText(getString(position == 0 ? R.string.next : R.string.post));
             }
 
             @Override
@@ -76,6 +76,15 @@ public class PostRideActivity extends BaseActivity
         });
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        if (viewPager.getCurrentItem() == 1)
+            viewPager.setCurrentItem(0, true);
+        else
+            super.onBackPressed();
+    }
+
     @OnClick(R.id.buttonNextOrSubmit)
     void onNextOrSubmitClicked()
     {
@@ -83,8 +92,7 @@ public class PostRideActivity extends BaseActivity
         {
             viewPager.setCurrentItem(1, true);
             buttonNextOrSubmit.setText(getString(R.string.post));
-        }
-        else
+        } else
         {
             // check valid data entered
             if (!validateData())
@@ -99,8 +107,8 @@ public class PostRideActivity extends BaseActivity
             final ProgressDialog progressDialog = ProgressDialog.show(this, "", getString(R.string.posting));
             RidesAPIController controller = new RidesAPIController(this);
             controller.postRide(new AuthenticationAPIController(this).getTokken()
-            ,ride
-            , new GenericSuccessCallback()
+                    , ride
+                    , new GenericSuccessCallback()
             {
                 @Override
                 public void success()

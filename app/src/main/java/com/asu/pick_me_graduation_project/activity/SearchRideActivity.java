@@ -103,6 +103,15 @@ public class SearchRideActivity extends BaseActivity
                 });
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        if (viewPager.getCurrentItem() == 1)
+            viewPager.setCurrentItem(0, true);
+        else
+            super.onBackPressed();
+    }
+
     @OnClick(R.id.buttonNextOrSubmit)
     void onNextOrSubmitClicked()
     {
