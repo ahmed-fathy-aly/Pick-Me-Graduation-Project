@@ -1,6 +1,7 @@
 package com.asu.pick_me_graduation_project.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,11 @@ import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.CircleTransform;
 import com.github.florent37.materialimageloading.MaterialImageLoading;
+import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -48,7 +52,7 @@ public class UsersAdapter extends ArrayAdapter<User>
 
         // reference views
         TextView textViewUsername = (TextView) view.findViewById(R.id.textViewUserName);
-        final ImageView imageViewPP = (ImageView) view.findViewById(R.id.imageViewPP);
+        final CircleImageView imageViewPP = (CircleImageView) view.findViewById(R.id.imageViewPP);
 
         // set data
         final User user = getItem(position);
@@ -58,7 +62,6 @@ public class UsersAdapter extends ArrayAdapter<User>
                     load(user.getProfilePictureUrl())
                     .placeholder(R.drawable.ic_user_small)
                     .into(imageViewPP);
-
 
         // add listenrs
         final View finalView = view;
@@ -75,7 +78,6 @@ public class UsersAdapter extends ArrayAdapter<User>
 
         return view;
     }
-
 
 
     public interface Listener

@@ -41,7 +41,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class FeedBackActivity extends AppCompatActivity
+public class FeedBackActivity extends BaseActivity
 {
     /* UI */
     @Bind(R.id.content)

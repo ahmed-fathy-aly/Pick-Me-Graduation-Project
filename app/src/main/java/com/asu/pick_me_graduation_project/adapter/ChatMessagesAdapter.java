@@ -15,6 +15,7 @@ import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.TimeUtils;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.GenericMapsView;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -60,9 +61,15 @@ public class ChatMessagesAdapter extends ArrayAdapter<ChatMessage>
 
             // reference view
             GenericMapsView genericMapsView = (GenericMapsView) locationView.findViewById(R.id.genericMapsView);
+            genericMapsView.setScrollable(false);
 
             // get the location from extras
             LatLng latLng = message.getLatLngExtra();
+            genericMapsView.addMarker(
+                    "locationSent"
+                    ,user.getFirstName() + " " + user.getLastName()
+                    , BitmapDescriptorFactory.HUE_CYAN
+                    ,latLng);
 
             // move to that location
             genericMapsView.setCenterMarkerShown(false);

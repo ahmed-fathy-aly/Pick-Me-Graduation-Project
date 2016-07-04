@@ -33,7 +33,8 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CommunityJoinRequestsFragment extends Fragment implements CommunityRequestsAdapter.Listener {
+public class CommunityJoinRequestsFragment extends Fragment implements CommunityRequestsAdapter.Listener
+{
 
 
     /* fields */
@@ -51,13 +52,15 @@ public class CommunityJoinRequestsFragment extends Fragment implements Community
 
     /* life cycle methods */
 
-    public CommunityJoinRequestsFragment() {
+    public CommunityJoinRequestsFragment()
+    {
         // Required empty public constructor
     }
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         this.communityId = getArguments().getString(Constants.COMMUNITY_ID);
         this.controller = new CommunityAPIController(getContext());
@@ -65,7 +68,8 @@ public class CommunityJoinRequestsFragment extends Fragment implements Community
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         // Inflate the layout and reference views
         View view = inflater.inflate(R.layout.fragment_community_join_requests, container, false);
         ButterKnife.bind(this, view);
@@ -77,9 +81,11 @@ public class CommunityJoinRequestsFragment extends Fragment implements Community
         recyclerViewPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // only enable swipe refresh when the first item is at the top
-        recyclerViewPosts.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerViewPosts.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState)
+            {
                 super.onScrollStateChanged(recyclerView, newState);
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 boolean enableSwipeToRefresh =
@@ -92,17 +98,21 @@ public class CommunityJoinRequestsFragment extends Fragment implements Community
         // setup swipe refresh
         swipeRefreshLayout.setColorSchemeResources(R.color.accent);
         swipeRefreshLayout.setRefreshing(true);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
             @Override
-            public void onRefresh() {
+            public void onRefresh()
+            {
                 downloadPosts();
             }
         });
 
         // download data
-        swipeRefreshLayout.post(new Runnable() {
+        swipeRefreshLayout.post(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 swipeRefreshLayout.setRefreshing(true);
             }
         });
@@ -112,20 +122,24 @@ public class CommunityJoinRequestsFragment extends Fragment implements Community
 
 
     /* methods */
-    private void downloadPosts() {
+    private void downloadPosts()
+    {
 
         controller.getCommunityRequests(
                 new AuthenticationAPIController(getContext()).getTokken()
                 , new AuthenticationAPIController(getContext()).getCurrentUser().getUserId()
-                , communityId, new GetUsersCallback() {
+                , communityId, new GetUsersCallback()
+                {
 
                     @Override
-                    public void success(List<User> users) {
+                    public void success(List<User> users)
+                    {
                         adapterPosts.setData(users);
                     }
 
                     @Override
-                    public void fail(String message) {
+                    public void fail(String message)
+                    {
                         Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
                     }
                 });
@@ -133,13 +147,15 @@ public class CommunityJoinRequestsFragment extends Fragment implements Community
     }
 
     @Override
-    public void onDestroyView() {
+    public void onDestroyView()
+    {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
 
     @Override
-    public void onClick(User user, int position, View v) {
+    public void onClick(User user, int position, View v)
+    {
         // go to the user profile activity
         Intent intent = new Intent(getContext(), UserProfileActivity.class);
         intent.putExtra(Constants.USER_ID, user.getUserId());
@@ -152,42 +168,50 @@ public class CommunityJoinRequestsFragment extends Fragment implements Community
     }
 
     @Override
-    public void onAccept(User user, int adapterPosition) {
+    public void onAccept(final User user, int adapterPosition)
+    {
 
         controller.answerCommunityRequests(
                 new AuthenticationAPIController(getContext()).getTokken()
-                ,"true"
+                , "true"
                 , user.getUserId()
-                , communityId, new GenericSuccessCallback() {
+                , communityId, new GenericSuccessCallback()
+                {
 
                     @Override
-                    public void success() {
-
+                    public void success()
+                    {
+                        adapterPosts.remove(user.getUserId());
                     }
 
                     @Override
-                    public void fail(String message) {
+                    public void fail(String message)
+                    {
                         Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
                     }
                 });
     }
 
     @Override
-    public void onDecline(User user, int adapterPosition ) {
+    public void onDecline(final User user, int adapterPosition)
+    {
 
         controller.answerCommunityRequests(
                 new AuthenticationAPIController(getContext()).getTokken()
                 , "false"
                 , user.getUserId()
-                , communityId, new GenericSuccessCallback() {
+                , communityId, new GenericSuccessCallback()
+                {
 
                     @Override
-                    public void success() {
-
+                    public void success()
+                    {
+                        adapterPosts.remove(user.getUserId());
                     }
 
                     @Override
-                    public void fail(String message) {
+                    public void fail(String message)
+                    {
                         Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
                     }
                 });

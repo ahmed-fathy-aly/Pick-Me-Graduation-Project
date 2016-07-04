@@ -27,7 +27,7 @@ public class MapsControllerTest
                 new LatLng(37.01693,37.18675),
                 new LatLng(37.01384,37.18705));
 
-        String expected = "http://maps.googleapis.com/maps/api/directions/json?origin=37.0157,37.18315&destination=37.01384,37.18705&waypoints=via:37.01583,37.18677|via:37.01693,37.18675";
+        String expected = "http://maps.googleapis.com/maps/api/directions/json?origin=37.0157,37.18315&destination=37.01384,37.18705&waypoints=via:37.01583,37.18677|37.01693,37.18675";
         String result = controller.getUrl(latLngs);
         assertEquals(expected, result);
 

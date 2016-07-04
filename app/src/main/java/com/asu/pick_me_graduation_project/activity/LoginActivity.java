@@ -113,21 +113,26 @@ public class LoginActivity extends BaseActivity
 
     }
 
-    public void printHashKey() {
-        try {
+    public void printHashKey()
+    {
+        try
+        {
 
             PackageInfo info = getPackageManager().getPackageInfo(
                     "asu.com.pick_me_graduation_project",
                     PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
+            for (Signature signature : info.signatures)
+            {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
                 Log.d("Game", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException e)
+        {
 
             Log.e("Game", "hash error " + e.getMessage());
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e)
+        {
 
             Log.e("Game", "hash error " + e.getMessage());
         }
@@ -301,6 +306,7 @@ public class LoginActivity extends BaseActivity
     {
         progressBar.setVisibility(View.VISIBLE);
 
+        Log.e("Game", "google token " + token);
         // login from backend
         AuthenticationAPIController controller = new AuthenticationAPIController(this);
         controller.loginByGmail(token, new LoginCallback());
@@ -382,7 +388,6 @@ public class LoginActivity extends BaseActivity
             Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
         }
     }
-
 
 
 }

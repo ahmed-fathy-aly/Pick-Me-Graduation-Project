@@ -103,11 +103,6 @@ public class CommunityProfileActivity extends BaseActivity
                                     load(community.getProfilePictureUrl())
                                     .placeholder(R.drawable.ic_user_small)
                                     .into(imageViewCommunityPP);
-                        else
-                            Picasso.with(getApplicationContext()).
-                                    load("http://www.churchmilitant.com/images/uploads/news_feature/2015-07-02-special-announcement.jpg")
-                                    .placeholder(R.drawable.ic_user_small)
-                                    .into(imageViewCommunityPP);
 
 
                         // setup view pager

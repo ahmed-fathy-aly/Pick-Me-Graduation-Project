@@ -18,6 +18,7 @@ import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController
 import com.asu.pick_me_graduation_project.controller.ChatAPIController;
 import com.asu.pick_me_graduation_project.model.ChatMessage;
 
+import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 
 import java.util.List;
@@ -63,7 +64,8 @@ public class RecentChatsActivity extends BaseActivity implements RecentMessagesA
         controller = new ChatAPIController(this);
 
         //  setup list view and its adapter
-        adapter = new RecentMessagesAdapter(this, R.layout.row_user_chat);
+        String currentUserId = new AuthenticationAPIController(this).getCurrentUser().getUserId();
+        adapter = new RecentMessagesAdapter(this, R.layout.row_user_chat, currentUserId);
         adapter.setListener(this);
         ListViewChat.setAdapter(adapter);
 
@@ -106,9 +108,15 @@ public class RecentChatsActivity extends BaseActivity implements RecentMessagesA
 
     @Override
     public void onClick(int position, ChatMessage message, View view) {
+        // get the other user
+        String currentUserId = new AuthenticationAPIController(this).getCurrentUser().getUserId();
+        User otherUser = message.getFrom();
+        if (otherUser.getUserId().equals(currentUserId))
+            otherUser = message.getTo();
+
         // go to the user profile activity
         Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra(Constants.USER_ID, message.getTo().getUserId());
+        intent.putExtra(Constants.USER_ID, otherUser.getUserId());
         ActivityOptionsCompat options =
                 ActivityOptionsCompat.makeSceneTransitionAnimation(this,
                         android.support.v4.util.Pair.create(view, getString(R.string.transition_recentChat_list_to_chat))

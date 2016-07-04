@@ -70,7 +70,7 @@ public class RideAnnoucementsAdapter extends RecyclerView.Adapter<RideAnnoucemen
 
         // from user
         User user = announcment.getUser();
-        holder.textViewUserName.setText(context.getString(R.string.from) + " " + user.getFirstName() + " " + user.getLastName());
+        holder.textViewUserName.setText(user.getFirstName() + " " + user.getLastName());
         if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
             Picasso.with(context).
                     load(user.getProfilePictureUrl())

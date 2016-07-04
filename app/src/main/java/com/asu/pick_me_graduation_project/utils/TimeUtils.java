@@ -2,7 +2,6 @@ package com.asu.pick_me_graduation_project.utils;
 
 import android.content.Context;
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -39,7 +39,7 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:padding="4dp">
@@ -58,12 +58,11 @@
                 <TextView
                     android:id="@+id/MessageFromReceiver"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/rounded_corner_forchat"
                     android:gravity="left"
                     android:minHeight="6dp"
-                    android:text="this is the msg "
+                    android:text="hi ossama .\nI'm mahmoud raafat from your section."
                     android:textColor="@color/black"
                     android:textSize="16sp"
 

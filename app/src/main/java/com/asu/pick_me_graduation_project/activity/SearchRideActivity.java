@@ -33,7 +33,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SearchRideActivity extends AppCompatActivity
+public class SearchRideActivity extends BaseActivity
 {
 
     /* UI */
@@ -101,6 +101,15 @@ public class SearchRideActivity extends AppCompatActivity
                         Log.e("Game", "result test = " + result);
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        if (viewPager.getCurrentItem() == 1)
+            viewPager.setCurrentItem(0, true);
+        else
+            super.onBackPressed();
     }
 
     @OnClick(R.id.buttonNextOrSubmit)

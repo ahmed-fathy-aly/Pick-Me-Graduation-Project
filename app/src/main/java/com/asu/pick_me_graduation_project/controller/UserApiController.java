@@ -11,6 +11,7 @@ import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.TimeUtils;
 import com.github.kittinunf.fuel.Fuel;
 import com.github.kittinunf.fuel.core.FuelError;
+import com.github.kittinunf.fuel.core.Handler;
 import com.github.kittinunf.fuel.core.Request;
 import com.github.kittinunf.fuel.core.Response;
 import com.google.gson.JsonObject;
@@ -36,7 +37,7 @@ public class UserApiController
 {
     /* fields */
     Context context;
-    private ResponseFuture<String> searchUsersRequest;
+    private Request searchUsersRequest;
 
     /* constructor */
     public UserApiController(Context context)
@@ -70,7 +71,6 @@ public class UserApiController
                         }
 
                         // parse the response
-                        Log.e("Game", "get profile result = " + result);
                         try
                         {
                             // check status
@@ -117,7 +117,7 @@ public class UserApiController
         if (user.getCarDetails().getYear() != null)
             json.addProperty("caryear", user.getCarDetails().getYear());
         json.addProperty("carPlateNumber", user.getCarDetails().getPlateNumber());
-        json.addProperty("profilePicture", user.getProfilePictureUrl());
+        // json.addProperty("profilePicture", user.getProfilePictureUrl());
         json.addProperty("phoneNumber", user.getPhoneNumber());
 
         String body = json.toString();
@@ -134,10 +134,6 @@ public class UserApiController
                     @Override
                     public void success(Request request, Response r, String s)
                     {
-                        Log.e("Game", "edit profile result = " + s);
-                        Log.e("Game", "request " + request.toString());
-                        Log.e("Game", "response" + r.toString());
-
                         try
                         {
                             // check status
@@ -175,7 +171,7 @@ public class UserApiController
     /**
      * seraches for all users having that substring
      */
-    public void serachUsers(final String searchString, final GetUsersCallback callback)
+    public void searchUsers(final String searchString, final GetUsersCallback callback)
     {
         // cancel any previous request
         if (searchUsersRequest != null)
@@ -184,31 +180,23 @@ public class UserApiController
         String url = Constants.HOST + "search_for_user"
                 + "?searchString=" + searchString
                 + "&count=-1";
-        Log.e("Game", "searching for " + url);
-        searchUsersRequest = Ion.with(context)
-                .load("GET", url)
-                .setHeader("Content-Type", "application/json")
-                .asString();
-        searchUsersRequest.setCallback(new FutureCallback<String>()
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+
+        searchUsersRequest =
+                Fuel.get(url)
+                        .header();
+        searchUsersRequest.responseString(new Handler<String>()
         {
             @Override
-            public void onCompleted(Exception e, String result)
+            public void success(Request request, Response fuelResponse, String s)
             {
-
-
-                // check failed
-                if (e != null)
-                {
-                    if (!searchUsersRequest.isCancelled())
-                        callback.fail(e.getMessage());
-                    return;
-                }
-
                 // parse the response
                 try
                 {
                     // check status
-                    JSONObject response = new JSONObject(result);
+                    JSONObject response = new JSONObject(s);
                     int status = response.getInt("status");
                     if (status == 0)
                     {
@@ -234,10 +222,16 @@ public class UserApiController
                     callback.fail(e2.getMessage());
                     return;
                 }
+            }
 
-
+            @Override
+            public void failure(Request request, Response response, FuelError fuelError)
+            {
+                callback.fail(fuelError.getMessage());
             }
         });
+
+
     }
 
 }
