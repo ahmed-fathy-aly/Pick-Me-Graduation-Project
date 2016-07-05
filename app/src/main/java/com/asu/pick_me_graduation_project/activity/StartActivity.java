@@ -2,6 +2,7 @@ package com.asu.pick_me_graduation_project.activity;
 
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
@@ -23,6 +24,7 @@ public class StartActivity extends AwesomeSplash
     @Override
     public void initSplash(ConfigSplash configSplash)
     {
+
         // setup fabric
         if (!BuildConfig.DEBUG)
             Fabric.with(this, new Crashlytics());

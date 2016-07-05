@@ -34,6 +34,22 @@ Screenshots
 <a href="http://imgur.com/XXuTEIB"><img src="http://i.imgur.com/XXuTEIB.png" title="Log In"  height="400"/></a>
 <a href="http://imgur.com/nSjAjT9"><img src="http://i.imgur.com/nSjAjT9.png" title="Share to social media"  height="400"/></a>
 
+How to build
+------------------
+Create a resource files called config.xml containing the following keys
+
+```
+ <?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="maps_api_key">YOUR_ID_HERE</string>
+    <string name="banner_ads_id">YOUR_ID_HERE</string>
+    <string name="interstitial_ads_id">YOUR_ID_HERE</string>
+    <string name="facebook_app_id">YOUR_ID_HERE</string>
+    <string name="google_server_client_id">YOUR_ID_HERE</string>
+
+</resources>
+```
+
 Contributors
 ------------------
 This, along with the website and back end, was submitted as our graduation project from the Faculty of Engineering, Ain-Shams University 2016.  Here's the team that worked on it.
@@ -45,5 +61,5 @@ This, along with the website and back end, was submitted as our graduation proje
 - Mahmoud Kamal(Special thanks for designing the app icons)
 - Mohamed Naiem(Web)
 - Nahla El-Shafey(Web)
-- under the supervision of Dr. Islam El-Maddah
+under the supervision of Dr. Islam El-Maddah
 

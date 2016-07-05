@@ -162,14 +162,6 @@ public class CommunitiesActivity extends BaseActivity
             @Override
             public void success(List<Community> communityList)
             {
-                for (int i = 0; i < 30; i++)
-
-                {
-                    Community community = new Community();
-                    community.setName("comm " + i);
-                    community.setId("i" + i);
-                    communityList.add(community)
-;                }
                 progressBar.setVisibility(View.GONE);
 
                 // show the communities in the fragment

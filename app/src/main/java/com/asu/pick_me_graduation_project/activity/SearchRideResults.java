@@ -28,6 +28,7 @@ import com.asu.pick_me_graduation_project.utils.Constants;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.reward.RewardItem;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -67,7 +68,8 @@ public class SearchRideResults extends AppCompatActivity implements RideListFrag
         searchRideParams = (SearchRideParams) getIntent().getExtras().getSerializable(Constants.SEARCH_RIDE_PARAMS);
 
         // setup fragment
-        rideListFragment = new RideListFragment(this);
+        rideListFragment = new RideListFragment();
+        rideListFragment.setListener(this);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, rideListFragment)
