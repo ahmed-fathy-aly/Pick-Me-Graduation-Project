@@ -16,12 +16,17 @@ import com.asu.pick_me_graduation_project.callback.GetCommunityCallback;
 import com.asu.pick_me_graduation_project.callback.GetUsersCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.CommunityAPIController;
-import com.asu.pick_me_graduation_project.fragment.MembersListFragment;
+import com.asu.pick_me_graduation_project.events.UpdateCommunityMembersEvent;
 import com.asu.pick_me_graduation_project.model.Community;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
+import com.asu.pick_me_graduation_project.view.OnPageSelectedListener;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -77,6 +82,45 @@ public class CommunityProfileActivity extends BaseActivity
 
         // load data
         loadInfo();
+
+        // register for community update event
+        EventBus.getDefault().register(this);
+
+        // view pager listener
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
+        {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+            {
+
+            }
+
+            @Override
+            public void onPageSelected(int position)
+            {
+                try
+                {
+                    OnPageSelectedListener child = (OnPageSelectedListener) communityPagerAdapter.getItem(position);
+                    child.onSelected();
+                } catch (Exception e)
+                {
+
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state)
+            {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -113,7 +157,7 @@ public class CommunityProfileActivity extends BaseActivity
 
                         // check if should swtich to the requests tab
                         if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean(SWITCH_TO_REQUEST_TAB, false))
-                            if (viewPager.getChildCount()== 4)
+                            if (viewPager.getChildCount() == 4)
                                 viewPager.setCurrentItem(3, true);
 
 
@@ -160,4 +204,12 @@ public class CommunityProfileActivity extends BaseActivity
     }
 
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(UpdateCommunityMembersEvent updateCommunityMembersEvent)
+    {
+        loadMembers();
+    }
+
+
 }
+

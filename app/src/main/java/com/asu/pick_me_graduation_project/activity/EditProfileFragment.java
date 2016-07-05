@@ -35,7 +35,6 @@ import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.TimeUtils;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.CarDetailsView;
-import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -156,6 +155,7 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
     }
 
 
+    /*
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent result)
     {
@@ -173,13 +173,14 @@ public class EditProfileFragment extends android.support.v4.app.DialogFragment
                     .into(ProfilePic);
         }
     }
+     */
 
     /* listeners */
 
     @OnClick(R.id.ProfilePic)
     void pickProfilePicture()
     {
-        Crop.pickImage(getActivity());
+        //Crop.pickImage(getActivity());
     }
 
     @OnClick(R.id.dob)

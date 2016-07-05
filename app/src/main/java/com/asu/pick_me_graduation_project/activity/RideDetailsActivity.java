@@ -25,6 +25,7 @@ import com.asu.pick_me_graduation_project.controller.RidesAPIController;
 import com.asu.pick_me_graduation_project.database.DatabaseHelper;
 import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.asu.pick_me_graduation_project.view.OnPageSelectedListener;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.io.File;
@@ -80,6 +81,34 @@ public class RideDetailsActivity extends BaseActivity
         // load data
         readRideFromDatabase();
 
+        // add listener to view pager
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
+        {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+            {
+                try
+                {
+                    OnPageSelectedListener child = (OnPageSelectedListener) rideDetailsPagerAdapter.getItem(position);
+                    child.onSelected();
+                } catch (Exception e)
+                {
+
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position)
+            {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state)
+            {
+
+            }
+        });
     }
 
     @Override
@@ -160,22 +189,22 @@ public class RideDetailsActivity extends BaseActivity
         contoller.getRideDetails(new AuthenticationAPIController(this).getTokken()
                 , rideId
                 , new GetRideCallback()
-        {
-            @Override
-            public void success(Ride ride)
-            {
-                progressBar.setVisibility(View.INVISIBLE);
-                onRideLoaded(ride);
-            }
+                {
+                    @Override
+                    public void success(Ride ride)
+                    {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        onRideLoaded(ride);
+                    }
 
-            @Override
-            public void fail(String error)
-            {
-                progressBar.setVisibility(View.INVISIBLE);
+                    @Override
+                    public void fail(String error)
+                    {
+                        progressBar.setVisibility(View.INVISIBLE);
 
-                Snackbar.make(content, error, Snackbar.LENGTH_SHORT).show();
-            }
-        });
+                        Snackbar.make(content, error, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     /**
@@ -252,4 +281,6 @@ public class RideDetailsActivity extends BaseActivity
         });
 
     }
+
 }
+

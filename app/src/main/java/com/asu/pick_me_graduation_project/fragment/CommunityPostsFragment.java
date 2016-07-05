@@ -5,10 +5,10 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -21,7 +21,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.asu.pick_me_graduation_project.R;
-import com.asu.pick_me_graduation_project.activity.EditProfileFragment;
+import com.asu.pick_me_graduation_project.activity.CommunityProfileActivity;
 import com.asu.pick_me_graduation_project.adapter.CommunityPostsAdapter;
 import com.asu.pick_me_graduation_project.callback.CreatePostCallback;
 import com.asu.pick_me_graduation_project.callback.GetCommunityPostsCalback;
@@ -29,6 +29,7 @@ import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController
 import com.asu.pick_me_graduation_project.controller.CommunityAPIController;
 import com.asu.pick_me_graduation_project.model.CommunityPost;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.asu.pick_me_graduation_project.view.OnPageSelectedListener;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CommunityPostsFragment extends Fragment
+public class CommunityPostsFragment extends Fragment implements OnPageSelectedListener
 {
 
     /* fields */
@@ -54,6 +55,8 @@ public class CommunityPostsFragment extends Fragment
     RecyclerView recyclerViewPosts;
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.fab)
+    FloatingActionButton fab;
 
     /* life cycle methods */
 
@@ -155,6 +158,22 @@ public class CommunityPostsFragment extends Fragment
     }
 
 
+    @Override
+    public void onSelected()
+    {
+        // animate the fab
+        if (fab.getVisibility() == View.INVISIBLE)
+            fab.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    fab.show();
+                }
+            });
+    }
+
+
     /* methods */
     private void downloadPosts()
     {
@@ -247,4 +266,5 @@ public class CommunityPostsFragment extends Fragment
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
 }

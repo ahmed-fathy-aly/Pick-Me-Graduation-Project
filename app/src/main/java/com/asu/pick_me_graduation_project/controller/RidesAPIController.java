@@ -530,9 +530,6 @@ public class RidesAPIController
                     @Override
                     public void success(Request request, Response r, String s)
                     {
-                        Log.e("Game", "request " + request.toString());
-                        Log.e("Game", "response" + r.toString());
-
                         try
                         {
                             // check status
