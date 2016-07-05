@@ -31,13 +31,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!-- crashlytics -->
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="bbd5f7f8cb2fb58808fc8ca08ab47451be907153" />
+
         <!-- maps stuff -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/maps_release_api_key"/>
+            android:value="@string/maps_debug_api_key"/>
 
         <!-- adds stuff -->
         <activity

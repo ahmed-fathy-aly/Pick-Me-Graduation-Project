@@ -141,6 +141,7 @@
     <string name="announcment">Announcement</string>
     <string name="disabled_welcomed">Disabled Welcomed</string>
     <string name="bio">Bio</string>
+    <string name="publicCommunities">Public</string>
 
 
 </resources>
