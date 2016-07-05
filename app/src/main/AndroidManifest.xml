@@ -159,11 +159,14 @@
             android:name=".activity.CommunitiesActivity"
             android:configChanges="orientation"
             android:label="@string/title_communities"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.ChatActivity"
             android:configChanges="orientation"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+
             android:screenOrientation="portrait">
         </activity>
         <activity

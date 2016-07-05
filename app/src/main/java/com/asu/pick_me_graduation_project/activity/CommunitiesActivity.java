@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
@@ -48,6 +50,8 @@ public class CommunitiesActivity extends BaseActivity
     CommunitiesListFragment communitiesListFragment;
     @Bind(R.id.editTextSearch)
     EditText editTextSearch;
+    @Bind(R.id.fab)
+    FloatingActionButton fab;
 
     /* fields */
     private CommunityAPIController controller;
@@ -100,8 +104,19 @@ public class CommunitiesActivity extends BaseActivity
                     getMyCommunities();
             }
         });
+
         // get data
         getMyCommunities();
+
+        // animate fab
+        fab.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                fab.show();
+            }
+        });
     }
 
     /**
@@ -147,6 +162,14 @@ public class CommunitiesActivity extends BaseActivity
             @Override
             public void success(List<Community> communityList)
             {
+                for (int i = 0; i < 30; i++)
+
+                {
+                    Community community = new Community();
+                    community.setName("comm " + i);
+                    community.setId("i" + i);
+                    communityList.add(community)
+;                }
                 progressBar.setVisibility(View.GONE);
 
                 // show the communities in the fragment

@@ -105,6 +105,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="#E0F7FA"
+               android:layout_gravity="center_vertical"
                 android:layout_marginRight="8dp"
                 app:cardElevation="4dp">
 
@@ -119,9 +120,10 @@
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fabSend"
-                style="@style/fab2"
+                style="@style/fab"
                 android:src="@drawable/ic_send_white_24dp"
-                app:fabSize="mini"
+                android:layout_gravity="center_vertical"
+                android:visibility="invisible"
                 app:theme="@style/ThemeOverlay.AppCompat.Light"
                 />
         </LinearLayout>

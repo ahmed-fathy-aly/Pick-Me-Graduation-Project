@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -27,6 +28,7 @@ import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController
 import com.asu.pick_me_graduation_project.controller.RidesAPIController;
 import com.asu.pick_me_graduation_project.model.RideAnnouncement;
 import com.asu.pick_me_graduation_project.utils.Constants;
+import com.asu.pick_me_graduation_project.view.OnPageSelectedListener;
 import com.github.kittinunf.fuel.Fuel;
 
 import java.util.List;
@@ -35,7 +37,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RideAnnouncmentsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener
+public class RideAnnouncmentsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, OnPageSelectedListener
 {
 
     /* views */
@@ -45,6 +47,8 @@ public class RideAnnouncmentsFragment extends Fragment implements SwipeRefreshLa
     RecyclerView recyclerViewAnnoucnments;
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.fab)
+    FloatingActionButton fab;
 
     /* fields */
     private String rideId;
@@ -146,6 +150,23 @@ public class RideAnnouncmentsFragment extends Fragment implements SwipeRefreshLa
         builder.show();
     }
 
+
+    @Override
+    public void onSelected()
+    {
+        // animate the fab
+        if (fab.getVisibility() == View.INVISIBLE)
+            fab.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    fab.show();
+                }
+            });
+
+
+    }
 
     /* methods */
 

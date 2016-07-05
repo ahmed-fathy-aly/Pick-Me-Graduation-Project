@@ -95,7 +95,7 @@ public class ChatActivity extends BaseActivity
         controller = new ChatAPIController(this);
 
 
-        // TODO - setup list view and its adapter
+        //  setup list view and its adapter
         adapter = new ChatMessagesAdapter(this, new AuthenticationAPIController(getApplicationContext()).getCurrentUser().getUserId());
         ListViewChat.setAdapter(adapter);
 
@@ -105,6 +105,17 @@ public class ChatActivity extends BaseActivity
 
         // register for new message event
         EventBus.getDefault().register(this);
+
+        // animate fab
+        fabSend.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                fabSend.show();
+            }
+        }, 700);
+
     }
 
     @Override
