@@ -253,7 +253,6 @@ public class UserProfileActivity extends BaseActivity
                     textViewAge.setText(age + "");
                 }
                 textViewBio.setText(ValidationUtils.correct(user.getBio()));
-
                 if (ValidationUtils.notEmpty(user.getProfilePictureUrl()))
                     Picasso.with(getApplicationContext()).
                             load(user.getProfilePictureUrl())
