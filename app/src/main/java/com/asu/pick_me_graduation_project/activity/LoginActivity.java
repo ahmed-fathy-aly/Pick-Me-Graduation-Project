@@ -238,7 +238,7 @@ public class LoginActivity extends BaseActivity
     {
         // init google client
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.server_client_id))
+                .requestIdToken(getString(R.string.google_server_client_id))
                 .requestEmail()
                 .requestProfile()
                 .build();

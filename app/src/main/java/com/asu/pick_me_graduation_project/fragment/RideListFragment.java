@@ -36,11 +36,11 @@ public class RideListFragment extends Fragment implements RidesAdapter.Listener
     {
     }
 
-    public RideListFragment(RideListFragment.Listener listener)
+
+    public void setListener(RideListFragment.Listener listener)
     {
         this.listener = listener;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState)
