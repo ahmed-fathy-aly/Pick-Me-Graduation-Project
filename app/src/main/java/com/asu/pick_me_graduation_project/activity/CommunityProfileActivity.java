@@ -16,12 +16,19 @@ import com.asu.pick_me_graduation_project.callback.GetCommunityCallback;
 import com.asu.pick_me_graduation_project.callback.GetUsersCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.CommunityAPIController;
+import com.asu.pick_me_graduation_project.events.NewMessageEvent;
+import com.asu.pick_me_graduation_project.events.UpdateCommunityMembersEvent;
 import com.asu.pick_me_graduation_project.fragment.MembersListFragment;
+import com.asu.pick_me_graduation_project.model.ChatMessage;
 import com.asu.pick_me_graduation_project.model.Community;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -77,8 +84,17 @@ public class CommunityProfileActivity extends BaseActivity
 
         // load data
         loadInfo();
+
+        // register for community update event
+        EventBus.getDefault().register(this);
     }
 
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
     /**
      * loads the community profile from backend
      */
@@ -159,5 +175,11 @@ public class CommunityProfileActivity extends BaseActivity
                 });
     }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(UpdateCommunityMembersEvent updateCommunityMembersEvent)
+    {
+        loadMembers();
+    }
 
 }

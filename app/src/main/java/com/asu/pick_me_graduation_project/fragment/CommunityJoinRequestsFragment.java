@@ -22,8 +22,11 @@ import com.asu.pick_me_graduation_project.callback.GenericSuccessCallback;
 import com.asu.pick_me_graduation_project.callback.GetUsersCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.CommunityAPIController;
+import com.asu.pick_me_graduation_project.events.UpdateCommunityMembersEvent;
 import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -182,6 +185,10 @@ public class CommunityJoinRequestsFragment extends Fragment implements Community
                     public void success()
                     {
                         adapterPosts.remove(user.getUserId());
+
+                        // notify the community to update its members
+                        EventBus.getDefault().post(new UpdateCommunityMembersEvent(communityId));
+
                     }
 
                     @Override
