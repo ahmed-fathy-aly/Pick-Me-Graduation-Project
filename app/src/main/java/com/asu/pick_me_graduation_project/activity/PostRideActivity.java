@@ -88,6 +88,9 @@ public class PostRideActivity extends BaseActivity
     @OnClick(R.id.buttonNextOrSubmit)
     void onNextOrSubmitClicked()
     {
+
+        int ossama = 1 / 0;
+
         if (viewPager.getCurrentItem() == 0)
         {
             viewPager.setCurrentItem(1, true);

@@ -6,6 +6,9 @@ import android.os.Bundle;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * The activity started when the app is opened
@@ -19,6 +22,9 @@ public class StartActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        // setup fabric
+        Fabric.with(this, new Crashlytics());
 
         // check if user is logged in
         if (new AuthenticationAPIController(this).isUserLoggedIn() )
