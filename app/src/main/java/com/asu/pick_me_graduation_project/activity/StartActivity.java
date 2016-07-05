@@ -1,16 +1,12 @@
 package com.asu.pick_me_graduation_project.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.asu.pick_me_graduation_project.R;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
-import com.asu.pick_me_graduation_project.utils.Constants;
 import com.crashlytics.android.Crashlytics;
 import com.daimajia.androidanimations.library.Techniques;
 import com.viksaa.sssplash.lib.activity.AwesomeSplash;
-import com.viksaa.sssplash.lib.cnst.Flags;
 import com.viksaa.sssplash.lib.model.ConfigSplash;
 
 import io.fabric.sdk.android.Fabric;
@@ -40,8 +36,8 @@ public class StartActivity extends AwesomeSplash
         //Customize Title
         configSplash.setTitleSplash(getString(R.string.app_name));
         configSplash.setTitleTextColor(R.color.primary_text);
-        configSplash.setTitleTextSize(22f);
-        configSplash.setAnimTitleDuration(1200);
+        configSplash.setTitleTextSize(24f);
+        configSplash.setAnimTitleDuration(800);
         configSplash.setAnimTitleTechnique(Techniques.SlideInUp);
 
     }
