@@ -13,6 +13,8 @@ apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://jitpack.io" }
+
 }
 
 android {
@@ -26,6 +28,7 @@ android {
         versionCode 3
         versionName "1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -46,15 +49,14 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.1.1'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
-    compile 'com.pkmmte.view:circularimageview:1.1'
     compile('com.github.florent37:materialimageloading:1.0.1@aar') {
         transitive = true
     }
-    compile 'com.pacioianu.david:ink-page-indicator:1.1.1'
+    compile 'com.pacioianu.david:ink-page-indicator:1.2.0'
+
     compile 'com.google.maps.android:android-maps-utils:0.4.+'
     testCompile 'junit:junit:4.12'
     compile 'com.github.kittinunf.fuel:fuel-android:1.2.1'
-    //for Android
     compile 'com.google.android.gms:play-services-maps:9.0.2'
     compile 'com.google.android.gms:play-services-ads:9.0.2'
     compile 'com.google.android.gms:play-services-auth:9.0.2'
@@ -65,7 +67,10 @@ dependencies {
     compile project(':linkedin-sdk')
 
     compile 'com.github.ornolfr:rating-view:0.1.1@aar'
-
+    compile 'com.github.ViksaaSkool:AwesomeSplash:v1.0.0'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.daimajia.easing:library:1.0.1@aar'
+    compile 'com.daimajia.androidanimations:library:1.1.3@aar'
 
     // Espresso UI Testing dependencies.
     androidTestCompile 'com.android.support.test:runner:0.5'
@@ -83,6 +88,6 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.0@aar') {
         transitive = true;
     }
+    compile 'com.android.support:multidex:1.0.0'
 
 }
-// can you see me ? you sohuldn't...tb now? tb now?
