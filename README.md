@@ -52,7 +52,7 @@ Create a resource files called config.xml containing the following keys
 
 Contributors
 ------------------
-This, along with the website and back end, was submitted as our graduation project from the Faculty of Engineering, Ain-Shams University 2016.  Here's the team that worked on it.
+This, along with the website and back end, was submitted as our graduation project from the Faculty of Engineering, Ain-Shams University 2016.  Here's the team that worked on it under the supervision of Dr. Islam El-Maddah.
 
 - Ahmed Fathy(Android)
 - Eman El-Sheikh(Backend)
@@ -61,5 +61,5 @@ This, along with the website and back end, was submitted as our graduation proje
 - Mahmoud Kamal(Special thanks for designing the app icons)
 - Mohamed Naiem(Web)
 - Nahla El-Shafey(Web)
-under the supervision of Dr. Islam El-Maddah
+
 
