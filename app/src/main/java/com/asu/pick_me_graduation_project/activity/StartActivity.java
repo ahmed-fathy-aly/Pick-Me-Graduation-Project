@@ -26,7 +26,7 @@ public class StartActivity extends AwesomeSplash
         // setup fabric
         if (!BuildConfig.DEBUG)
             Fabric.with(this, new Crashlytics());
-        
+
         // no circle reveal
         configSplash.setAnimCircularRevealDuration(0);
         configSplash.setBackgroundColor(R.color.white);
@@ -38,8 +38,6 @@ public class StartActivity extends AwesomeSplash
 
         // no title
         configSplash.setAnimTitleDuration(0);
-
-
     }
 
     @Override

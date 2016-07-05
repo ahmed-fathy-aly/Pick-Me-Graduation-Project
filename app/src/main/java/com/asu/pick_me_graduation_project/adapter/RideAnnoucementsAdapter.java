@@ -53,7 +53,7 @@ public class RideAnnoucementsAdapter extends RecyclerView.Adapter<RideAnnoucemen
     public void addToTop(RideAnnouncement announcement)
     {
         data.add(0, announcement);
-        notifyDataSetChanged();
+        notifyItemInserted(0);
     }
 
     @Override
