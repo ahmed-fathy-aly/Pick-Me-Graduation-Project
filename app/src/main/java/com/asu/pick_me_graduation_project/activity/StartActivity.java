@@ -24,22 +24,17 @@ public class StartActivity extends AwesomeSplash
         // setup fabric
         Fabric.with(this, new Crashlytics());
 
+        // no circle reveal
         configSplash.setAnimCircularRevealDuration(0);
         configSplash.setBackgroundColor(R.color.white);
 
-        //Customize Logo
+        // logo fade in
         configSplash.setLogoSplash(R.drawable.ic_pick_me_large_icon);
         configSplash.setAnimLogoSplashDuration(700);
         configSplash.setAnimLogoSplashTechnique(Techniques.FadeIn);
 
-
-        //Customize Title
-        configSplash.setTitleSplash(getString(R.string.app_name));
-        configSplash.setTitleTextColor(R.color.primary_text);
-        configSplash.setTitleTextSize(24f);
-        configSplash.setAnimTitleDuration(800);
-        configSplash.setAnimTitleTechnique(Techniques.SlideInUp);
-
+        // no title
+        configSplash.setAnimTitleDuration(0);
     }
 
     @Override

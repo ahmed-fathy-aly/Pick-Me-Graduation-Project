@@ -64,7 +64,8 @@ public class BaseActivity extends AppCompatActivity
         final User user = new AuthenticationAPIController(activity).getCurrentUser();
 
         // profile header
-        final ProfileDrawerItem userProfile = new ProfileDrawerItem().withName(user.getFirstName()).
+        String userName = user.getFirstName() + " " + user.getLastName();
+        final ProfileDrawerItem userProfile = new ProfileDrawerItem().withName(userName).
                 withEmail(user.getEmail()).withIcon(user.getProfilePictureUrl());
         final AccountHeader accountHeader = new AccountHeaderBuilder()
                 .withActivity(activity)
