@@ -1,6 +1,7 @@
 package com.asu.pick_me_graduation_project.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -12,9 +13,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.asu.pick_me_graduation_project.R;
+import com.asu.pick_me_graduation_project.activity.UserProfileActivity;
 import com.asu.pick_me_graduation_project.model.Location;
 import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.model.User;
+import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.utils.LocationUtils;
 import com.asu.pick_me_graduation_project.utils.ValidationUtils;
 import com.asu.pick_me_graduation_project.view.GenericMapsView;
@@ -193,6 +196,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder>
 
                 }
             });
+
         }
 
     }

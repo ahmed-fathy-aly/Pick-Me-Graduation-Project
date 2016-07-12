@@ -2,6 +2,7 @@ package com.asu.pick_me_graduation_project.fragment;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -15,13 +16,18 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.asu.pick_me_graduation_project.R;
+import com.asu.pick_me_graduation_project.activity.UserProfileActivity;
 import com.asu.pick_me_graduation_project.adapter.JoinRideRequestAdapter;
 import com.asu.pick_me_graduation_project.callback.GenericSuccessCallback;
 import com.asu.pick_me_graduation_project.callback.GetRideJoinRequestsCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.RidesAPIController;
+import com.asu.pick_me_graduation_project.events.UpdateRideEvent;
 import com.asu.pick_me_graduation_project.model.JoinRideRequest;
+import com.asu.pick_me_graduation_project.model.User;
 import com.asu.pick_me_graduation_project.utils.Constants;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -167,6 +173,9 @@ public class JoinRideRequestsFragment extends Fragment implements JoinRideReques
                         progressDialog.dismiss();
                         Toast.makeText(getContext(), getString(R.string.success), Toast.LENGTH_SHORT).show();
                         adapter.remove(joinRideRequest.getUser().getUserId());
+
+                        // notify other activities
+                        EventBus.getDefault().post(new UpdateRideEvent(rideId));
                     }
 
                     @Override
@@ -177,6 +186,15 @@ public class JoinRideRequestsFragment extends Fragment implements JoinRideReques
                     }
                 }
         );
+    }
+
+    @Override
+    public void onUserClicked(int position, User user)
+    {
+        // open the profile activity
+        Intent intent = new Intent(getActivity(), UserProfileActivity.class);
+        intent.putExtra(Constants.USER_ID, user.getUserId());
+        startActivity(intent);
     }
 
 }

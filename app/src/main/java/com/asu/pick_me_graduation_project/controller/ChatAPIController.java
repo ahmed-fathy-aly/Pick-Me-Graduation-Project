@@ -44,7 +44,6 @@ public class ChatAPIController
      */
     public void getRecentChats(String token, String userId, final GetMessagesCallback callback)
     {
-        // TODO - get them from back end instead of mock data later
         String url = Constants.HOST + "Message/get_recent_chats" + "?count=-1";
         Ion.with(context)
                 .load("GET", url)
@@ -62,7 +61,6 @@ public class ChatAPIController
                     return;
                 }
                 //parse el response
-                Log.e("Game", "get recent chats result = " + result);
                 try
                 {
 
@@ -127,9 +125,8 @@ public class ChatAPIController
                 //parse el response
                 try
                 {
+                    Log.e("Game", "chat response  " +result );
 
-
-                    Log.e("Game", "get chat result = " + result);
                     JSONObject response = new JSONObject(result);
                     int status = response.getInt("status");
                     if (status == 0)
