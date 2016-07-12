@@ -26,8 +26,8 @@ android {
         applicationId "asu.com.pick_me_graduation_project"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 4
-        versionName "1.3"
+        versionCode 5
+        versionName "1.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

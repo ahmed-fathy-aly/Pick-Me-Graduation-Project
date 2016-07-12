@@ -46,7 +46,7 @@ public class Constants
     public static final int NOTIFICATION_RIDE_ANNOUNCEMENT_SUGGESTED_BY_EMAN = 19;
 
     /* ads */
-    public static final boolean ENABLE_ADS = false;
+    public static final boolean ENABLE_ADS = true;
 
     /**
      * uses the Noob multiplier to get a unique notification for each type and each object of that type

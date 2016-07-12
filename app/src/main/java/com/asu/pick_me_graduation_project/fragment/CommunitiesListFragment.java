@@ -94,7 +94,7 @@ public class CommunitiesListFragment extends android.support.v4.app.Fragment imp
                     @Override
                     public void success()
                     {
-                        if (isAdded())
+                        if (!isAdded())
                             return;
 
                         Snackbar.make(content, getString(R.string.sent), Snackbar.LENGTH_SHORT).show();
@@ -104,7 +104,7 @@ public class CommunitiesListFragment extends android.support.v4.app.Fragment imp
                     @Override
                     public void fail(String message)
                     {
-                        if (isAdded())
+                        if (!isAdded())
                             return;
                         
                         Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();

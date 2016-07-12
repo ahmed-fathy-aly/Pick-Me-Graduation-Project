@@ -88,11 +88,12 @@ public class MembersAdminsListFragment extends Fragment implements UsersAdminAda
         // go to the user profile activity
         Intent intent = new Intent(getContext(), UserProfileActivity.class);
         intent.putExtra(Constants.USER_ID, user.getUserId());
-        ActivityOptionsCompat options =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                        android.support.v4.util.Pair.create(v, getString(R.string.transition_user_list_to_profile))
-                );
-        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+        startActivity(intent);
+        //ActivityOptionsCompat options =
+        //        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+        //                android.support.v4.util.Pair.create(v, getString(R.string.transition_user_list_to_profile))
+       //         );
+      //  ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
     }
 
     @Override

@@ -23,10 +23,17 @@ import com.asu.pick_me_graduation_project.callback.GetRideCallback;
 import com.asu.pick_me_graduation_project.controller.AuthenticationAPIController;
 import com.asu.pick_me_graduation_project.controller.RidesAPIController;
 import com.asu.pick_me_graduation_project.database.DatabaseHelper;
+import com.asu.pick_me_graduation_project.events.NewMessageEvent;
+import com.asu.pick_me_graduation_project.events.UpdateRideEvent;
+import com.asu.pick_me_graduation_project.model.ChatMessage;
 import com.asu.pick_me_graduation_project.model.Ride;
 import com.asu.pick_me_graduation_project.utils.Constants;
 import com.asu.pick_me_graduation_project.view.OnPageSelectedListener;
 import com.google.android.gms.maps.GoogleMap;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -109,6 +116,16 @@ public class RideDetailsActivity extends BaseActivity
 
             }
         });
+
+        // register for update event
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -280,6 +297,16 @@ public class RideDetailsActivity extends BaseActivity
             }
         });
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(UpdateRideEvent updateRideEvent)
+    {
+        // check it's for this ride
+        if (!updateRideEvent.getRideId().equals(rideId))
+            return;
+
+        loadRideFromBackend();
     }
 
 }

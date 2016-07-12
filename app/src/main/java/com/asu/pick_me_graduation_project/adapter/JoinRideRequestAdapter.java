@@ -189,6 +189,24 @@ public class JoinRideRequestAdapter extends RecyclerView.Adapter<JoinRideRequest
                         listener.respond(getAdapterPosition(), data.get(getAdapterPosition()), false);
                 }
             });
+            imageViewUserPP.setOnClickListener(new DebouncingOnClickListener()
+            {
+                @Override
+                public void doClick(View v)
+                {
+                    if(listener != null)
+                        listener.onUserClicked(getAdapterPosition(), data.get(getAdapterPosition()).getUser());
+                }
+            });
+            textViewUserName.setOnClickListener(new DebouncingOnClickListener()
+            {
+                @Override
+                public void doClick(View v)
+                {
+                    if(listener != null)
+                        listener.onUserClicked(getAdapterPosition(), data.get(getAdapterPosition()).getUser());
+                }
+            });
 
         }
 
@@ -198,6 +216,6 @@ public class JoinRideRequestAdapter extends RecyclerView.Adapter<JoinRideRequest
     public interface Listener
     {
         public void respond(int position, JoinRideRequest joinRideRequest, boolean accept);
-
+        public void onUserClicked(int position, User user);
     }
 }
